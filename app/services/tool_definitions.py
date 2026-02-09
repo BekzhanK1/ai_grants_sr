@@ -1,9 +1,20 @@
 """
 OpenAI function-calling tool definitions.
 
-Each tool maps to a stored procedure in the Smart Remont database.
-Reference data (menus/groups/grants) is injected into descriptions so the
-model can resolve natural-language names to concrete IDs.
+Each tool maps to a stored procedure / query in Smart Remont.
+Reference data is injected into descriptions so the model can resolve
+natural-language names to concrete IDs.
+
+Tool categories:
+  FETCH (read-only, no side effects):
+    get_user_current_permissions  → 4 × SELECT from permission tables
+    get_menu_by_url               → admin.get_menu_by_url(url_)
+
+  ACTION (write):
+    assign_role                   → admin.employee_group_link   TOGGLE
+    add_interface_button          → admin.employee_menu__add    INSERT
+    link_module                   → admin.employee_module_link  TOGGLE
+    add_grant                     → INSERT INTO employee_grant_tab
 """
 
 from __future__ import annotations
@@ -21,11 +32,56 @@ def build_tools(reference_data: ReferenceData) -> list[dict[str, Any]]:
     grants_map = {g["grant_id"]: g["grant_name"] for g in reference_data.grants if "grant_id" in g}
 
     return [
+        # ─────────────────────────────────────────────────────────────────
+        #  FETCH tools (read-only)
+        # ─────────────────────────────────────────────────────────────────
+
         _function_tool(
-            name="grant_group_access",
+            name="get_user_current_permissions",
             description=(
-                "Назначить сотруднику принадлежность к группе доступа. "
-                f"Доступные группы: {json.dumps(groups_map, ensure_ascii=False)[:2000]}"
+                "ВСЕГДА вызывай этот инструмент ПЕРВЫМ перед любыми действиями. "
+                "Возвращает списки всех group_id, menu_id, module_id и grant_id, "
+                "которые УЖЕ назначены сотруднику. Используй результат, чтобы "
+                "не назначать то, что уже есть (Toggle Trap)."
+            ),
+            parameters={
+                "type": "object",
+                "properties": {
+                    "employee_id": {"type": "integer", "description": "ID сотрудника"},
+                },
+                "required": ["employee_id"],
+            },
+        ),
+        _function_tool(
+            name="get_menu_by_url",
+            description=(
+                "Найти menu_id по URL-адресу страницы интерфейса. "
+                "Если пользователь скинул ссылку вместо ID — используй этот инструмент."
+            ),
+            parameters={
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "description": "URL или путь страницы, например /system/employee-list/",
+                    },
+                },
+                "required": ["url"],
+            },
+        ),
+
+        # ─────────────────────────────────────────────────────────────────
+        #  ACTION tools (write)
+        # ─────────────────────────────────────────────────────────────────
+
+        _function_tool(
+            name="assign_role",
+            description=(
+                "Назначить сотруднику группу (роль/должность). "
+                "⚠ TOGGLE: если роль уже есть — НЕ вызывай, иначе она будет УДАЛЕНА. "
+                "Сначала проверь через get_user_current_permissions. "
+                f"Доступные группы (group_id → name): "
+                f"{json.dumps(groups_map, ensure_ascii=False)[:2000]}"
             ),
             parameters={
                 "type": "object",
@@ -37,25 +93,32 @@ def build_tools(reference_data: ReferenceData) -> list[dict[str, Any]]:
             },
         ),
         _function_tool(
-            name="add_menu_for_employee",
+            name="add_interface_button",
             description=(
-                "Выдать сотруднику доступ к пункту меню с определённым grant. "
-                f"Меню: {json.dumps(menus_map, ensure_ascii=False)[:1500]}; "
-                f"Grants: {json.dumps(grants_map, ensure_ascii=False)[:1500]}"
+                "Открыть сотруднику доступ к кнопке/пункту меню интерфейса. "
+                "Безопасное добавление (не toggle). "
+                "Если menu_id уже есть — сообщи, что доступ уже открыт. "
+                f"Доступные пункты (menu_id → name): "
+                f"{json.dumps(menus_map, ensure_ascii=False)[:2000]}"
             ),
             parameters={
                 "type": "object",
                 "properties": {
                     "employee_id": {"type": "integer", "description": "ID сотрудника"},
                     "menu_id": {"type": "integer", "description": "ID пункта меню"},
-                    "grant_id": {"type": "integer", "description": "ID гранта"},
                 },
-                "required": ["employee_id", "menu_id", "grant_id"],
+                "required": ["employee_id", "menu_id"],
             },
         ),
         _function_tool(
-            name="link_module_for_employee",
-            description="Назначить сотруднику доступ к модулю системы.",
+            name="link_module",
+            description=(
+                "Дать сотруднику доступ к целому модулю системы "
+                "(CRM, Склад, Офис и т.д.). "
+                "⚠ TOGGLE: если модуль уже привязан — НЕ вызывай, "
+                "иначе он будет ОТКЛЮЧЁН. "
+                "Сначала проверь через get_user_current_permissions."
+            ),
             parameters={
                 "type": "object",
                 "properties": {
@@ -63,6 +126,24 @@ def build_tools(reference_data: ReferenceData) -> list[dict[str, Any]]:
                     "module_id": {"type": "integer", "description": "ID модуля"},
                 },
                 "required": ["employee_id", "module_id"],
+            },
+        ),
+        _function_tool(
+            name="add_grant",
+            description=(
+                "Выдать сотруднику точечное техническое право (grant). "
+                "Безопасное добавление (не toggle). "
+                "Если grant_id уже есть — сообщи пользователю. "
+                f"Доступные гранты (grant_id → name): "
+                f"{json.dumps(grants_map, ensure_ascii=False)[:2000]}"
+            ),
+            parameters={
+                "type": "object",
+                "properties": {
+                    "employee_id": {"type": "integer", "description": "ID сотрудника"},
+                    "grant_id": {"type": "integer", "description": "ID гранта"},
+                },
+                "required": ["employee_id", "grant_id"],
             },
         ),
     ]

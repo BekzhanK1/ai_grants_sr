@@ -24,13 +24,14 @@ async def process_request(
     reference_data: ReferenceData = Depends(get_reference_data),
 ) -> ProcessRequestResponse | JSONResponse:
     """
-    Принимает user_id + prompt, вызывает OpenAI с tools,
+    Принимает user_id + prompt + reason, вызывает OpenAI с tools,
     исполняет выбранные инструменты и возвращает результат.
     """
     try:
         result = await process_user_request(
             user_id=body.user_id,
             prompt=body.prompt,
+            reason=body.reason,
             reference_data=reference_data,
         )
     except (AIServiceError, DatabaseError) as exc:

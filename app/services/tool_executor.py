@@ -1,5 +1,19 @@
 """
 Tool executor — dispatches OpenAI tool-call objects to db_service functions.
+
+Safety layer:
+  - Blocked IDs (admin groups, admin menus) are rejected before DB call.
+  - Fetch tools return data without side effects.
+
+Tool → DB mapping:
+  FETCH:
+    get_user_current_permissions  → db_service.get_user_permissions
+    get_menu_by_url               → db_service.get_menu_by_url
+  ACTION:
+    assign_role                   → db_service.employee_group_link  (PG toggle)
+    add_interface_button          → db_service.employee_menu_add    (PG insert)
+    link_module                   → db_service.employee_module_link (PG toggle)
+    add_grant                     → db_service.employee_grant_add   (direct INSERT)
 """
 
 from __future__ import annotations
@@ -8,42 +22,90 @@ import json
 import logging
 from typing import Any
 
+from app.core.safety import is_grant_blocked, is_group_blocked, is_menu_blocked
 from app.services import db_service
 
 logger = logging.getLogger(__name__)
 
 
-# ── Handlers (private) ───────────────────────────────────────────────────────
+# ── Fetch handlers (read-only, return data) ──────────────────────────────────
 
 
-async def _handle_grant_group_access(args: dict[str, Any]) -> None:
+async def _handle_get_permissions(args: dict[str, Any]) -> dict[str, Any]:
+    return await db_service.get_user_permissions(employee_id=int(args["employee_id"]))
+
+
+async def _handle_get_menu_by_url(args: dict[str, Any]) -> dict[str, Any]:
+    menu_id = await db_service.get_menu_by_url(url=str(args["url"]))
+    return {"menu_id": menu_id}
+
+
+# ── Action handlers (write, side effects) ────────────────────────────────────
+
+
+async def _handle_assign_role(args: dict[str, Any]) -> None:
+    group_id = int(args["group_id"])
+    if is_group_blocked(group_id):
+        raise PermissionError(
+            f"Назначение группы group_id={group_id} заблокировано политикой безопасности. "
+            "Администраторские роли нельзя выдавать через AI-интерфейс."
+        )
     await db_service.employee_group_link(
         employee_id=int(args["employee_id"]),
-        group_id=int(args["group_id"]),
+        group_id=group_id,
     )
 
 
-async def _handle_add_menu_for_employee(args: dict[str, Any]) -> None:
+async def _handle_add_interface_button(args: dict[str, Any]) -> None:
+    menu_id = int(args["menu_id"])
+    if is_menu_blocked(menu_id):
+        raise PermissionError(
+            f"Доступ к меню menu_id={menu_id} заблокирован политикой безопасности. "
+            "Меню администрирования нельзя выдавать через AI-интерфейс."
+        )
     await db_service.employee_menu_add(
         employee_id=int(args["employee_id"]),
-        menu_id=int(args["menu_id"]),
-        grant_id=int(args["grant_id"]),
+        menu_id=menu_id,
     )
 
 
-async def _handle_link_module_for_employee(args: dict[str, Any]) -> None:
+async def _handle_link_module(args: dict[str, Any]) -> None:
     await db_service.employee_module_link(
         employee_id=int(args["employee_id"]),
         module_id=int(args["module_id"]),
     )
 
 
-# Registry: tool name → async handler
-_TOOL_HANDLERS = {
-    "grant_group_access": _handle_grant_group_access,
-    "add_menu_for_employee": _handle_add_menu_for_employee,
-    "link_module_for_employee": _handle_link_module_for_employee,
+async def _handle_add_grant(args: dict[str, Any]) -> None:
+    grant_id = int(args["grant_id"])
+    if is_grant_blocked(grant_id):
+        raise PermissionError(
+            f"Грант grant_id={grant_id} заблокирован политикой безопасности."
+        )
+    await db_service.employee_grant_add(
+        employee_id=int(args["employee_id"]),
+        grant_id=grant_id,
+    )
+
+
+# ── Registry ─────────────────────────────────────────────────────────────────
+
+_TOOL_HANDLERS: dict[str, Any] = {
+    # Fetch
+    "get_user_current_permissions": _handle_get_permissions,
+    "get_menu_by_url": _handle_get_menu_by_url,
+    # Action
+    "assign_role": _handle_assign_role,
+    "add_interface_button": _handle_add_interface_button,
+    "link_module": _handle_link_module,
+    "add_grant": _handle_add_grant,
 }
+
+# Tools that return data (their result goes back to the model as content)
+_DATA_TOOLS: frozenset[str] = frozenset({
+    "get_user_current_permissions",
+    "get_menu_by_url",
+})
 
 
 # ── Public API ───────────────────────────────────────────────────────────────
@@ -53,14 +115,22 @@ async def execute_tool_call(call: Any) -> dict[str, Any]:
     """
     Parse a single OpenAI tool-call object, dispatch to the right handler,
     and return a structured result dict.
+
+    For data tools the result includes a "data" key with the fetched payload.
     """
     name = call.function.name
+    call_id = call.id
     try:
         args: dict[str, Any] = json.loads(call.function.arguments or "{}")
     except json.JSONDecodeError:
         args = {}
 
-    result: dict[str, Any] = {"tool": name, "args": args, "status": "ok"}
+    result: dict[str, Any] = {
+        "tool_call_id": call_id,
+        "tool": name,
+        "args": args,
+        "status": "ok",
+    }
 
     handler = _TOOL_HANDLERS.get(name)
     if handler is None:
@@ -70,7 +140,13 @@ async def execute_tool_call(call: Any) -> dict[str, Any]:
         return result
 
     try:
-        await handler(args)
+        handler_result = await handler(args)
+        if name in _DATA_TOOLS and handler_result is not None:
+            result["data"] = handler_result
+    except PermissionError as exc:
+        result["status"] = "blocked"
+        result["error"] = str(exc)
+        logger.warning("Safety block on tool %s: %s", name, exc)
     except Exception as exc:  # noqa: BLE001
         result["status"] = "error"
         result["error"] = str(exc)

@@ -1,7 +1,7 @@
 # AI Admin Service
 
 Интеллектуальный backend-сервис для управления правами доступа в системе **Smart Remont**.  
-Принимает естественно-языковой запрос + `user_id`, вызывает OpenAI (function calling) и маппит результат на хранимые процедуры PostgreSQL.
+Принимает естественно-языковой запрос, причину и `user_id` (из аутентификации), вызывает OpenAI (function calling) и маппит результат на хранимые процедуры PostgreSQL.
 
 ## Стек
 
@@ -25,7 +25,8 @@ app/
 ├── core/
 │   ├── config.py              # Settings из .env
 │   ├── exceptions.py          # AIServiceError, DatabaseError
-│   └── logging.py             # Настройка logging (file + console)
+│   ├── logging.py             # Настройка logging (file + console)
+│   └── safety.py              # Чёрные списки (admin group, menu IDs)
 ├── data/
 │   ├── normalize.py           # Нормализация JSON-экспортов (BOM, типы)
 │   └── reference.py           # ReferenceData — singleton, загрузка при старте
@@ -33,7 +34,7 @@ app/
     ├── ai_service.py          # Оркестратор: OpenAI → tool calls → db
     ├── db_service.py          # Стабы БД-операций (logging вместо SQL)
     ├── tool_definitions.py    # Описания tools для OpenAI
-    └── tool_executor.py       # Диспатч tool-call → db_service
+    └── tool_executor.py       # Диспатч tool-call → db_service + safety checks
 json/                          # Reference data (admin_*_tab.json)
 ```
 
@@ -77,32 +78,73 @@ curl http://localhost:8000/health
 
 **Тело запроса:**
 
+| Поле | Тип | Обязательно | Описание |
+|------|-----|-------------|----------|
+| `user_id` | `int` | да | ID сотрудника (приходит из слоя аутентификации) |
+| `prompt` | `string` | да | Естественно-языковой запрос о правах доступа |
+| `reason` | `string` | да | Причина запроса (10–500 символов). Зачем нужен доступ |
+
+**Пример запроса:**
+
 ```json
 {
-  "user_id": 123,
-  "prompt": "Добавь пользователя в группу Администраторы"
+  "user_id": 42,
+  "prompt": "Открой мне доступ к модулю CRM",
+  "reason": "Перехожу в отдел продаж, нужен CRM для работы с клиентами"
 }
 ```
 
-**Ответ:**
+**Пример ответа:**
 
 ```json
 {
   "id": "chatcmpl-...",
   "tool_calls": [
     {
-      "tool": "grant_group_access",
-      "args": { "employee_id": 123, "group_id": 1 },
+      "tool": "link_module",
+      "args": { "employee_id": 42, "module_id": 5 },
       "status": "ok",
       "error": null
     }
   ],
-  "explanation": "Назначены права: grant_group_access",
-  "ai_message": null
+  "explanation": "Назначены права: link_module",
+  "ai_message": "Доступ к модулю CRM (module_id=5) открыт для сотрудника 42."
 }
 ```
+
+**Если причина неадекватная:**
+
+```json
+{
+  "id": "chatcmpl-...",
+  "tool_calls": [],
+  "explanation": "Модель не вызвала ни одного инструмента. Права не изменены.",
+  "ai_message": "Указанная причина не объясняет бизнес-необходимость. Пожалуйста, опишите, для какой задачи вам нужен этот доступ."
+}
+```
+
+## Безопасность
+
+Сервис реализует многоуровневую защиту:
+
+1. **Валидация на уровне схемы** — `reason` обязателен, минимум 10 символов (Pydantic 422 при нарушении).
+2. **AI-проверка причины** — модель оценивает адекватность `reason` и отказывает, если причина бессмысленная или не связана с запросом.
+3. **Fetch-before-action** — перед любым назначением AI запрашивает текущие права (`get_user_current_permissions`), чтобы не сработал Toggle-переключатель (повторный вызов `employee_group_link` / `employee_module_link` **удаляет** право).
+4. **Чёрные списки** (`core/safety.py`) — запрещены: группа «Администраторы» (`group_id=1`), меню администрирования (`menu_id=1, 2, 4, 10`). Блокировка на уровне кода, даже если LLM сгенерирует запрещённый вызов.
+5. **Аудит** — каждое действие (кроме read-only) логируется с `user_id`, `prompt`, `reason`, `tool_name`, `args` и `status`.
+
+## Доступные инструменты AI
+
+| Инструмент | PG-функция / таблица | Тип | Описание |
+|---|---|---|---|
+| `get_user_current_permissions` | SELECT из 4 таблиц | fetch | Текущие права сотрудника |
+| `get_menu_by_url` | `admin.get_menu_by_url(url_)` | fetch | Найти menu_id по URL |
+| `assign_role` | `admin.employee_group_link` | action (toggle) | Назначить роль |
+| `add_interface_button` | `admin.employee_menu__add` | action (insert) | Открыть кнопку меню |
+| `link_module` | `admin.employee_module_link` | action (toggle) | Привязать модуль |
+| `add_grant` | `INSERT INTO admin.employee_grant_tab` | action (insert) | Выдать точечный грант |
 
 ## DB-слой
 
 Сейчас все операции с базой — стабы, которые логируют вызовы через `logging.info`.  
-Для перехода на боевой режим достаточно заменить тела функций в `db_service.py` на реальные asyncpg-вызовы хранимых процедур (SQL указан в docstrings каждой функции).
+Для перехода на боевой режим достаточно заменить тела функций в `db_service.py` на реальные asyncpg-вызовы (production SQL указан в docstrings каждой функции).

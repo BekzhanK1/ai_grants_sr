@@ -11,6 +11,12 @@ from pydantic import BaseModel, Field
 class ProcessRequestBody(BaseModel):
     user_id: int = Field(..., description="ID сотрудника в Smart Remont")
     prompt: str = Field(..., min_length=1, description="Естественно-языковой запрос о правах доступа")
+    reason: str = Field(
+        ...,
+        min_length=10,
+        max_length=500,
+        description="Причина запроса прав (минимум 10 символов). Объясните, зачем нужен доступ.",
+    )
 
 
 # ── Response ─────────────────────────────────────────────────────────────────
