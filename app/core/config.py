@@ -19,6 +19,12 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = Field(..., description="API key for OpenAI")
     OPENAI_MODEL: str = Field(default="gpt-4.1-mini", description="Chat model to use")
 
+    # PostgreSQL
+    DATABASE_URL: str = Field(
+        ...,
+        description="PostgreSQL DSN, e.g. postgresql://user:pass@host:5432/dbname",
+    )
+
     # Reference data directory (exported JSONs)
     DATA_DIR: Path = Field(default=Path("json"), description="Directory with JSON reference data")
 

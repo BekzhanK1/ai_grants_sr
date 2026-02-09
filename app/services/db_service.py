@@ -1,9 +1,5 @@
 """
-Database service — stub implementations.
-
-Every function logs the call via the standard logger instead of touching a
-real database.  To switch to production, replace the stub bodies with actual
-asyncpg calls (production SQL is documented in each docstring).
+Database service — real asyncpg calls to PostgreSQL.
 
 Real PL/pgSQL behaviour (verified from source):
 ─────────────────────────────────────────────────
@@ -23,8 +19,11 @@ Real PL/pgSQL behaviour (verified from source):
 
 from __future__ import annotations
 
+import json
 import logging
 from typing import Any
+
+from app.core.database import get_pool
 
 logger = logging.getLogger(__name__)
 
@@ -36,30 +35,60 @@ logger = logging.getLogger(__name__)
 
 async def get_user_permissions(employee_id: int) -> dict[str, list[int]]:
     """
-    Return every permission the employee currently has.
-
-    Production SQL (4 queries):
-        SELECT group_id  FROM admin.employee_group_tab  WHERE employee_id = $1;
-        SELECT menu_id   FROM admin.employee_menu_tab   WHERE employee_id = $1;
-        SELECT module_id FROM admin.employee_module_tab  WHERE employee_id = $1;
-        SELECT grant_id  FROM admin.employee_grant_tab   WHERE employee_id = $1;
+    Return every permission the employee currently has (4 parallel SELECTs).
     """
-    logger.info("[STUB] get_user_permissions  employee_id=%s", employee_id)
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        groups, menus, modules, grants = await _fetch_all_permissions(conn, employee_id)
 
-    # Stub: return empty lists (no existing permissions)
+    logger.info(
+        "get_user_permissions  employee_id=%s  groups=%d menus=%d modules=%d grants=%d",
+        employee_id,
+        len(groups),
+        len(menus),
+        len(modules),
+        len(grants),
+    )
     return {
-        "group_ids": [],
-        "menu_ids": [],
-        "module_ids": [],
-        "grant_ids": [],
+        "group_ids": groups,
+        "menu_ids": menus,
+        "module_ids": modules,
+        "grant_ids": grants,
     }
+
+
+async def _fetch_all_permissions(
+    conn: Any, employee_id: int
+) -> tuple[list[int], list[int], list[int], list[int]]:
+    """Run 4 permission queries inside a single connection."""
+    group_rows = await conn.fetch(
+        "SELECT group_id FROM admin.employee_group_tab WHERE employee_id = $1",
+        employee_id,
+    )
+    menu_rows = await conn.fetch(
+        "SELECT menu_id FROM admin.employee_menu_tab WHERE employee_id = $1",
+        employee_id,
+    )
+    module_rows = await conn.fetch(
+        "SELECT module_id FROM admin.employee_module_tab WHERE employee_id = $1",
+        employee_id,
+    )
+    grant_rows = await conn.fetch(
+        "SELECT grant_id FROM admin.employee_grant_tab WHERE employee_id = $1",
+        employee_id,
+    )
+    return (
+        [r["group_id"] for r in group_rows],
+        [r["menu_id"] for r in menu_rows],
+        [r["module_id"] for r in module_rows],
+        [r["grant_id"] for r in grant_rows],
+    )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # ACTION 1: Назначение группы / роли
 #   PG-функция:  admin.employee_group_link(group_id_, employee_id_)
 #   Поведение:   TOGGLE (INSERT if absent, DELETE if present)
-#   Проверка:    group_tab.is_active = true
 #   Smart Assign: перед вызовом проверяем count, вызываем ТОЛЬКО если 0
 # ═══════════════════════════════════════════════════════════════════════════
 
@@ -69,21 +98,37 @@ async def employee_group_link(employee_id: int, group_id: int) -> None:
     Назначить сотруднику группу (роль).
 
     ⚠ PG-функция — Toggle: повторный вызов УДАЛИТ роль.
-    В production обязательна проверка перед вызовом.
-
-    Production SQL (Smart Assign):
-        -- 1) check existence
-        SELECT count(1) FROM admin.employee_group_tab
-         WHERE employee_id = $1 AND group_id = $2;
-        -- 2) ONLY if count = 0:
-        SELECT admin.employee_group_link(
-            group_id_ := $2, employee_id_ := $1
-        );
+    Smart Assign: проверяем существование перед вызовом.
     """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        exists = await conn.fetchval(
+            "SELECT count(1) FROM admin.employee_group_tab "
+            "WHERE employee_id = $1 AND group_id = $2",
+            employee_id,
+            group_id,
+        )
+        if exists:
+            logger.warning(
+                "employee_group_link SKIPPED (already assigned)  "
+                "employee_id=%s group_id=%s",
+                employee_id,
+                group_id,
+            )
+            return
+
+        await conn.fetchval(
+            "SELECT admin.employee_group_link("
+            "  group_id_ := $1, employee_id_ := $2"
+            ")",
+            group_id,
+            employee_id,
+        )
+
     logger.info(
-        "[STUB] admin.employee_group_link(group_id_=%s, employee_id_=%s)",
-        group_id,
+        "employee_group_link OK  employee_id=%s group_id=%s",
         employee_id,
+        group_id,
     )
 
 
@@ -97,16 +142,20 @@ async def employee_group_link(employee_id: int, group_id: int) -> None:
 async def employee_menu_add(employee_id: int, menu_id: int) -> None:
     """
     Открыть сотруднику доступ к кнопке/пункту меню.
-
     Безопасное добавление — функция делает только INSERT.
-
-    Production SQL:
-        SELECT admin.employee_menu__add(
-            employee_id_ := $1, menu_id_ := $2
-        );
     """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        await conn.fetchval(
+            "SELECT admin.employee_menu__add("
+            "  employee_id_ := $1, menu_id_ := $2"
+            ")",
+            employee_id,
+            menu_id,
+        )
+
     logger.info(
-        "[STUB] admin.employee_menu__add(employee_id_=%s, menu_id_=%s)",
+        "employee_menu__add OK  employee_id=%s menu_id=%s",
         employee_id,
         menu_id,
     )
@@ -125,21 +174,37 @@ async def employee_module_link(employee_id: int, module_id: int) -> None:
     Дать сотруднику доступ к модулю (CRM, Склад, Офис…).
 
     ⚠ PG-функция — Toggle: повторный вызов ОТКЛЮЧИТ модуль.
-    В production обязательна проверка перед вызовом.
-
-    Production SQL (Smart Assign):
-        -- 1) check existence
-        SELECT count(1) FROM admin.employee_module_tab
-         WHERE employee_id = $1 AND module_id = $2;
-        -- 2) ONLY if count = 0:
-        SELECT admin.employee_module_link(
-            module_id_ := $2, employee_id_ := $1
-        );
+    Smart Assign: проверяем существование перед вызовом.
     """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        exists = await conn.fetchval(
+            "SELECT count(1) FROM admin.employee_module_tab "
+            "WHERE employee_id = $1 AND module_id = $2",
+            employee_id,
+            module_id,
+        )
+        if exists:
+            logger.warning(
+                "employee_module_link SKIPPED (already assigned)  "
+                "employee_id=%s module_id=%s",
+                employee_id,
+                module_id,
+            )
+            return
+
+        await conn.fetchval(
+            "SELECT admin.employee_module_link("
+            "  module_id_ := $1, employee_id_ := $2"
+            ")",
+            module_id,
+            employee_id,
+        )
+
     logger.info(
-        "[STUB] admin.employee_module_link(module_id_=%s, employee_id_=%s)",
-        module_id,
+        "employee_module_link OK  employee_id=%s module_id=%s",
         employee_id,
+        module_id,
     )
 
 
@@ -154,16 +219,21 @@ async def employee_grant_add(employee_id: int, grant_id: int) -> None:
     """
     Выдать сотруднику точечное право (grant).
 
-    ⚠ PG-функции employee_grant_add НЕТ в базе.
-    Production делает прямой INSERT.
-
-    Production SQL:
-        INSERT INTO admin.employee_grant_tab (employee_id, grant_id)
-        VALUES ($1, $2)
-        ON CONFLICT DO NOTHING;
+    ⚠ PG-функции employee_grant_add НЕТ в базе — прямой INSERT.
+    ON CONFLICT DO NOTHING для идемпотентности.
     """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute(
+            "INSERT INTO admin.employee_grant_tab (employee_id, grant_id) "
+            "VALUES ($1, $2) "
+            "ON CONFLICT DO NOTHING",
+            employee_id,
+            grant_id,
+        )
+
     logger.info(
-        "[STUB] INSERT admin.employee_grant_tab(employee_id=%s, grant_id=%s)",
+        "employee_grant_add OK  employee_id=%s grant_id=%s",
         employee_id,
         grant_id,
     )
@@ -177,16 +247,16 @@ async def employee_grant_add(employee_id: int, grant_id: int) -> None:
 
 
 async def get_menu_by_url(url: str) -> int | None:
-    """
-    Найти menu_id по URL-адресу страницы интерфейса.
+    """Найти menu_id по URL-адресу страницы интерфейса."""
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        result = await conn.fetchval(
+            "SELECT admin.get_menu_by_url(url_ := $1)",
+            url,
+        )
 
-    Production SQL:
-        SELECT admin.get_menu_by_url(url_ := $1);
-    """
-    logger.info("[STUB] admin.get_menu_by_url(url_=%r)", url)
-
-    # Stub: return None (not found)
-    return None
+    logger.info("get_menu_by_url  url=%r  result=%s", url, result)
+    return result
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -203,19 +273,13 @@ async def log_ai_request(
     tool_args: dict[str, Any] | None,
     result_summary: str | None,
 ) -> None:
-    """
-    Persist an AI interaction record.
-
-    Production SQL:
-        INSERT INTO admin.ai_request_logs
-            (user_id, prompt, reason, tool_name, tool_args, result_summary)
-        VALUES ($1, $2, $3, $4, $5::jsonb, $6);
-    """
+    """Log an AI interaction event, but do not save to database."""
     logger.info(
-        "[STUB] log_ai_request  user_id=%s  tool=%s  status=%s  reason=%r  args=%s",
+        "log_ai_request  user_id=%s  tool=%s  prompt=%r  reason=%r  tool_args=%r  status=%s",
         user_id,
         tool_name,
-        result_summary,
-        reason[:80],
+        prompt,
+        reason,
         tool_args,
+        result_summary,
     )
