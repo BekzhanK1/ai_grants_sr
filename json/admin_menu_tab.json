@@ -1,0 +1,3818 @@
+[
+    {
+        "\ufeff\"menu_id\"": "1",
+        "parent_id": "null",
+        "menu_name": "\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "2",
+        "parent_id": "1",
+        "menu_name": "\u0412\u0435\u0434\u0435\u043d\u0438\u0435 \u0440\u043e\u043b\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "/system/menu-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "4",
+        "parent_id": "1",
+        "menu_name": "\u0412\u0435\u0434\u0435\u043d\u0438\u0435 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "/system/employee-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "10",
+        "parent_id": "1",
+        "menu_name": "\u041f\u0440\u0438\u0432\u0438\u043b\u0435\u0433\u0438\u0438 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "/system/employee-group/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "15",
+        "parent_id": "null",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "17",
+        "parent_id": "15",
+        "menu_name": "\u0422\u0438\u043f\u044b \u043c\u0430\u0442\u0435\u0440\u0438\u043b\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/material-type-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "18",
+        "parent_id": "15",
+        "menu_name": "\u0421\u043f\u0438\u0441\u043e\u043a \u0440\u0430\u0431\u043e\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/work-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "21",
+        "parent_id": "null",
+        "menu_name": "\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "22",
+        "parent_id": "15",
+        "menu_name": "\u041e\u043f\u0446\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/addition-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "23",
+        "parent_id": "15",
+        "menu_name": "\u041a\u043e\u043c\u043d\u0430\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/room-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "24",
+        "parent_id": "15",
+        "menu_name": "\u0427\u0435\u043a-\u043b\u0438\u0441\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/check-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "25",
+        "parent_id": "null",
+        "menu_name": "\u0420\u0435\u043c\u043e\u043d\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "35",
+        "parent_id": "null",
+        "menu_name": "\u0412\u0435\u0434\u0435\u043d\u0438\u0435 \u043a\u043b\u0438\u0435\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/system/client-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "36",
+        "parent_id": "null",
+        "menu_name": "\u041a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u043e\u0440 \u0441\u043c\u0435\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "37",
+        "parent_id": "36",
+        "menu_name": "\u041f\u043e\u0432\u0435\u0440\u0445\u043d\u043e\u0441\u0442\u0438",
+        "menu_code": "null",
+        "menu_action": "/constructor/work-set/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "38",
+        "parent_id": "36",
+        "menu_name": "\u041f\u043e\u0434\u0431\u043e\u0440\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-kit-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "39",
+        "parent_id": "36",
+        "menu_name": "\u041f\u0440\u0435\u0441\u0435\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/constructor/preset/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "40",
+        "parent_id": "15",
+        "menu_name": "\u041d\u0430\u0431\u043e\u0440\u044b \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/material-set-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "41",
+        "parent_id": "15",
+        "menu_name": "\u0416\u0438\u043b\u044b\u0435 \u043a\u043e\u043c\u043f\u043b\u0435\u043a\u0441\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/resident-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "42",
+        "parent_id": "36",
+        "menu_name": "\u041e\u043f\u0446\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "/constructor/option-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "43",
+        "parent_id": "36",
+        "menu_name": "\u041f\u0440\u0435\u0441\u0435\u0442 \u043e\u043f\u0446\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "/constructor/preset-option/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "44",
+        "parent_id": "null",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043d\u0430 \u0440\u0435\u043c\u043e\u043d\u0442",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "45",
+        "parent_id": "44",
+        "menu_name": "\u0421\u043e\u0437\u0434\u0430\u043d\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/client_request_status_id/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "46",
+        "parent_id": "44",
+        "menu_name": "\u041f\u0440\u0438\u043d\u044f\u0442\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/client_request_status_id/2/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "47",
+        "parent_id": "44",
+        "menu_name": "\u0414\u0414\u0423",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/client_request_status_id/3/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "48",
+        "parent_id": "44",
+        "menu_name": "\u0414\u043e\u0433\u043e\u0432\u043e\u0440 \u0437\u0430\u043a\u043b\u044e\u0447\u0435\u043d",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/client_request_status_id/4/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "49",
+        "parent_id": "44",
+        "menu_name": "\u041e\u043f\u043b\u0430\u0447\u0435\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/client_request_status_id/5/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "50",
+        "parent_id": "44",
+        "menu_name": "\u0412 \u0440\u0435\u043c\u043e\u043d\u0442\u0435",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/client_request_status_id/6/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "51",
+        "parent_id": "44",
+        "menu_name": "\u041e\u0442\u043a\u0430\u0437\u0430\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/client_request_status_id/7/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "52",
+        "parent_id": "null",
+        "menu_name": "\u041e\u0431\u0440\u0430\u0449\u0435\u043d\u0438\u044f \u043a\u043b\u0438\u0435\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/client-message-list/is_processed/0/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "53",
+        "parent_id": "52",
+        "menu_name": "\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "/dict/client-message-list/is_processed/0/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "54",
+        "parent_id": "null",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "55",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0431\u0449\u0438\u0439 \u0441\u043f\u0438\u0441\u043e\u043a \u0434\u043e\u0441\u0442\u0430\u0432\u043e\u043a \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u043f\u043e \u0432\u0441\u0435\u043c \u043a\u0432\u0430\u0440\u0442\u0438\u0440\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/contractor/material-shipping/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "56",
+        "parent_id": "54",
+        "menu_name": "\u0413\u0440\u0430\u0444\u0438\u043a \u043e\u0442\u0433\u0440\u0443\u0437\u043a\u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u0437\u0430 \u043f\u0435\u0440\u0438\u043e\u0434",
+        "menu_code": "null",
+        "menu_action": "/provider/material-shipment-graph/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "60",
+        "parent_id": "15",
+        "menu_name": "\u042d\u0442\u0430\u043f\u044b \u0413\u041f\u0420",
+        "menu_code": "null",
+        "menu_action": "/dict/gpr-stage-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "105",
+        "parent_id": "1",
+        "menu_name": "\u0412\u0435\u0434\u0435\u043d\u0438\u0435 \u043f\u0440\u043e\u0446\u0435\u0434\u0443\u0440",
+        "menu_code": "null",
+        "menu_action": "/system/func-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "106",
+        "parent_id": "null",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "107",
+        "parent_id": "106",
+        "menu_name": "\u0412 \u043f\u0440\u043e\u0446\u0435\u0441\u0441\u0435",
+        "menu_code": "null",
+        "menu_action": "/techproject/techproject-request-list/is_completed/0/status_id/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "108",
+        "parent_id": "25",
+        "menu_name": "\u041d\u0430\u0447\u0430\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "109",
+        "parent_id": "25",
+        "menu_name": "\u0417\u0430\u043a\u043e\u043d\u0447\u0435\u043d",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/2/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "110",
+        "parent_id": "25",
+        "menu_name": "\u041e\u0442\u043c\u0435\u043d\u0435\u043d",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/3/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "111",
+        "parent_id": "null",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430\u043c (\u041f)",
+        "menu_code": "null",
+        "menu_action": "/dict/provider-request-list/type/not_shipped/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "112",
+        "parent_id": "111",
+        "menu_name": "\u0412\u0441\u0435",
+        "menu_code": "null",
+        "menu_action": "/dict/provider-request-list/type/all/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "118",
+        "parent_id": "52",
+        "menu_name": "\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u0430\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "/dict/client-message-list/is_processed/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "119",
+        "parent_id": "54",
+        "menu_name": "\u041f\u043b\u0430\u0442\u0435\u0436\u0438 \u043e\u0442 \u043a\u043b\u0438\u0435\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/all-remont-payment-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "120",
+        "parent_id": "15",
+        "menu_name": "\u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u043a\u043e\u043c\u043d\u0430\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/param-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "121",
+        "parent_id": "106",
+        "menu_name": "\u0423\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d",
+        "menu_code": "null",
+        "menu_action": "/techproject/techproject-request-list/is_completed/1/status_id/2/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "122",
+        "parent_id": "108",
+        "menu_name": "\u0412\u0441\u0442\u0440\u0435\u0447\u0430 \u043d\u0430 \u043e\u0431\u044a\u0435\u043a\u0442\u0435",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/1/stage_id/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "123",
+        "parent_id": "108",
+        "menu_name": "\u041f\u0440\u043e\u0435\u043a\u0442 \u0440\u0435\u043c\u043e\u043d\u0442\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/1/stage_id/2/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "124",
+        "parent_id": "108",
+        "menu_name": "\u0427\u0435\u0440\u043d\u043e\u0432\u0430\u044f \u044d\u043b\u0435\u043a\u0442\u0440\u0438\u043a\u0430 \u0438 \u0441\u0430\u043d\u0442\u0435\u0445\u043d\u0438\u043a\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/1/stage_id/3/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "125",
+        "parent_id": "108",
+        "menu_name": "\u0421\u0442\u0435\u043d\u044b, \u043f\u043e\u0442\u043e\u043b\u043a\u0438, \u043f\u043e\u043b \u0438 \u043a\u0430\u0444\u0435\u043b\u044c",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/1/stage_id/4/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "126",
+        "parent_id": "108",
+        "menu_name": "\u041b\u0430\u043c\u0438\u043d\u0430\u0442, \u043e\u0431\u043e\u0438, \u043f\u043b\u0438\u043d\u0442\u0443\u0441",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/1/stage_id/5/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "127",
+        "parent_id": "108",
+        "menu_name": "\u0421\u0434\u0430\u0447\u0430 \u043a\u043b\u0438\u0435\u043d\u0442\u0443",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/1/stage_id/6/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "128",
+        "parent_id": "108",
+        "menu_name": "\u041d\u0435\u0442 \u044d\u0442\u0430\u043f\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/1/stage_id/0/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "129",
+        "parent_id": "15",
+        "menu_name": "\u041f\u0440\u0435\u0441\u0435\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "139",
+        "parent_id": "25",
+        "menu_name": "\u0413\u0430\u0440\u0430\u043d\u0442\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-list/remont_status_id/4/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "141",
+        "parent_id": "15",
+        "menu_name": "\u0422\u043e\u0447\u043a\u0438 \u043f\u0440\u043e\u0434\u0430\u0436",
+        "menu_code": "null",
+        "menu_action": "/dict/sale-point-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "142",
+        "parent_id": "54",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430\u043c \u043f\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/provider/provider-requests-materials/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "153",
+        "parent_id": "15",
+        "menu_name": "\u041f\u0440\u043e\u0434\u0443\u043a\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/product-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "162",
+        "parent_id": "null",
+        "menu_name": "\u0421\u0438\u043d\u0445\u0440\u043e\u043d\u0438\u0437\u0430\u0446\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "164",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u0438\u044e \u044d\u0442\u0430\u043f\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/report-completed-stage/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "165",
+        "parent_id": "54",
+        "menu_name": "\u041d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u041e\u041a\u041a \u043f\u043e \u0416\u041a \u0438 \u043a\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/report-stage-ready/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "166",
+        "parent_id": "162",
+        "menu_name": "\u0412\u0435\u0440\u0441\u0438\u0438 \u043c\u043e\u0431\u0438\u043b\u044c\u043d\u043e\u0433\u043e \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f (\u041e\u041a\u041a)",
+        "menu_code": "null",
+        "menu_action": "/dict/mobile-app-version-list/what/okk/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "171",
+        "parent_id": "1",
+        "menu_name": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/setting-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "172",
+        "parent_id": "15",
+        "menu_name": "\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0438 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/product-category-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "184",
+        "parent_id": "1",
+        "menu_name": "\u0412\u0435\u0434\u0435\u043d\u0438\u0435 \u0442\u0438\u043f\u043e\u0432 \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0439",
+        "menu_code": "null",
+        "menu_action": "/system/message-type-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "187",
+        "parent_id": "15",
+        "menu_name": "\u0421\u043b\u043e\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/layer-edit/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "188",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0451\u0442 \u043e \u0437\u0430\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0445 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430\u0445",
+        "menu_code": "null",
+        "menu_action": "/dict/report-requested-materials/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "189",
+        "parent_id": "15",
+        "menu_name": "\u041d\u0430\u0431\u043e\u0440\u044b \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/product-set-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "190",
+        "parent_id": "1",
+        "menu_name": "\u0427\u0430\u0442\u044b \u043f\u043e \u0434\u043e\u043b\u0436\u043d\u043e\u0441\u0442\u044f\u043c",
+        "menu_code": "null",
+        "menu_action": "/system/position-chat/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "191",
+        "parent_id": "54",
+        "menu_name": "\u041e\u043f\u043b\u0430\u0442\u0430 \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u0443 \u043f\u043e \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u0438\u044e \u044d\u0442\u0430\u043f\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/report-contractor-completed-stage/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "193",
+        "parent_id": "1",
+        "menu_name": "\u0421\u0442\u0430\u0442\u0443\u0441\u044b \u043f\u043e \u044d\u0442\u0430\u043f\u0430\u043c \u0434\u043b\u044f \u0434\u043e\u043b\u0436\u043d\u043e\u0441\u0442\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "/system/position-mark-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "195",
+        "parent_id": "54",
+        "menu_name": "\u0422\u0435\u043a\u0443\u0449\u0430\u044f \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u043e\u0441\u0442\u044c \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/report-contractor-capacity/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "196",
+        "parent_id": "54",
+        "menu_name": "\u0422\u0435\u043a\u0443\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435 \u043f\u043e \u0441\u0440\u043e\u043a\u043e\u043c \u0440\u0430\u0431\u043e\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/report-current-state-work-duration/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "197",
+        "parent_id": "54",
+        "menu_name": "\u0410\u043a\u0442 \u0441\u0432\u0435\u0440\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/akt-sverki-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "198",
+        "parent_id": "null",
+        "menu_name": "\u0424\u0438\u043d\u0430\u043d\u0441\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "202",
+        "parent_id": "299",
+        "menu_name": "\u041e\u0436\u0438\u0434\u0430\u0435\u0442 \u043e\u043f\u043b\u0430\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "205",
+        "parent_id": "299",
+        "menu_name": "\u041f\u0440\u0438\u043d\u044f\u0442 \u043a \u043e\u043f\u043b\u0430\u0442\u0435",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "206",
+        "parent_id": "299",
+        "menu_name": "\u041e\u043f\u043b\u0430\u0447\u0435\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "211",
+        "parent_id": "202",
+        "menu_name": "\u041a\u043b\u0438\u0435\u043d\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/finance-client-payment-list/payment_status/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "216",
+        "parent_id": "237",
+        "menu_name": "\u0421\u043e\u0433\u043b\u0430\u0441\u043e\u0432\u0430\u043d\u0438\u0435 \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0433\u043e \u043e\u0442\u0434\u0435\u043b\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/anketa-list/anketa_status_id/2/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "217",
+        "parent_id": "44",
+        "menu_name": "\u0412\u0441\u0435",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/client_request_status_id/-1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "221",
+        "parent_id": "54",
+        "menu_name": "\u0411\u0443\u0434\u0443\u0449\u0438\u0435 \u043e\u0431\u044a\u0435\u043c\u044b \u0440\u0435\u043c\u043e\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/report-contractor-future-capacity/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "222",
+        "parent_id": "54",
+        "menu_name": "\u0418\u0441\u0442\u043e\u0440\u0438\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043e\u043a \u041e\u041a\u041a \u043f\u043e \u044d\u0442\u0430\u043f\u0430\u043c ",
+        "menu_code": "null",
+        "menu_action": "/dict/report-for-okk/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "224",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u0434\u043b\u044f \u041e\u041f",
+        "menu_code": "null",
+        "menu_action": "/dict/report-for-sales-department/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "226",
+        "parent_id": "54",
+        "menu_name": "\u0417\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u043e\u0441\u0442\u044c \u041e\u041a\u041a",
+        "menu_code": "null",
+        "menu_action": "/dict/report-for-okk-workload/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "227",
+        "parent_id": "54",
+        "menu_name": "\u0418\u0441\u0442\u043e\u0440\u0438\u044f \u043f\u0440\u043e\u0432\u0435\u0440\u043e\u043a \u041e\u041a\u041a \u043f\u043e \u044d\u0442\u0430\u043f\u0430\u043c ",
+        "menu_code": "null",
+        "menu_action": "/dict/report-for-okk-check-history/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "228",
+        "parent_id": "null",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043d\u0430 \u043f\u0440\u043e\u0434\u0443\u043a\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "230",
+        "parent_id": "535",
+        "menu_name": "\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d",
+        "menu_code": "null",
+        "menu_action": "/dict/product-request-list/product_request_status_code/send/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "237",
+        "parent_id": "null",
+        "menu_name": "\u0410\u043d\u043a\u0435\u0442\u0430  \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "238",
+        "parent_id": "237",
+        "menu_name": "\u041f\u0440\u0438\u043d\u044f\u0442\u043e",
+        "menu_code": "null",
+        "menu_action": "/dict/anketa-list/anketa_status_id/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "256",
+        "parent_id": "null",
+        "menu_name": "\u0423\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "257",
+        "parent_id": "256",
+        "menu_name": "\u0423\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "/notification/notification-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "259",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0437\u0430\u0434\u043e\u043b\u0436\u0435\u043d\u043d\u043e\u0441\u0442\u0438 \u043a\u043b\u0438\u0435\u043d\u0442\u0430 \u0432 \u0440\u0435\u043c\u043e\u043d\u0442\u0435",
+        "menu_code": "null",
+        "menu_action": "/dict/report-client-debt-remont/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "260",
+        "parent_id": "256",
+        "menu_name": "\u0427\u0430\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/notification/chat-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "275",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043d\u0435\u043e\u0442\u0433\u0440\u0443\u0436\u0435\u043d\u043d\u044b\u043c \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/report-provider-not-shipped-request/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "278",
+        "parent_id": "1",
+        "menu_name": "\u0411\u0435\u0437\u043e\u043f\u0430\u0441\u043d\u043e\u0441\u0442\u044c",
+        "menu_code": "null",
+        "menu_action": "/system/device-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "302",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0451\u0442 \u043e\u0431 \u0443\u0441\u0442\u0440\u0430\u043d\u0435\u043d\u0438\u0438 \u0437\u0430\u043c\u0435\u0447\u0430\u043d\u0438\u0439",
+        "menu_code": "null",
+        "menu_action": "/dict/report-open-remont-defect/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "304",
+        "parent_id": "36",
+        "menu_name": "\u041f\u043e\u0440\u044f\u0434\u043e\u043a \u0440\u0430\u0431\u043e\u0442 \u043f\u043e \u0413\u041f\u0420",
+        "menu_code": "null",
+        "menu_action": "/remont/work-set-order-gpr/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "306",
+        "parent_id": "null",
+        "menu_name": "CRM",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "310",
+        "parent_id": "null",
+        "menu_name": "\u0416\u0443\u0440\u043d\u0430\u043b \u0414\u043e\u0433\u043e\u0432\u043e\u0440\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "311",
+        "parent_id": "310",
+        "menu_name": "\u0412\u0441\u0435 \u0434\u043e\u0433\u043e\u0432\u043e\u0440\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/contractor-agreement-list/type/all/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "316",
+        "parent_id": "15",
+        "menu_name": "\u0417\u0430\u0441\u0442\u0440\u043e\u0439\u0449\u0438\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/home-builder-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "317",
+        "parent_id": "306",
+        "menu_name": "\u041e\u0442\u0434\u0435\u043b\u044b BIG",
+        "menu_code": "null",
+        "menu_action": "/crm/department-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "318",
+        "parent_id": "306",
+        "menu_name": "\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a\u0438 BIG",
+        "menu_code": "null",
+        "menu_action": "/crm/big-employee-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "320",
+        "parent_id": "null",
+        "menu_name": "\u0413\u0430\u0440\u0430\u043d\u0442\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "/guarantee/guarantee-loader/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "325",
+        "parent_id": "15",
+        "menu_name": "\u0421\u0442\u0430\u0442\u044c\u0438 \u0437\u0430\u0442\u0440\u0430\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/payment-costs-type-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "326",
+        "parent_id": "null",
+        "menu_name": "\u041b\u0435\u043d\u0434\u0438\u043d\u0433",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "330",
+        "parent_id": "15",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u0434\u0432\u0435\u0440\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "/remont/material-door-depent-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "333",
+        "parent_id": "839",
+        "menu_name": "\u0414\u043e\u0441\u0442\u0443\u043f\u044b \u0416\u041a",
+        "menu_code": "null",
+        "menu_action": "/dict/employee-resident-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "335",
+        "parent_id": "320",
+        "menu_name": "\u0412\u0441\u0435",
+        "menu_code": "null",
+        "menu_action": "/guarantee/guarantee-loader/grt_status_id/0/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "336",
+        "parent_id": "320",
+        "menu_name": "\u0421\u043e\u0437\u0434\u0430\u043d\u0430",
+        "menu_code": "null",
+        "menu_action": "/guarantee/guarantee-loader/grt_status_id/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "337",
+        "parent_id": "320",
+        "menu_name": "\u041e\u0431\u0440\u0430\u0442\u043d\u0430\u044f \u0441\u0432\u044f\u0437\u044c \u0441 \u043a\u043b\u0438\u0435\u043d\u0442\u043e\u043c",
+        "menu_code": "null",
+        "menu_action": "/guarantee/guarantee-loader/grt_status_id/100/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "338",
+        "parent_id": "320",
+        "menu_name": "\u0412\u044b\u0435\u0437\u0434 \u0438 \u0441\u043e\u0441\u0442\u0430\u0432\u043b\u0435\u043d\u0438\u0435 \u0414\u0410",
+        "menu_code": "null",
+        "menu_action": "/guarantee/guarantee-loader/grt_status_id/200/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "339",
+        "parent_id": "320",
+        "menu_name": "\u0412 \u0440\u0430\u0431\u043e\u0442\u0435",
+        "menu_code": "null",
+        "menu_action": "/guarantee/guarantee-loader/grt_status_id/300/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "341",
+        "parent_id": "320",
+        "menu_name": "\u0412\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "/guarantee/guarantee-loader/grt_status_id/500/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "344",
+        "parent_id": "320",
+        "menu_name": "\u041e\u0442\u043a\u0430\u0437\u0430\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "/guarantee/guarantee-loader/grt_status_id/600/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "349",
+        "parent_id": "533",
+        "menu_name": "\u041a\u043b\u0438\u043d\u0438\u043d\u0433 (\u041a\u043e\u043d\u0442\u0440\u0430\u0433\u0435\u043d\u0442)",
+        "menu_code": "null",
+        "menu_action": "/dict/cleaning-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "351",
+        "parent_id": "15",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u0432\u044b\u0445\u043e\u0434\u043d\u044b\u0445",
+        "menu_code": "null",
+        "menu_action": "/dict/holiday-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "359",
+        "parent_id": "306",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u043f\u0440\u0438\u0447\u0438\u043d \u043e\u0442\u043a\u0430\u0437\u0430",
+        "menu_code": "null",
+        "menu_action": "/crm/deny-reason-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "362",
+        "parent_id": "306",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u0438\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u043e\u0432 \u043b\u0438\u0434\u0430",
+        "menu_code": "null",
+        "menu_action": "/crm/origin-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "363",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0442\u0435\u0445\u043d\u0438\u043a\u0435",
+        "menu_code": "null",
+        "menu_action": "/report/report-tech/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "370",
+        "parent_id": "237",
+        "menu_name": "\u0414\u043e\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u041f\u0440\u043e\u0438\u0437\u0432\u043e\u0434\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0433\u043e \u043e\u0442\u0434\u0435\u043b\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/anketa-list/anketa_status_id/3/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "371",
+        "parent_id": "237",
+        "menu_name": "\u0421\u043e\u0433\u043b\u0430\u0441\u043e\u0432\u0430\u043d\u0438\u0435 \u042e\u0440. \u043e\u0442\u0434\u0435\u043b\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/anketa-list/anketa_status_id/4/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "372",
+        "parent_id": "237",
+        "menu_name": "\u0414\u043e\u0440\u0430\u0431\u043e\u0442\u043a\u0430 \u042e\u0440. \u043e\u0442\u0434\u0435\u043b\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/anketa-list/anketa_status_id/5/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "373",
+        "parent_id": "237",
+        "menu_name": "\u041e\u0442\u043a\u0430\u0437\u0430\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "/dict/anketa-list/anketa_status_id/6/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "374",
+        "parent_id": "237",
+        "menu_name": "\u0421\u043e\u0433\u043b\u0430\u0441\u043e\u0432\u0430\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "/dict/anketa-list/anketa_status_id/7/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "378",
+        "parent_id": "36",
+        "menu_name": "\u042d\u0442\u0430\u043b\u043e\u043d\u043d\u044b\u0435 \u043a\u0432\u0430\u0440\u0442\u0438\u0440\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/etalon-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "379",
+        "parent_id": "106",
+        "menu_name": "\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u0430\u0443\u0434\u0438\u0442\u043e\u0440\u0430",
+        "menu_code": "null",
+        "menu_action": "/techproject/techproject-request-list/is_completed/0/status_id/3/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "380",
+        "parent_id": "null",
+        "menu_name": "\u0410\u043d\u043a\u0435\u0442\u044b \u043c\u0430\u0441\u0442\u0435\u0440\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "381",
+        "parent_id": "380",
+        "menu_name": "\u041f\u0440\u0438\u043d\u044f\u0442\u043e",
+        "menu_code": "null",
+        "menu_action": "/dict/anketa-master-list/is_checked/0/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "382",
+        "parent_id": "380",
+        "menu_name": "\u041e\u0442\u0440\u0430\u0431\u043e\u0442\u0430\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "/dict/anketa-master-list/is_checked/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "383",
+        "parent_id": "null",
+        "menu_name": "\u0421\u043a\u043b\u0430\u0434",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "384",
+        "parent_id": "383",
+        "menu_name": "\u0411\u043e\u043b\u044c\u0448\u0438\u0435 \u0437\u0430\u044f\u0432\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "/warehouse/big-request-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "385",
+        "parent_id": "383",
+        "menu_name": "\u041f\u0440\u0438\u0445\u043e\u0434\u044b",
+        "menu_code": "null",
+        "menu_action": "/warehouse/lot-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "386",
+        "parent_id": "383",
+        "menu_name": "\u041e\u0442\u043f\u0443\u0441\u043a \u0441\u043e \u0441\u043a\u043b\u0430\u0434\u0430",
+        "menu_code": "null",
+        "menu_action": "/warehouse/release-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "387",
+        "parent_id": "383",
+        "menu_name": "\u0417\u0430\u043a\u0440\u044b\u0442\u0438\u0435 \u043f\u0435\u0440\u0438\u043e\u0434\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/warehouse/close-period-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "388",
+        "parent_id": "383",
+        "menu_name": "\u041e\u0441\u0442\u0430\u0442\u043a\u0438 \u043d\u0430 \u0441\u043a\u043b\u0430\u0434\u0435",
+        "menu_code": "null",
+        "menu_action": "/warehouse/inventory-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "389",
+        "parent_id": "383",
+        "menu_name": "\u041f\u0435\u0440\u0435\u043c\u0435\u0449\u0435\u043d\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "/warehouse/warehouse-provider-request-move-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "390",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442\u044b \u0434\u043b\u044f \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u0435\u0439(\u0413\u0430\u0440\u0430\u043d\u0442\u0438\u044f)",
+        "menu_code": "null",
+        "menu_action": "/dict/report-for-management-grt/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "391",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0437\u0430\u043c\u0435\u0447\u0430\u043d\u0438\u044f\u043c \u041e\u041a\u041a",
+        "menu_code": "null",
+        "menu_action": "/dict/check-list-report-okk-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "397",
+        "parent_id": "15",
+        "menu_name": "\u0427\u0435\u0440\u043d\u044b\u0439 \u0441\u043f\u0438\u0441\u043e\u043a \u043a\u043e\u043d\u0442\u0440\u0430\u0433\u0435\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/contragent-black-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "398",
+        "parent_id": "320",
+        "menu_name": "\u0417\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u043e",
+        "menu_code": "null",
+        "menu_action": "/guarantee/guarantee-loader/grt_status_id/700/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "400",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043f\u043b\u0430\u0442\u0435\u0436\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/report-client-request-payment-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "401",
+        "parent_id": "15",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u043f\u043e \u0440\u0430\u0431\u043e\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/option-work-price-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "403",
+        "parent_id": "198",
+        "menu_name": "\u0420\u0435\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u0438 \u0440\u0435\u043c\u043e\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-realisation-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "404",
+        "parent_id": "15",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u043a\u0440\u0430\u0441\u043e\u043a",
+        "menu_code": "null",
+        "menu_action": "/dict/material-paint-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "406",
+        "parent_id": "44",
+        "menu_name": "\u0420\u0430\u0441\u0442\u043e\u0440\u0436\u0435\u043d",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/client_request_status_id/8/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "407",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043e\u043f\u043b\u0430\u0442\u0430\u043c \u041f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/report-provider-payment/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "429",
+        "parent_id": "383",
+        "menu_name": "\u0422\u0440\u0430\u043d\u0441\u0444\u0435\u0440",
+        "menu_code": "null",
+        "menu_action": "/warehouse/transfer-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "431",
+        "parent_id": "15",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u0432\u044b\u0441\u043e\u0442\u044b \u0434\u0432\u0435\u0440\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "/dict/material-additional-setting-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "432",
+        "parent_id": "15",
+        "menu_name": "\u0426\u0435\u043d\u044b \u043f\u0440\u0435\u0441\u0435\u0442\u043e\u0432 \u0434\u043b\u044f \u0440\u0430\u0437\u0440\u0430\u0431\u043e\u0442\u0447\u0438\u043a\u043e\u0432 \u0442\u0435\u0445 \u043f\u0440\u043e\u0435\u043a\u0442\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/techproject-developer-preset-price-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "436",
+        "parent_id": "null",
+        "menu_name": "\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "441",
+        "parent_id": "36",
+        "menu_name": "\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b \u0432 \u043f\u0440\u0435\u0441\u0435\u0442\u0430\u0445",
+        "menu_code": "null",
+        "menu_action": "/constructor/pm-edit/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "442",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0451\u0442 \u043f\u043e \u0437\u0430\u043a\u043e\u043d\u0447\u0435\u043d\u043d\u044b\u043c \u0440\u0435\u043c\u043e\u043d\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/report-completed-remont/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "448",
+        "parent_id": "436",
+        "menu_name": "\u0411\u0430\u0437\u043e\u0432\u044b\u0435 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "/material/material-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "451",
+        "parent_id": "237",
+        "menu_name": "\u0412\u0441\u0435",
+        "menu_code": "null",
+        "menu_action": "/dict/anketa-list/anketa_status_id/0/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "452",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0451\u0442 \u043f\u043e \u0438\u0437\u043c\u0435\u043d\u0451\u043d\u043d\u044b\u043c \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430\u043c \u043a\u043b\u0438\u0435\u043d\u0442\u0430",
+        "menu_code": "null",
+        "menu_action": "/techproject/report-changed-material-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "457",
+        "parent_id": "456",
+        "menu_name": "\u041f\u0440\u0438\u0445\u043e\u0434\u044b",
+        "menu_code": "null",
+        "menu_action": "/material/material-atom-change-lot/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "458",
+        "parent_id": "320",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043e\u0442 \u043a\u043b\u0438\u0435\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/guarantee/guarantee-loader/grt_status_id/-1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "459",
+        "parent_id": "456",
+        "menu_name": "\u041a\u043e\u043d\u0444\u043b\u0438\u043a\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/material/close-period-conflict/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "460",
+        "parent_id": "456",
+        "menu_name": "\u041e\u0442\u043f\u0443\u0441\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "/material/material-atom-change-release/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "488",
+        "parent_id": "383",
+        "menu_name": "\u0418\u043d\u0432\u0435\u043d\u0442\u0430\u0440\u0438\u0437\u0430\u0446\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "/warehouse/inventory-date-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "489",
+        "parent_id": "383",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "490",
+        "parent_id": "489",
+        "menu_name": "\u041d\u0435\u0442 \u043d\u0430 \u0441\u043a\u043b\u0430\u0434\u0435",
+        "menu_code": "null",
+        "menu_action": "/warehouse/report-out-of-stock/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "495",
+        "parent_id": "383",
+        "menu_name": "\u042d\u043b\u0435\u043a\u0442\u0440\u043e\u043d\u043d\u043e\u0435 \u0442\u0430\u0431\u043b\u043e \u0434\u043b\u044f \u0441\u043a\u043b\u0430\u0434\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/tablo-for-wh-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "500",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430\u043c \u0434\u043b\u044f \u043f\u0440\u043e\u0440\u0430\u0431\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/report-manager-project-material/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "505",
+        "parent_id": "489",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043e\u0441\u0442\u0430\u0442\u043a\u0438 \u043d\u0430 \u0441\u043a\u043b\u0430\u0434\u0435",
+        "menu_code": "null",
+        "menu_action": "/warehouse/report-warehouse-material-balance/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "508",
+        "parent_id": "489",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0437\u0430\u043a\u0440\u044b\u0442\u0438\u044e \u0434\u043d\u044f",
+        "menu_code": "null",
+        "menu_action": "/warehouse/report-move-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "509",
+        "parent_id": "383",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442\u044b \u043f\u043e \u0441\u043a\u043b\u0430\u0434\u0443",
+        "menu_code": "null",
+        "menu_action": "/warehouse/report-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "510",
+        "parent_id": "15",
+        "menu_name": "\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0430 \u0440\u0435\u043d\u0434\u0435\u0440\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/visual-render/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "511",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u0424\u041e \u043f\u043e \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/report-for-finance-contractor/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "512",
+        "parent_id": "15",
+        "menu_name": "\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u044b \u0434\u043b\u044f \u0422\u041e",
+        "menu_code": "null",
+        "menu_action": "/dict/standart-document-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "514",
+        "parent_id": "503",
+        "menu_name": "\u041a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "/crm/crm-conversion-report/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "515",
+        "parent_id": "503",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043c\u0430\u0440\u043a\u0435\u0442\u0438\u043d\u0433\u0443",
+        "menu_code": "null",
+        "menu_action": "/dict/report-for-marketing/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "521",
+        "parent_id": "15",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u0445\u0430\u0440\u0430\u043a\u0442\u0435\u0440\u0438\u0441\u0442\u0438\u043a",
+        "menu_code": "null",
+        "menu_action": "/dict/characteristic-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "525",
+        "parent_id": "44",
+        "menu_name": "KPI",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "526",
+        "parent_id": "525",
+        "menu_name": "\u041b\u0438\u0447\u043d\u044b\u0439 \u043a\u0430\u0431\u0438\u043d\u0435\u0442 \u0445\u0430\u043d\u0442\u0435\u0440\u0430",
+        "menu_code": "null",
+        "menu_action": "/crm/hanters-plan-fact-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "527",
+        "parent_id": "525",
+        "menu_name": "\u0413\u0440\u0430\u0444\u0438\u043a \u043c\u0435\u043d\u0435\u0434\u0436\u0435\u0440\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/crm/manager-graphic-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "528",
+        "parent_id": "525",
+        "menu_name": "KPI",
+        "menu_code": "null",
+        "menu_action": "/dict/kpi-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "530",
+        "parent_id": "null",
+        "menu_name": "CMS",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "531",
+        "parent_id": "530",
+        "menu_name": "\u0411\u0430\u043d\u043d\u0435\u0440\u044b",
+        "menu_code": "null",
+        "menu_action": "/landing/front-banner-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "533",
+        "parent_id": "15",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u043a\u043e\u043d\u0442\u0440\u0430\u0433\u0435\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "534",
+        "parent_id": "530",
+        "menu_name": "\u041f\u043e\u0447\u0435\u043c\u0443 \u043c\u044b ?",
+        "menu_code": "null",
+        "menu_action": "/landing/front-why-we-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "535",
+        "parent_id": "228",
+        "menu_name": "\u041f\u0440\u043e\u0434\u0443\u043a\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "536",
+        "parent_id": "228",
+        "menu_name": "\u041a\u0443\u0445\u043d\u044f",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "538",
+        "parent_id": "536",
+        "menu_name": "\u041f\u0440\u0435\u0434\u043e\u043f\u043b\u0430\u0442\u0430 \u043f\u043e\u043b\u0443\u0447\u0435\u043d\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/product-request-list/product_request_status_code/payed_half/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "545",
+        "parent_id": "530",
+        "menu_name": "\u041d\u0430\u0448 \u0440\u0435\u043c\u043e\u043d\u0442 \u0432 \u0434\u0435\u0442\u0430\u043b\u044f\u0445",
+        "menu_code": "null",
+        "menu_action": "/landing/front-remont-details-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "551",
+        "parent_id": "530",
+        "menu_name": "\u041a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u043e\u0440 \u0440\u0435\u043c\u043e\u043d\u0442\u0430",
+        "menu_code": "null",
+        "menu_action": "/landing/front-constructor-remont-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "552",
+        "parent_id": "536",
+        "menu_name": "\u0412\u0441\u0435",
+        "menu_code": "null",
+        "menu_action": "/dict/product-request-list/product_request_status_code/kitchen_all/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "553",
+        "parent_id": "530",
+        "menu_name": "\u041e\u0442\u0437\u044b\u0432\u044b",
+        "menu_code": "null",
+        "menu_action": "/landing/front-reviews-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "554",
+        "parent_id": "530",
+        "menu_name": "FAQ",
+        "menu_code": "null",
+        "menu_action": "/landing/front-faq-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "555",
+        "parent_id": "530",
+        "menu_name": "\u041a\u0430\u043a \u043c\u044b \u0440\u0430\u0431\u043e\u0442\u0430\u0435\u043c - \u042d\u0442\u0430\u043f\u044b",
+        "menu_code": "null",
+        "menu_action": "/landing/front-stage-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "556",
+        "parent_id": "530",
+        "menu_name": "\u0422\u043e\u0447\u043a\u0438 \u043f\u0440\u043e\u0434\u0430\u0436",
+        "menu_code": "null",
+        "menu_action": "/landing/front-sale-point-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "557",
+        "parent_id": "530",
+        "menu_name": "\u0428\u043e\u0443-\u0440\u0443\u043c\u044b",
+        "menu_code": "null",
+        "menu_action": "/landing/front-show-room-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "558",
+        "parent_id": "530",
+        "menu_name": "\u041f\u043e\u0434\u0431\u043e\u0440\u044b",
+        "menu_code": "null",
+        "menu_action": "/landing/preset-kit-info-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "559",
+        "parent_id": "530",
+        "menu_name": "\u0411\u043b\u043e\u0433",
+        "menu_code": "null",
+        "menu_action": "/landing/front-blog-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "560",
+        "parent_id": "530",
+        "menu_name": "\u041e\u0442\u043b\u0438\u0447\u0438\u0435 \u043f\u0430\u043a\u0435\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/landing/front-pack-diff-item-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "561",
+        "parent_id": "530",
+        "menu_name": "\u041e\u0442\u043b\u0438\u0447\u0438\u0435 \u043f\u0430\u043a\u0435\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/landing/front-pack-diff-item-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "562",
+        "parent_id": "null",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0430 \u0431\u0435\u0437 \u0440\u0435\u043c\u043e\u043d\u0442\u0430",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "563",
+        "parent_id": "562",
+        "menu_name": "\u0421\u043e\u0437\u0434\u0430\u043d\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/remarket_request_status_id/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "570",
+        "parent_id": "562",
+        "menu_name": "\u0412\u0441\u0435",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-list/remarket_request_status_id/-2/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "571",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0451\u0442 \u043f\u043e \u0441\u0442\u043e\u043b\u0435\u0448\u043d\u0438\u0446\u0430\u043c ZOV",
+        "menu_code": "null",
+        "menu_action": "/dict/report-tabletop-request/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "572",
+        "parent_id": "null",
+        "menu_name": "\u0411\u044b\u0441\u0442\u0440\u044b\u0439 \u043f\u043e\u0438\u0441\u043a",
+        "menu_code": "null",
+        "menu_action": "/dict/remont-fast-info/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "576",
+        "parent_id": "15",
+        "menu_name": "\u0413\u0440\u0443\u043f\u043f\u044b \u0440\u0430\u0431\u043e\u0442",
+        "menu_code": "null",
+        "menu_action": "/wset/wset-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "577",
+        "parent_id": "749",
+        "menu_name": "\u0422\u0438\u043f \u0440\u0430\u0431\u043e\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/partner-work-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "579",
+        "parent_id": "503",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e NPS",
+        "menu_code": "null",
+        "menu_action": "/crm/nps-report/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "582",
+        "parent_id": "15",
+        "menu_name": "\u0413\u0440\u0443\u043f\u043f\u044b \u0440\u0430\u0431\u043e\u0442 \u043f\u043e \u043f\u0440\u0435\u0441\u0435\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/wset/wset-preset-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "584",
+        "parent_id": "null",
+        "menu_name": "\u041a\u0430\u043d\u0431\u0430\u043d",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "585",
+        "parent_id": "584",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u0434\u043e\u0441\u043e\u043a",
+        "menu_code": "null",
+        "menu_action": "/kanban/board-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "586",
+        "parent_id": "584",
+        "menu_name": "\u0414\u043e\u0441\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "/kanban/boards/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "587",
+        "parent_id": "null",
+        "menu_name": "\u041f\u0430\u0440\u0442\u043d\u0435\u0440\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "588",
+        "parent_id": "587",
+        "menu_name": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "settings",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "589",
+        "parent_id": "653",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u041e\u041a\u041a",
+        "menu_code": "null",
+        "menu_action": "reportOkkStage",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "590",
+        "parent_id": "671",
+        "menu_name": "\u0421\u043f\u0438\u0441\u043e\u043a \u043e\u043f\u043b\u0430\u0442 \u043f\u043e \u0440\u0435\u043c\u043e\u043d\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "reportCostPayment",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "591",
+        "parent_id": "671",
+        "menu_name": "\u0420\u0430\u0441\u0448\u0438\u0444\u0440\u043e\u0432\u043a\u0430 \u043e\u043f\u043b\u0430\u0442\u044b \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u0443",
+        "menu_code": "null",
+        "menu_action": "reportPartnerPayment",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "592",
+        "parent_id": "653",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0442\u0435\u0445.\u043e\u0441\u043e\u0431\u0435\u043d\u043d\u043e\u0441\u0442\u044f\u043c",
+        "menu_code": "null",
+        "menu_action": "reportAddWorks",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "593",
+        "parent_id": "653",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0440\u0435\u043c\u043e\u043d\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "reportTable",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "594",
+        "parent_id": "653",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043e\u0442\u0433\u0440\u0443\u0437\u043a\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "reportMaterialShip",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "595",
+        "parent_id": "672",
+        "menu_name": "\u041c\u0430\u0441\u0442\u0435\u0440\u0430",
+        "menu_code": "null",
+        "menu_action": "mastersPage",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "596",
+        "parent_id": "672",
+        "menu_name": "\u041f\u0430\u043a\u0435\u0442\u044b \u0441 \u0440\u0430\u0431\u043e\u0442\u0430\u043c\u0438",
+        "menu_code": "null",
+        "menu_action": "presetsList",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "597",
+        "parent_id": "670",
+        "menu_name": "\u041d\u0430\u0447\u0430\u0442",
+        "menu_code": "null",
+        "menu_action": "remontsPage",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "598",
+        "parent_id": "672",
+        "menu_name": "\u0422\u0430\u0440\u0438\u0444\u044b",
+        "menu_code": "null",
+        "menu_action": "tariffs",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "599",
+        "parent_id": "587",
+        "menu_name": "\u041e\u0431\u0440\u0430\u0449\u0435\u043d\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "problems",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "601",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u0434\u043b\u044f \u043b\u043e\u0433\u0438\u0441\u0442\u0438\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/report-for-logistics/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "615",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0437\u0430\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u043c \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/report-for-requested-materials/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "616",
+        "parent_id": "198",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0440\u0435\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f\u043c \u0440\u0435\u043c\u043e\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/finance/report-remont-realisation/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "619",
+        "parent_id": "653",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442\u044b \u0434\u043b\u044f \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "executiveReport",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "620",
+        "parent_id": "15",
+        "menu_name": "\u0410\u043a\u0446\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/sale-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "621",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u0414\u0421",
+        "menu_code": "null",
+        "menu_action": "/dict/report-ds-unaccepted/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "624",
+        "parent_id": "1",
+        "menu_name": "\u0412\u0435\u0434\u0435\u043d\u0438\u0435 \u043f\u0440\u0430\u0432",
+        "menu_code": "null",
+        "menu_action": "/system/user-right/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "625",
+        "parent_id": "671",
+        "menu_name": "\u041f\u043b\u0430\u0442\u0435\u0436\u0438",
+        "menu_code": "null",
+        "menu_action": "payments",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "632",
+        "parent_id": "672",
+        "menu_name": "\u041f\u043e\u043b\u0443\u0447\u0430\u0442\u0435\u043b\u0438",
+        "menu_code": "null",
+        "menu_action": "recipients",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "633",
+        "parent_id": "36",
+        "menu_name": "\u0413\u0440\u0443\u043f\u043f\u044b \u0432\u043e\u0440\u043a\u0441\u0435\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/constructor/work-set-grouping/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "634",
+        "parent_id": "1",
+        "menu_name": "\u0428\u0430\u0431\u043b\u043e\u043d\u044b \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/document-template-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "635",
+        "parent_id": "36",
+        "menu_name": "\u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u043f\u043e \u043a\u043e\u043c\u043d\u0430\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/room-param-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "638",
+        "parent_id": "null",
+        "menu_name": "\u041f\u0430\u0440\u0442\u043d\u0435\u0440",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "640",
+        "parent_id": "null",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043d\u0430 \u0443\u0441\u043b\u0443\u0433\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/provider-request-list/type/service/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "647",
+        "parent_id": "640",
+        "menu_name": "\u0412\u0441\u0435",
+        "menu_code": "null",
+        "menu_action": "/dict/provider-request-list/type/service/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "650",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0437\u0430\u044f\u0432\u043a\u0430\u043c \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0443(\u0423\u0441\u043b\u0443\u0433\u0438)",
+        "menu_code": "null",
+        "menu_action": "/report/report-provider-request-service/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "651",
+        "parent_id": "653",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0434\u043e\u043f.\u0440\u0430\u0431\u043e\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "additionalWorksReport",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "653",
+        "parent_id": "587",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "660",
+        "parent_id": "54",
+        "menu_name": "\u0420\u0430\u0441\u0445\u043e\u0436\u0434\u0435\u043d\u0438\u0435 \u043f\u043e \u0441\u043c\u0435\u0442\u0435",
+        "menu_code": "null",
+        "menu_action": "/dict/difference-smeta-report/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "662",
+        "parent_id": "436",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043d\u0430 \u0441\u043c\u0435\u043d\u0443 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430 \u043d\u0430 \u0430\u043b\u044c\u0442\u0435\u0440\u043d\u0430\u0442\u0438\u0432\u0443",
+        "menu_code": "null",
+        "menu_action": "/dict/analog-request-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "663",
+        "parent_id": "530",
+        "menu_name": "\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/landing/front-constructor-document-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "664",
+        "parent_id": "587",
+        "menu_name": "\u0416\u0443\u0440\u043d\u0430\u043b \u0434\u043e\u0433\u043e\u0432\u043e\u0440\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "contractJournal",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "665",
+        "parent_id": "15",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u043a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u0439",
+        "menu_code": "null",
+        "menu_action": "/dict/material-group-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "666",
+        "parent_id": "436",
+        "menu_name": "\u041a\u043b\u0430\u0441\u0441\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u043f\u043e \u043f\u0440\u0435\u0441\u0435\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-material-group-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "667",
+        "parent_id": "653",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u043d\u044b\u043c \u0440\u0430\u0431\u043e\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "worksReport",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "668",
+        "parent_id": "383",
+        "menu_name": "\u0421\u043a\u0440\u0438\u043f\u0442\u044b \u0434\u043b\u044f \u0437\u0430\u043a\u0440\u044b\u0442\u0438\u044f \u043f\u0435\u0440\u0438\u043e\u0434\u0430",
+        "menu_code": "null",
+        "menu_action": "/warehouse/close-period-page/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "669",
+        "parent_id": "587",
+        "menu_name": "\u041f\u043e\u0438\u0441\u043a \u043f\u043e \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "materialSearch",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "670",
+        "parent_id": "587",
+        "menu_name": "\u0420\u0435\u043c\u043e\u043d\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "671",
+        "parent_id": "587",
+        "menu_name": "\u041e\u043f\u043b\u0430\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "672",
+        "parent_id": "587",
+        "menu_name": "\u0421\u043f\u0438\u0441\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "673",
+        "parent_id": "670",
+        "menu_name": "\u0413\u0430\u0440\u0430\u043d\u0442\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "remontsPage",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "674",
+        "parent_id": "670",
+        "menu_name": "\u0417\u0430\u043a\u043e\u043d\u0447\u0435\u043d",
+        "menu_code": "null",
+        "menu_action": "remontsPage",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "675",
+        "parent_id": "670",
+        "menu_name": "\u041e\u0442\u043c\u0435\u043d\u0435\u043d",
+        "menu_code": "null",
+        "menu_action": "remontsPage",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "676",
+        "parent_id": "670",
+        "menu_name": "\u0421\u043f\u0438\u0441\u043e\u043a \u0440\u0435\u043c\u043e\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "remontList",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "677",
+        "parent_id": "383",
+        "menu_name": "\u0412\u043e\u0437\u0432\u0440\u0430\u0442 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0443",
+        "menu_code": "null",
+        "menu_action": "/warehouse/refund-provider-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "678",
+        "parent_id": "383",
+        "menu_name": "\u0412\u043e\u0437\u0432\u0440\u0430\u0442 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430 \u0441 \u0416\u041a",
+        "menu_code": "null",
+        "menu_action": "/warehouse/refund-flat-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "679",
+        "parent_id": "null",
+        "menu_name": "\u0414\u0435\u0444\u0435\u043a\u0442\u043d\u044b\u0439 \u0430\u043a\u0442",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "680",
+        "parent_id": "679",
+        "menu_name": "\u0427\u0435\u043a\u043b\u0438\u0441\u0442\u044b \u0438 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b",
+        "menu_code": "null",
+        "menu_action": "/defect/check-param-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "681",
+        "parent_id": "679",
+        "menu_name": "\u0427\u0435\u043a\u043b\u0438\u0441\u0442\u044b \u0437\u0430\u0441\u0442\u0440\u043e\u0439\u0449\u0438\u043a\u0430",
+        "menu_code": "null",
+        "menu_action": "/defect/link-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "684",
+        "parent_id": "679",
+        "menu_name": "\u0414\u0435\u0444\u0435\u043a\u0442\u043d\u044b\u0435 \u0430\u043a\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/defect/defect-list/defect_type_id/1/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "685",
+        "parent_id": "36",
+        "menu_name": "\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "686",
+        "parent_id": "685",
+        "menu_name": "\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u043d\u043e\u0441\u0442\u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u0438 \u043d\u0430\u0431\u043e\u0440\u043e\u0432 \u0432 \u043f\u0440\u0435\u0441\u0435\u0442\u0430\u0445",
+        "menu_code": "null",
+        "menu_action": "/dict/constr-material-check-report/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "687",
+        "parent_id": "436",
+        "menu_name": "\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b \u0432 \u0440\u0435\u043c\u043e\u043d\u0442\u0430\u0445",
+        "menu_code": "null",
+        "menu_action": "/dict/material-remonts/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "688",
+        "parent_id": "36",
+        "menu_name": "\u041f\u043b\u043e\u0449\u0430\u0434\u0438 \u044d\u0442\u0430\u043b\u043e\u043d\u043d\u044b\u0445 \u043a\u0432\u0430\u0440\u0442\u0438\u0440",
+        "menu_code": "null",
+        "menu_action": "/constructor/etalon-flat-area/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "689",
+        "parent_id": "679",
+        "menu_name": "\u0410\u041f\u041f \u0427\u041e",
+        "menu_code": "null",
+        "menu_action": "/defect/defect-list/defect_type_id/2/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "691",
+        "parent_id": "36",
+        "menu_name": "\u041f\u043e\u0434\u0431\u043e\u0440\u044b \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u043f\u0440\u0435\u0441\u0435\u0442\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-material-kit-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "692",
+        "parent_id": "36",
+        "menu_name": "\u041f\u0440\u0435\u0441\u0435\u0442\u044b \u043f\u043e \u043a\u043b\u0430\u0441\u0441\u0430\u043c \u0416\u041a",
+        "menu_code": "null",
+        "menu_action": "/dict/resident-class-preset-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "695",
+        "parent_id": "36",
+        "menu_name": "\u041c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u044b\u0435 \u043f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/min-standard-param-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "696",
+        "parent_id": "44",
+        "menu_name": "\u041f\u043e\u0438\u0441\u043a \u043f\u043e Session",
+        "menu_code": "null",
+        "menu_action": "/dict/client-request-session/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "697",
+        "parent_id": "383",
+        "menu_name": "\u0418\u043d\u0432\u0435\u043d\u0442\u0430\u0440\u0438\u0437\u0430\u0446\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "/warehouse/inventory/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "698",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043d\u0430\u043a\u043b\u0430\u0434\u043d\u044b\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/report-provider-request-invoice/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "699",
+        "parent_id": "36",
+        "menu_name": "\u041f\u043e\u0434\u0431\u043e\u0440\u044b \u043a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u0438\u0432\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/work-set-preset-kit-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "700",
+        "parent_id": "54",
+        "menu_name": "\u0413\u0435\u043d\u0435\u0440\u0430\u0442\u043e\u0440 \u043e\u0442\u0447\u0435\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/report/report-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "701",
+        "parent_id": "700",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/report/report-view/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "702",
+        "parent_id": "700",
+        "menu_name": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u043e\u0442\u0447\u0435\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/report/report-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "703",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u0437\u0430\u0433\u0440\u0443\u0437\u043e\u043a \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u043e\u0432 \u041e\u041a\u041a \u0427\u041e",
+        "menu_code": "null",
+        "menu_action": "/report/report-for-docs-okk/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "704",
+        "parent_id": "671",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043e\u0436\u0438\u0434\u0430\u0435\u043c\u044b\u043c \u043e\u043f\u043b\u0430\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "reportExpectedPayments",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "705",
+        "parent_id": "653",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u044d\u0442\u0430\u043f\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "reportStages",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "706",
+        "parent_id": "null",
+        "menu_name": "Fulfillment",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "707",
+        "parent_id": "706",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/ff/request-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "713",
+        "parent_id": "21",
+        "menu_name": "\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432 SR",
+        "menu_code": "null",
+        "menu_action": "/dict/material-provider-list/fulfillment_code/SR/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "714",
+        "parent_id": "21",
+        "menu_name": "\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432 FF",
+        "menu_code": "null",
+        "menu_action": "/dict/material-provider-list/fulfillment_code/FULFILLMENT/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "715",
+        "parent_id": "436",
+        "menu_name": "\u0421\u043f\u0438\u0441\u043e\u043a \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 (\u041e\u0417)",
+        "menu_code": "null",
+        "menu_action": "/material/material-zakup-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "716",
+        "parent_id": "436",
+        "menu_name": "\u0421\u043f\u0438\u0441\u043e\u043a \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 (\u0421\u041e)",
+        "menu_code": "null",
+        "menu_action": "/material/material-smetniy-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "717",
+        "parent_id": "436",
+        "menu_name": "\u0421\u043f\u0438\u0441\u043e\u043a \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 (\u041a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u043e\u0440)",
+        "menu_code": "null",
+        "menu_action": "/material/material-constructor-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "720",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0451\u0442 \u043f\u043e \u043f\u0440\u0438\u043d\u044f\u0442\u0438\u044e \u0416\u041a",
+        "menu_code": "null",
+        "menu_action": "/dict/report-resident-draft/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "721",
+        "parent_id": "679",
+        "menu_name": "\u041a\u043e\u043d\u0441\u043e\u043b\u0438\u0434\u0438\u0440\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0441\u043c\u0435\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/defect/defect-smeta-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "723",
+        "parent_id": "21",
+        "menu_name": "\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432 \u0434\u043b\u044f \u041a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u043e\u0440\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/material-provider-list-constructor/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "724",
+        "parent_id": "671",
+        "menu_name": "\u041e\u043f\u043b\u0430\u0442\u0430 \u043d\u0430\u0447.\u0434\u0438\u0440\u0435\u043a\u0446\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "paymentReportsAll",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "725",
+        "parent_id": "671",
+        "menu_name": "\u041e\u043f\u043b\u0430\u0442\u044b \u043f\u0440\u043e\u0440\u0430\u0431\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "prorabPaymentsReport",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "732",
+        "parent_id": "null",
+        "menu_name": "\u0421\u043c\u0435\u0442\u0430",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "734",
+        "parent_id": "36",
+        "menu_name": "\u041a\u043b\u0430\u0441\u0441\u044b \u043f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u043e\u043a",
+        "menu_code": "null",
+        "menu_action": "/dict/planirovka-class-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "735",
+        "parent_id": "671",
+        "menu_name": "\u0428\u0442\u0440\u0430\u0444\u044b",
+        "menu_code": "null",
+        "menu_action": "reportPenalty",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "736",
+        "parent_id": "671",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043b\u0438\u043c\u0438\u0442\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "reportLimit",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "738",
+        "parent_id": "15",
+        "menu_name": "\u0413\u0440\u0435\u0439\u0434\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/grade-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "745",
+        "parent_id": "21",
+        "menu_name": "\u0418\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u044f \u0446\u0435\u043d \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/mp-buffer-price-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "746",
+        "parent_id": "36",
+        "menu_name": "\u041f\u0440\u0438\u0432\u044f\u0437\u043a\u0430 \u043f\u043e\u0432\u0435\u0440\u0445\u043d\u043e\u0441\u0442\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "/constructor/work-set-rel-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "747",
+        "parent_id": "489",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043d\u0435\u0434\u043e\u0441\u0442\u0430\u044e\u0449\u0438\u043c \u043e\u0441\u0442\u0430\u0442\u043a\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/warehouse/report-zakup-material/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "749",
+        "parent_id": "null",
+        "menu_name": "\u0422\u0430\u0440\u0438\u0444\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "750",
+        "parent_id": "757",
+        "menu_name": "\u041f\u0430\u043a\u0435\u0442\u044b \u0440\u0430\u0431\u043e\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/work-pack-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "751",
+        "parent_id": "757",
+        "menu_name": "\u0426\u0435\u043d\u044b \u043f\u0430\u043a\u0435\u0442\u043e\u0432 \u043f\u043e\u0434\u0440\u044f\u0434\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/work-pack-contractor-price-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "752",
+        "parent_id": "587",
+        "menu_name": "\u0411\u0440\u0438\u0433\u0430\u0434\u044b",
+        "menu_code": "null",
+        "menu_action": "teams",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "753",
+        "parent_id": "757",
+        "menu_name": "\u041a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u0438\u0432\u044b \u043f\u0430\u043a\u0435\u0442\u043e\u0432 \u0440\u0430\u0431\u043e\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/work-pack-detail/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "754",
+        "parent_id": "21",
+        "menu_name": "\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432 \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/material-provider-list/fulfillment_code/CONTRACTOR/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "755",
+        "parent_id": "759",
+        "menu_name": "\u0414\u043e\u0445\u043e\u0434\u044b",
+        "menu_code": "null",
+        "menu_action": "accountingIncomes",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "756",
+        "parent_id": "759",
+        "menu_name": "\u0420\u0430\u0441\u0445\u043e\u0434\u044b",
+        "menu_code": "null",
+        "menu_action": "accountingCosts",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "757",
+        "parent_id": "749",
+        "menu_name": "\u041f\u0430\u043a\u0435\u0442\u044b \u043f\u043e\u0434\u0440\u044f\u0434\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "759",
+        "parent_id": "587",
+        "menu_name": "\u0423\u0447\u0435\u0442",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "760",
+        "parent_id": "306",
+        "menu_name": "\u041b\u0438\u043c\u0438\u0442\u044b \u0441\u0434\u0435\u043b\u043e\u043a",
+        "menu_code": "null",
+        "menu_action": "/dict/hunter-deal-limit-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "762",
+        "parent_id": "299",
+        "menu_name": "\u041e\u0442\u043c\u0435\u043d\u0430",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "774",
+        "parent_id": "1",
+        "menu_name": "\u041f\u0440\u0430\u0432\u0438\u043b\u0430 \u043f\u043b\u0430\u0442\u0435\u0436\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "/dict/payment-rule-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "775",
+        "parent_id": "587",
+        "menu_name": "\u0412\u0441\u0435 \u0437\u0430\u044f\u0432\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "requests",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "776",
+        "parent_id": "757",
+        "menu_name": "\u041b\u0438\u043c\u0438\u0442\u044b \u043f\u0430\u043a\u0435\u0442\u043e\u0432 \u0440\u0430\u0431\u043e\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/work-pack-limit-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "777",
+        "parent_id": "749",
+        "menu_name": "\u041e\u0431\u044a\u0435\u043c \u0440\u0430\u0431\u043e\u0442 \u043f\u043e \u043d\u0430\u0431\u043e\u0440\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/material-set-work-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "779",
+        "parent_id": "759",
+        "menu_name": "\u0411\u0430\u043b\u0430\u043d\u0441 \u0418\u041f",
+        "menu_code": "null",
+        "menu_action": "contractors",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "780",
+        "parent_id": "36",
+        "menu_name": "\u0421\u0440\u043e\u043a\u0438 \u0440\u0430\u0431\u043e\u0442 \u043f\u043e \u043f\u043e\u0434\u0431\u043e\u0440\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-kit-term-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "781",
+        "parent_id": "36",
+        "menu_name": "\u041d\u0430\u0434\u0431\u0430\u0432\u043a\u0438 \u043f\u043e\u0434\u0431\u043e\u0440\u043e\u0432 \u043f\u043e \u043a\u043e\u043c\u043d\u0430\u0442\u043d\u043e\u0441\u0442\u044f\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-kit-room-price-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "782",
+        "parent_id": "1",
+        "menu_name": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430 \u0438 \u043f\u0440\u0430\u0432\u0430 \u043d\u0430 \u0441\u0442\u0430\u0442\u0443\u0441\u044b \u0437\u0430\u044f\u0432\u043e\u043a \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0443",
+        "menu_code": "null",
+        "menu_action": "/dict/pr-status-link/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "831",
+        "parent_id": "null",
+        "menu_name": "\u0410\u043d\u0430\u043b\u0438\u0442\u0438\u043a\u0430 / \u041f\u0440\u043e\u0433\u043d\u043e\u0437",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "832",
+        "parent_id": "831",
+        "menu_name": "\u0420\u0435\u043c\u043e\u043d\u0442\u044b \u043f\u043e \u0441\u0440\u043e\u043a\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/avg-remont-days-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "835",
+        "parent_id": "759",
+        "menu_name": "\u0414\u043e\u043b\u0433\u0438",
+        "menu_code": "null",
+        "menu_action": "debts",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "836",
+        "parent_id": "759",
+        "menu_name": "\u041e\u043f\u043b\u0430\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "brigadirCosts",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "837",
+        "parent_id": "839",
+        "menu_name": "\u0413\u0440\u0443\u043f\u043f\u044b \u043e\u0442\u0447\u0435\u0442\u043e\u0432 \u0434\u043b\u044f \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "/mngreport/mng-report-group/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "838",
+        "parent_id": "111",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430\u043c SR",
+        "menu_code": "null",
+        "menu_action": "/provider-request/request-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "839",
+        "parent_id": "null",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442\u044b \u0434\u043b\u044f \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "840",
+        "parent_id": "839",
+        "menu_name": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "/mngreport/mng-report-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "841",
+        "parent_id": "530",
+        "menu_name": "\u041f\u0430\u043c\u044f\u0442\u043a\u0438, \u0432\u0438\u0434\u0435\u043e",
+        "menu_code": "null",
+        "menu_action": "/landing/front-brief-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "842",
+        "parent_id": "530",
+        "menu_name": "\u041e \u043d\u0430\u0441",
+        "menu_code": "null",
+        "menu_action": "/landing/about-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "843",
+        "parent_id": "530",
+        "menu_name": "\u041a\u043e\u043d\u0442\u0440\u0430\u0433\u0435\u043d\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/landing/partner-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "844",
+        "parent_id": "530",
+        "menu_name": "\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/landing/front-contact-info-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "846",
+        "parent_id": "null",
+        "menu_name": "\u041e\u0444\u0438\u0441",
+        "menu_code": "null",
+        "menu_action": "null",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "847",
+        "parent_id": "898",
+        "menu_name": "\u041e\u0436\u0438\u0434\u0430\u0435\u0442 \u043e\u043f\u043b\u0430\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "payments",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "848",
+        "parent_id": "15",
+        "menu_name": "\u0410\u0431\u0441\u0442\u0440\u0430\u043a\u0442\u043d\u044b\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b",
+        "menu_code": "null",
+        "menu_action": "/material/abs-material-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "862",
+        "parent_id": "null",
+        "menu_name": "\u041f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "863",
+        "parent_id": "839",
+        "menu_name": "\u0414\u043e\u0441\u0442\u0443\u043f\u044b \u043f\u043e \u0433\u0440\u0443\u043f\u043f\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/mngreport/mng-report-group-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "865",
+        "parent_id": "759",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u0440\u0430\u0441\u0445\u043e\u0434\u043e\u0432 \u0438 \u0434\u043e\u0445\u043e\u0434\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "remontsAccountingReport",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "866",
+        "parent_id": "759",
+        "menu_name": "\u0418\u0442\u043e\u0433\u0438",
+        "menu_code": "null",
+        "menu_action": "debtsAmount",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "867",
+        "parent_id": "null",
+        "menu_name": "A\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435"
+    },
+    {
+        "\ufeff\"menu_id\"": "868",
+        "parent_id": "867",
+        "menu_name": "\u0414\u043e\u0441\u0442\u0443\u043f\u044b",
+        "menu_code": "null",
+        "menu_action": "permissions",
+        "location": "\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435"
+    },
+    {
+        "\ufeff\"menu_id\"": "869",
+        "parent_id": "867",
+        "menu_name": "\u0421\u043e\u0442\u0440\u0443\u0434\u043d\u0438\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "userSettings",
+        "location": "\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435"
+    },
+    {
+        "\ufeff\"menu_id\"": "870",
+        "parent_id": "862",
+        "menu_name": "\u0413\u043b\u0430\u0432\u043d\u0430\u044f",
+        "menu_code": "null",
+        "menu_action": "main",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "871",
+        "parent_id": "862",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "null",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "872",
+        "parent_id": "871",
+        "menu_name": "\u041f\u0440\u043e\u0441\u0440\u043e\u0447\u0435\u043d\u043d\u044b\u0435",
+        "menu_code": "null",
+        "menu_action": "requestsOverdue",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "874",
+        "parent_id": "871",
+        "menu_name": "\u0410\u043a\u0442\u0438\u0432\u043d\u044b\u0435",
+        "menu_code": "null",
+        "menu_action": "requestsActive",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "875",
+        "parent_id": "871",
+        "menu_name": "\u0417\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u043d\u044b\u0435",
+        "menu_code": "null",
+        "menu_action": "requestsCompleted",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "878",
+        "parent_id": "871",
+        "menu_name": "\u041f\u043e\u044f\u0432\u0438\u043b\u0441\u044f \u043d\u0430 \u0441\u043a\u043b\u0430\u0434\u0435",
+        "menu_code": "null",
+        "menu_action": "requestsWaitShipping",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "879",
+        "parent_id": "871",
+        "menu_name": "\u041d\u0435\u0442 \u0432 \u043d\u0430\u043b\u0438\u0447\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "requestsNot",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "880",
+        "parent_id": "54",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u0441 \u0440\u0443\u0447\u043d\u044b\u043c\u0438 \u043f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u043a\u0430\u043c\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/manual-plan-request-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "881",
+        "parent_id": "null",
+        "menu_name": "\u041f\u0440\u043e\u0432\u0435\u0440\u043a\u0430 \u043f\u043e \u0432\u0438\u0434\u0430\u043c \u0440\u0430\u0431\u043e\u0442",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "882",
+        "parent_id": "881",
+        "menu_name": "\u0427\u0435\u043a\u043b\u0438\u0441\u0442\u044b \u043f\u043e \u043a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u0438\u0432\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/work-set-check-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "883",
+        "parent_id": "881",
+        "menu_name": "\u0413\u0440\u0443\u043f\u043f\u044b \u043a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u0438\u0432\u043e\u0432 \u0434\u043b\u044f \u0447\u0435\u043a\u043b\u0438\u0441\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/work-set-check-group-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "884",
+        "parent_id": "306",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043d\u0430 \u043e\u0442\u043a\u0430\u0437",
+        "menu_code": "null",
+        "menu_action": "/dict/report-request-cancel-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "885",
+        "parent_id": "306",
+        "menu_name": "\u0412\u043e\u0437\u0432\u0440\u0430\u0442 \u043e\u0442\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0445 \u0437\u0430\u044f\u0432\u043e\u043a",
+        "menu_code": "null",
+        "menu_action": "/dict/report-request-canceled-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "886",
+        "parent_id": "867",
+        "menu_name": "\u0421\u0432\u0435\u0440\u043a\u0430",
+        "menu_code": "null",
+        "menu_action": "compareDataOneC",
+        "location": "\u0410\u0434\u043c\u0438\u043d\u0438\u0441\u0442\u0440\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435"
+    },
+    {
+        "\ufeff\"menu_id\"": "887",
+        "parent_id": "898",
+        "menu_name": "\u041f\u043b\u0430\u0442\u0435\u0436\u043d\u044b\u0435 \u043f\u043e\u0440\u0443\u0447\u0435\u043d\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "financePayments",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "888",
+        "parent_id": "896",
+        "menu_name": "\u0422\u0430\u0439\u043c\u043b\u0430\u0439\u043d",
+        "menu_code": "null",
+        "menu_action": "null",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "889",
+        "parent_id": "888",
+        "menu_name": "\u0413\u0440\u0435\u0439\u0434",
+        "menu_code": "null",
+        "menu_action": "timelineGrade",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "890",
+        "parent_id": "888",
+        "menu_name": "\u0420\u0435\u043c\u043e\u043d\u0442",
+        "menu_code": "null",
+        "menu_action": "timelineRemont",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "894",
+        "parent_id": "36",
+        "menu_name": "\u041a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u0438\u0432\u044b \u043f\u043e \u0416\u041a/\u041f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043a\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/constructor/resident-work-set-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "895",
+        "parent_id": "839",
+        "menu_name": "\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u044f \u043f\u043e \u0433\u0440\u0443\u043f\u043f\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/mngreport/action-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "896",
+        "parent_id": "846",
+        "menu_name": "\u0420\u0435\u043c\u043e\u043d\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "null",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "898",
+        "parent_id": "846",
+        "menu_name": "\u0424\u0438\u043d\u0430\u043d\u0441\u044b",
+        "menu_code": "null",
+        "menu_action": "null",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "899",
+        "parent_id": "15",
+        "menu_name": "\u0428\u0430\u0431\u043b\u043e\u043d\u044b \u0414\u0421",
+        "menu_code": "null",
+        "menu_action": "/dict/ds-template-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "901",
+        "parent_id": "1",
+        "menu_name": "Uncheck",
+        "menu_code": "null",
+        "menu_action": "/system/uncheck-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "902",
+        "parent_id": "198",
+        "menu_name": "\u0420\u0443\u0447\u043d\u0430\u044f \u043a\u043e\u0440\u0440\u0435\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u043a\u0430 \u0434\u043e\u043b\u0433\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/buh-correction-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "903",
+        "parent_id": "198",
+        "menu_name": "\u0420\u0443\u0447\u043d\u044b\u0435 \u0431\u0443\u0445\u0433\u0430\u043b\u0442\u0435\u0440\u0441\u043a\u0438\u0435 \u043e\u043f\u0435\u0440\u0430\u0446\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/buh-manual-operation-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "905",
+        "parent_id": "256",
+        "menu_name": "\u0420\u0443\u0447\u043d\u0430\u044f \u043e\u0442\u043f\u0440\u0430\u0432\u043a\u0430 \u0441\u043c\u0441",
+        "menu_code": "null",
+        "menu_action": "/notification/sms-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "906",
+        "parent_id": "896",
+        "menu_name": "\u0411\u044b\u0441\u0442\u0440\u044b\u0439 \u043f\u043e\u0438\u0441\u043a",
+        "menu_code": "null",
+        "menu_action": "quickSearch",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "907",
+        "parent_id": "15",
+        "menu_name": "\u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u043f\u043e \u0444\u0438\u043a\u0441\u0430\u0446\u0438\u0438 \u043f\u0435\u0440\u0438\u043e\u0434\u0430 \u0432 \u0434\u043e\u0433\u043e\u0432\u043e\u0440\u0430\u0445",
+        "menu_code": "null",
+        "menu_action": "/dict/agreement-fix-price-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "908",
+        "parent_id": "null",
+        "menu_name": "\u0421\u0435\u0440\u0432\u0438\u0441\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "909",
+        "parent_id": "908",
+        "menu_name": "\u0421\u043f\u0438\u0441\u043e\u043a \u0438 \u0442\u0430\u0440\u0438\u0444\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/service-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "910",
+        "parent_id": "908",
+        "menu_name": "\u0421\u0432\u044f\u0437\u043a\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/service-link-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "911",
+        "parent_id": "15",
+        "menu_name": "\u0413\u0440\u0443\u043f\u043f\u044b \u0440\u0430\u0431\u043e\u0442 \u043f\u043e \u0433\u0440\u0435\u0439\u0434\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "/wset/wset-grade-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "912",
+        "parent_id": "846",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "handbook",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "913",
+        "parent_id": "912",
+        "menu_name": "\u041a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0442\u0438\u0432",
+        "menu_code": "null",
+        "menu_action": "handbookWorksets",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "914",
+        "parent_id": "896",
+        "menu_name": "\u0416\u0443\u0440\u043d\u0430\u043b \u0414\u043e\u0433\u043e\u0432\u043e\u0440\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "agreementsJournal",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "915",
+        "parent_id": "912",
+        "menu_name": "\u0428\u0430\u0431\u043b\u043e\u043d\u044b \u0443\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u0439",
+        "menu_code": "null",
+        "menu_action": "handbookNoticeTemplates",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "916",
+        "parent_id": "912",
+        "menu_name": "\u041f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "handbookProviders",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "917",
+        "parent_id": "912",
+        "menu_name": "\u0414\u043e\u0433\u043e\u0432\u043e\u0440 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "handbookProvidersAgreement",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "918",
+        "parent_id": "912",
+        "menu_name": "\u0424\u0430\u0439\u043b\u044b \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "handbookOrgFiles",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "919",
+        "parent_id": "924",
+        "menu_name": "\u041c\u0430\u0441\u0442\u0435\u0440\u0430 \u043f\u043e \u0443\u0441\u043b\u0443\u0433\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "handbookServiceMasters",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "921",
+        "parent_id": "54",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u0437\u0430\u0432\u0435\u0440\u0448\u0435\u043d\u0438\u044e \u0413\u0440\u0443\u043f\u043f \u0440\u0430\u0431\u043e\u0442",
+        "menu_code": "null",
+        "menu_action": "/dict/report-completed-check-group/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "922",
+        "parent_id": "923",
+        "menu_name": "\u041f\u043b\u0430\u0442\u0435\u0436\u0438",
+        "menu_code": "null",
+        "menu_action": "mastersPayments",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "923",
+        "parent_id": "587",
+        "menu_name": "\u0424\u0438\u043d\u0430\u043d\u0441\u044b",
+        "menu_code": "null",
+        "menu_action": "finance",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "924",
+        "parent_id": "846",
+        "menu_name": "\u041e\u043f\u043b\u0430\u0442\u044b \u043c\u0430\u0441\u0442\u0435\u0440\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "null",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "925",
+        "parent_id": "923",
+        "menu_name": "\u041e\u0436\u0438\u0434\u0430\u044e\u0442 \u043e\u043f\u043b\u0430\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "groupedMastersPayments",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "926",
+        "parent_id": "923",
+        "menu_name": "\u041f\u043e\u0434\u043f\u0438\u0441\u0430\u043d\u043d\u044b\u0435 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "mastersPaymentsSignedDocs",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "927",
+        "parent_id": "922",
+        "menu_name": "\u041e\u043f\u043b\u0430\u0447\u0435\u043d",
+        "menu_code": "null",
+        "menu_action": "mastersPayments",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "928",
+        "parent_id": "922",
+        "menu_name": "\u041e\u0442\u043c\u0435\u043d\u0435\u043d",
+        "menu_code": "null",
+        "menu_action": "mastersPayments",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "929",
+        "parent_id": "922",
+        "menu_name": "\u041f\u043e\u0434\u043f\u0438\u0441\u0430\u043d",
+        "menu_code": "null",
+        "menu_action": "mastersPayments",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "931",
+        "parent_id": "653",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043e\u043f\u043b\u0430\u0442\u0435 \u0432\u043d\u0435\u0448\u043d\u0438\u043c \u043c\u0430\u0441\u0442\u0435\u0440\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "externalMasterPayments",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "932",
+        "parent_id": "846",
+        "menu_name": "\u0413\u0435\u043d\u0435\u0440\u0430\u0442\u043e\u0440 \u043e\u0442\u0447\u0435\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "reportGenerator",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "933",
+        "parent_id": "846",
+        "menu_name": "\u0420\u0443\u0447\u043d\u043e\u0435 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0435 \u0434\u0430\u043d\u043d\u044b\u0445",
+        "menu_code": "null",
+        "menu_action": "manualModifications",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "939",
+        "parent_id": "15",
+        "menu_name": "\u0428\u0430\u0431\u043b\u043e\u043d\u044b \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/template-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "940",
+        "parent_id": "653",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442 \u043f\u043e \u043e\u043f\u043b\u0430\u0442\u0430\u043c \u043c\u0430\u0441\u0442\u0435\u0440\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "reportMasterPayments",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "941",
+        "parent_id": "912",
+        "menu_name": "\u0412\u0435\u0440\u0441\u0438\u0438 \u043c\u043e\u0431\u0438\u043b\u044c\u043d\u044b\u0445 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0439",
+        "menu_code": "null",
+        "menu_action": "handbookMobileApps",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "942",
+        "parent_id": "846",
+        "menu_name": "\u041e\u0442\u0447\u0435\u0442\u044b \u0434\u043b\u044f \u0440\u0443\u043a\u043e\u0432\u043e\u0434\u0438\u0442\u0435\u043b\u0435\u0439",
+        "menu_code": "null",
+        "menu_action": "executiveReports",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "943",
+        "parent_id": "846",
+        "menu_name": "\u041a\u0430\u043d\u0431\u0430\u043d",
+        "menu_code": "null",
+        "menu_action": "kanban",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "944",
+        "parent_id": "587",
+        "menu_name": "\u041a\u0430\u043d\u0431\u0430\u043d",
+        "menu_code": "null",
+        "menu_action": "kanban",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "946",
+        "parent_id": "436",
+        "menu_name": "\u0421\u043a\u0438\u0434\u043e\u0447\u043d\u044b\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b",
+        "menu_code": "null",
+        "menu_action": "/material/promo-material-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "947",
+        "parent_id": "888",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a",
+        "menu_code": "null",
+        "menu_action": "null",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "948",
+        "parent_id": "947",
+        "menu_name": "\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "handbookGradeActions",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "949",
+        "parent_id": "947",
+        "menu_name": "\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u044f \u0432 \u0448\u0430\u0433\u0435",
+        "menu_code": "null",
+        "menu_action": "handbookStepActivities",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "950",
+        "parent_id": "947",
+        "menu_name": "\u0428\u0430\u0433\u0438",
+        "menu_code": "null",
+        "menu_action": "handbookTimelineSteps",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "951",
+        "parent_id": "947",
+        "menu_name": "\u0428\u0430\u0433\u0438 \u0432 \u0433\u0440\u0435\u0439\u0434\u0435",
+        "menu_code": "null",
+        "menu_action": "handbookGradeTimelineSteps",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "952",
+        "parent_id": "947",
+        "menu_name": "\u0423\u0441\u043b\u043e\u0432\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "handbookTimelineStepConditions",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "953",
+        "parent_id": "898",
+        "menu_name": "\u0420\u0435\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f",
+        "menu_code": "null",
+        "menu_action": "realization",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "954",
+        "parent_id": "587",
+        "menu_name": "\u041f\u0440\u0438\u043c\u0435\u0440\u044b \u0440\u0430\u0431\u043e\u0442",
+        "menu_code": "null",
+        "menu_action": "ourWorks",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "955",
+        "parent_id": "587",
+        "menu_name": "\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u044b \u0421\u041c\u0420",
+        "menu_code": "null",
+        "menu_action": "cmrStandards",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "956",
+        "parent_id": "587",
+        "menu_name": "\u0410\u043d\u043a\u0435\u0442\u0430",
+        "menu_code": "null",
+        "menu_action": "forContractors",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "957",
+        "parent_id": "587",
+        "menu_name": "\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u043d\u044b\u0435 \u0434\u0430\u043d\u043d\u044b\u0435",
+        "menu_code": "null",
+        "menu_action": "contractorInfo",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "961",
+        "parent_id": "111",
+        "menu_name": "\u041f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u043c",
+        "menu_code": "null",
+        "menu_action": "/dict/shipping-plan-list/shipping_status/5/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "962",
+        "parent_id": "846",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043f\u0440\u043e\u0435\u043a\u0442\u0438\u0440\u043e\u0432\u0449\u0438\u043a\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "techprojectRequests",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "963",
+        "parent_id": "862",
+        "menu_name": "\u041f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u043c",
+        "menu_code": "null",
+        "menu_action": "shippingPlan",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "965",
+        "parent_id": "653",
+        "menu_name": "\u0420\u0435\u043c\u043e\u043d\u0442\u044b \u0441 \u044e\u0440 \u0434\u0430\u0442\u0430\u043c\u0438 \u043f\u043e \u0434\u0430\u0442\u0435 \u043f\u0435\u0440\u0435\u0445\u043e\u0434\u0430 \u043d\u0430 \u0433\u0430\u0440\u0430\u043d\u0442\u0438\u044e",
+        "menu_code": "null",
+        "menu_action": "jurDateWarranty",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "967",
+        "parent_id": "436",
+        "menu_name": "\u0421\u0432\u043e\u0439\u0441\u0442\u0432\u0430 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/material/prop-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "969",
+        "parent_id": "436",
+        "menu_name": "\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0438 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/material/material-category-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "970",
+        "parent_id": "null",
+        "menu_name": "\u0420\u0435\u043d\u0434\u0435\u0440\u044b",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "971",
+        "parent_id": "970",
+        "menu_name": "\u0422\u0438\u043f\u043e\u0432\u044b\u0435 \u0440\u0435\u043d\u0434\u0435\u0440\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/render-standard-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "972",
+        "parent_id": "970",
+        "menu_name": "\u0423\u043d\u0438\u043a\u0430\u043b\u044c\u043d\u044b\u0435 \u0440\u0435\u043d\u0434\u0435\u0440\u044b",
+        "menu_code": "null",
+        "menu_action": "/dict/render-plan-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "973",
+        "parent_id": "null",
+        "menu_name": "\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0430 \u0440\u0435\u043d\u0434\u0435\u0440\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/render-edit/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "974",
+        "parent_id": "970",
+        "menu_name": "\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0430 \u0440\u0435\u043d\u0434\u0435\u0440\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/render-edit/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "975",
+        "parent_id": "null",
+        "menu_name": "\u0425\u0430\u0440\u0430\u043a\u0442\u0435\u0440\u0438\u0441\u0442\u0438\u043a\u0438 \u0434\u043b\u044f \u0414\u0414\u0423",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "976",
+        "parent_id": "975",
+        "menu_name": "\u0425\u0430\u0440\u0430\u043a\u0442\u0435\u0440\u0438\u0441\u0442\u0438\u043a\u0438 \u043f\u043e\u0434\u0431\u043e\u0440\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-kit-diff-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "977",
+        "parent_id": "975",
+        "menu_name": "\u0425\u0430\u0440\u0430\u043a\u0442\u0435\u0440\u0438\u0441\u0442\u0438\u043a\u0438 \u043d\u0430\u0431\u043e\u0440\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-material-diff-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "978",
+        "parent_id": "null",
+        "menu_name": "\u0426\u0435\u043d\u044b \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u043f\u0440\u0435\u0441\u0435\u0442\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-material-price-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "979",
+        "parent_id": "null",
+        "menu_name": "\u041e\u0431\u0449\u0438\u0435 \u043d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u043c\u0435\u0442\u043e\u043a",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-label-type-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "980",
+        "parent_id": "null",
+        "menu_name": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u043c\u0435\u0442\u043e\u043a \u043f\u043e\u0434\u0431\u043e\u0440\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-kit-label-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "981",
+        "parent_id": "null",
+        "menu_name": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u043c\u0435\u0442\u043e\u043a \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430",
+        "menu_code": "null",
+        "menu_action": "/dict/preset-material-label-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "982",
+        "parent_id": "null",
+        "menu_name": "\u041f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "983",
+        "parent_id": "982",
+        "menu_name": "\u0420\u0430\u0437\u043f\u043e\u0437\u043d\u0430\u043d\u0438\u0435 \u0416\u041a",
+        "menu_code": "null",
+        "menu_action": "/warehouse/flat-image-resident-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "984",
+        "parent_id": "982",
+        "menu_name": "\u041f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/plan-create-form/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "985",
+        "parent_id": "912",
+        "menu_name": "\u041f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u0438",
+        "menu_code": "null",
+        "menu_action": "handbookContractors",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "986",
+        "parent_id": "912",
+        "menu_name": "\u0414\u0438\u0437\u0430\u0439\u043d \u0441\u0442\u0443\u0434\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "handbookTechprojectDevelopers",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "988",
+        "parent_id": "null",
+        "menu_name": "\u041a\u043e\u043c\u0438\u0441\u0441\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "null",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "989",
+        "parent_id": "988",
+        "menu_name": "\u0421\u043f\u0438\u0441\u043e\u043a \u0438 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "/dict/fee-type-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "990",
+        "parent_id": "988",
+        "menu_name": "\u0421\u0432\u044f\u0437\u043a\u0430 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0439",
+        "menu_code": "null",
+        "menu_action": "/dict/fee-type-link-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "991",
+        "parent_id": "862",
+        "menu_name": "\u041e\u043f\u043b\u0430\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "payments",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "992",
+        "parent_id": "846",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u0430\u043c",
+        "menu_code": "null",
+        "menu_action": "providerRequests",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "993",
+        "parent_id": "587",
+        "menu_name": "\u0414\u0438\u0441\u043f\u0435\u0442\u0447\u0435\u0440",
+        "menu_code": "null",
+        "menu_action": "dispatcher",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "994",
+        "parent_id": "587",
+        "menu_name": "\u041c\u043e\u0431\u0438\u043b\u044c\u043d\u043e\u0435 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435",
+        "menu_code": "MOBILE_MAIN",
+        "menu_action": "null",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "995",
+        "parent_id": "994",
+        "menu_name": "\u0421\u043f\u0438\u0441\u043e\u043a \u0440\u0435\u043c\u043e\u043d\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "remontList",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "996",
+        "parent_id": "994",
+        "menu_name": "\u0417\u0430\u0434\u0430\u0447\u0438",
+        "menu_code": "null",
+        "menu_action": "tasks",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "997",
+        "parent_id": "996",
+        "menu_name": "\u041d\u0435 \u043d\u0430\u0447\u0430\u0442",
+        "menu_code": "null",
+        "menu_action": "tasks",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "998",
+        "parent_id": "996",
+        "menu_name": "\u041d\u0430\u0447\u0430\u0442",
+        "menu_code": "null",
+        "menu_action": "tasks",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "999",
+        "parent_id": "996",
+        "menu_name": "\u041d\u0430 \u0438\u0441\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "tasks",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "1000",
+        "parent_id": "996",
+        "menu_name": "\u041e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d \u043d\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0443",
+        "menu_code": "null",
+        "menu_action": "tasks",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "1001",
+        "parent_id": "898",
+        "menu_name": "\u0411\u0430\u043b\u0430\u043d\u0441",
+        "menu_code": "null",
+        "menu_action": "balances",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1002",
+        "parent_id": "846",
+        "menu_name": "\u0411\u0440\u043e\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0435 \u043a\u043e\u043c\u043d\u0430\u0442 \u0428\u043e\u0443\u0440\u0443\u043c\u0430",
+        "menu_code": "null",
+        "menu_action": "roomBooking",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1003",
+        "parent_id": "null",
+        "menu_name": "\u0417\u0430\u043b\u043e\u0436\u0435\u043d\u043d\u044b\u0435 \u043f\u0430\u043a\u0435\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "/flat/flat-list/",
+        "location": "Smart Remont"
+    },
+    {
+        "\ufeff\"menu_id\"": "1004",
+        "parent_id": "587",
+        "menu_name": "\u0417\u0430\u044f\u0432\u043a\u0438 \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u0443",
+        "menu_code": "null",
+        "menu_action": "remontRequestList",
+        "location": "\u041c\u043e\u0434\u0443\u043b\u044c \u0434\u043b\u044f \u043f\u043e\u0434\u0440\u044f\u0434\u0447\u0438\u043a\u043e\u0432"
+    },
+    {
+        "\ufeff\"menu_id\"": "1005",
+        "parent_id": "846",
+        "menu_name": "\u0427\u0435\u0440\u043d\u043e\u0432\u0430\u044f",
+        "menu_code": "null",
+        "menu_action": "null",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1006",
+        "parent_id": "912",
+        "menu_name": "\u0428\u043e\u0443-\u0440\u0443\u043c\u044b",
+        "menu_code": "null",
+        "menu_action": "showrooms",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1007",
+        "parent_id": "846",
+        "menu_name": "\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "materialProvider",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1008",
+        "parent_id": "846",
+        "menu_name": "\u041c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b",
+        "menu_code": "null",
+        "menu_action": "materials",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1009",
+        "parent_id": "1005",
+        "menu_name": "\u0411\u0443\u0444\u0444\u0435\u0440",
+        "menu_code": "null",
+        "menu_action": "bufferParams",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1010",
+        "parent_id": "1005",
+        "menu_name": "\u0421\u0445\u0435\u043c\u044b",
+        "menu_code": "null",
+        "menu_action": "residentialSettings",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1011",
+        "parent_id": "912",
+        "menu_name": "\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a \u041c\u041e\u041f",
+        "menu_code": "null",
+        "menu_action": "flatList",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1012",
+        "parent_id": "1005",
+        "menu_name": "\u041a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0446\u0438\u0438",
+        "menu_code": "null",
+        "menu_action": "null",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1013",
+        "parent_id": "1012",
+        "menu_name": "\u0422\u0438\u043f \u043a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0446\u0438\u0439",
+        "menu_code": "null",
+        "menu_action": "frameTypes",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1014",
+        "parent_id": "1012",
+        "menu_name": "\u041a\u043e\u043d\u0441\u0442\u0440\u0443\u043a\u0446\u0438\u0438 \u043f\u043e \u0416\u041a",
+        "menu_code": "null",
+        "menu_action": "framesList",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1015",
+        "parent_id": "1007",
+        "menu_name": "\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "materialProviderList",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1016",
+        "parent_id": "1007",
+        "menu_name": "\u0418\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u044f \u0446\u0435\u043d \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u043e\u0432 \u043f\u043e\u0441\u0442\u0430\u0432\u0449\u0438\u043a\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "materialProvPriceChanges",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1017",
+        "parent_id": "1005",
+        "menu_name": "\u0421\u043c\u0435\u0442\u0430 \u043f\u043e \u0447\u0435\u0440\u043d\u043e\u0432\u043e\u0439",
+        "menu_code": "null",
+        "menu_action": "shellEstimates",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1018",
+        "parent_id": "null",
+        "menu_name": "\u041f\u0440\u043e\u0435\u043a\u0442\u044b",
+        "menu_code": "null",
+        "menu_action": "projects",
+        "location": "\u041c\u0430\u0441\u0442\u0435\u0440"
+    },
+    {
+        "\ufeff\"menu_id\"": "1019",
+        "parent_id": "1005",
+        "menu_name": "\u041f\u0440\u043e\u0435\u043a\u0442\u044b \u043f\u043e \u0447\u0435\u0440\u043d\u043e\u0432\u043e\u0439",
+        "menu_code": "null",
+        "menu_action": "shellProjects",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1020",
+        "parent_id": "null",
+        "menu_name": "\u0421\u0441\u044b\u043b\u043a\u0438 OpenSpace",
+        "menu_code": "null",
+        "menu_action": "openSpaceLinks",
+        "location": "\u041c\u0430\u0441\u0442\u0435\u0440"
+    },
+    {
+        "\ufeff\"menu_id\"": "1021",
+        "parent_id": "1018",
+        "menu_name": "\u0421\u0432\u043e\u0434\u043d\u0430\u044f \u0442\u0430\u0431\u043b\u0438\u0446\u0430",
+        "menu_code": "null",
+        "menu_action": "projectsOverview",
+        "location": "\u041c\u0430\u0441\u0442\u0435\u0440"
+    },
+    {
+        "\ufeff\"menu_id\"": "1022",
+        "parent_id": "1018",
+        "menu_name": "\u0412\u0432\u0435\u0434\u0435\u043d\u0438\u0435 \u043f\u0440\u043e\u0435\u043a\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "residentialSettings",
+        "location": "\u041c\u0430\u0441\u0442\u0435\u0440"
+    },
+    {
+        "\ufeff\"menu_id\"": "1023",
+        "parent_id": "1005",
+        "menu_name": "\u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u044d\u0442\u0430\u0436\u0430",
+        "menu_code": "null",
+        "menu_action": "floorParams",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1024",
+        "parent_id": "null",
+        "menu_name": "\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430 \u043f\u0430\u043a\u0435\u0442\u043e\u0432",
+        "menu_code": "null",
+        "menu_action": "packageEntry",
+        "location": "\u041c\u0430\u0441\u0442\u0435\u0440"
+    },
+    {
+        "\ufeff\"menu_id\"": "1025",
+        "parent_id": "912",
+        "menu_name": "\u0424\u043e\u043d\u043e\u0432\u044b\u0435 \u0437\u0430\u0434\u0430\u0447\u0438",
+        "menu_code": "null",
+        "menu_action": "cronJobs",
+        "location": "MySpace"
+    },
+    {
+        "\ufeff\"menu_id\"": "1026",
+        "parent_id": "1005",
+        "menu_name": "\u0411\u0443\u0444\u0444\u0435\u0440 \u0440\u0435\u0432\u0438\u0442",
+        "menu_code": "null",
+        "menu_action": "revitBufferParams",
+        "location": "MySpace"
+    }
+]
