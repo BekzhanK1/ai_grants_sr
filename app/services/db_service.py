@@ -101,122 +101,172 @@ async def _fetch_all_permissions(
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-async def search_menu(query: str) -> list[dict[str, Any]]:
+async def _get_employee_module_id(conn: Any, employee_id: int) -> int | None:
+    """
+    Get the 'native' module_id for an employee based on their position.
+    Used to prioritize search results.
+    """
+    try:
+        return await conn.fetchval(
+            """
+            SELECT p.module_id 
+            FROM admin.employee_tab e
+            JOIN admin.position_tab p ON e.position_id = p.position_id
+            WHERE e.employee_id = $1
+            """,
+            employee_id,
+        )
+    except Exception:
+        logger.warning("Failed to determine module_id for employee %s", employee_id)
+        return None
+
+
+async def search_menu(query: str, employee_id: int | None = None) -> list[dict[str, Any]]:
     """
     Поиск пунктов меню по названию.
     Только активные. Включает parent_name и module_name.
     Нечёткий поиск (pg_trgm), если доступен; иначе ILIKE.
+    Приоритет: совпадение модуля (если передан employee_id).
     """
     query = query.strip()
     if not query:
         return []
+    
     pool = get_pool()
     async with pool.acquire() as conn:
+        target_module_id = None
+        if employee_id:
+            target_module_id = await _get_employee_module_id(conn, employee_id)
+
+        # Base SELECT
+        select_sql = (
+            "SELECT t.menu_id, t.menu_name, t.menu_action, "
+            "       p.menu_name AS parent_name, m.module_name, t.module_id "
+            "FROM admin.menu_tab t "
+            "LEFT JOIN admin.menu_tab p ON t.menu_pid = p.menu_id "
+            "LEFT JOIN admin.module_tab m ON t.module_id = m.module_id "
+            "WHERE t.is_active = 1 "
+        )
+
+        # Ordering logic: boost raw match and module match
+        # If target_module_id is set, we use it to boost relevance
+        # We need conditional SQL construction or pass parameter conditionally
+        
+        args = [query]
+        order_clause = ""
+        
+        if target_module_id:
+            args.append(target_module_id)
+            # $2 is target_module_id
+            module_boost = "(CASE WHEN t.module_id = $2 THEN 1 ELSE 0 END) DESC, "
+        else:
+            module_boost = ""
+
         try:
-            rows = await conn.fetch(
-                "SELECT t.menu_id, t.menu_name, t.menu_action, "
-                "       p.menu_name AS parent_name, m.module_name "
-                "FROM admin.menu_tab t "
-                "LEFT JOIN admin.menu_tab p ON t.menu_pid = p.menu_id "
-                "LEFT JOIN admin.module_tab m ON t.module_id = m.module_id "
-                "WHERE t.is_active = 1 "
-                "  AND (t.menu_name ILIKE '%' || $1 || '%' OR t.menu_name % $1) "
-                "ORDER BY similarity(t.menu_name, $1) DESC NULLS LAST, t.menu_id "
-                "LIMIT 15",
-                query,
-            )
+            # TRY pg_trgm
+            where_clause = "AND (t.menu_name ILIKE '%' || $1 || '%' OR t.menu_name % $1) "
+            order_clause = f"ORDER BY {module_boost} similarity(t.menu_name, $1) DESC NULLS LAST, t.menu_id LIMIT 15"
+            sql = select_sql + where_clause + order_clause
+            rows = await conn.fetch(sql, *args)
         except asyncpg.UndefinedFunctionError:
-            rows = await conn.fetch(
-                "SELECT t.menu_id, t.menu_name, t.menu_action, "
-                "       p.menu_name AS parent_name, m.module_name "
-                "FROM admin.menu_tab t "
-                "LEFT JOIN admin.menu_tab p ON t.menu_pid = p.menu_id "
-                "LEFT JOIN admin.module_tab m ON t.module_id = m.module_id "
-                "WHERE t.is_active = 1 AND t.menu_name ILIKE '%' || $1 || '%' "
-                "ORDER BY t.menu_id LIMIT 15",
-                query,
-            )
+            # Fallback ILIKE
+            where_clause = "AND t.menu_name ILIKE '%' || $1 || '%' "
+            order_clause = f"ORDER BY {module_boost} t.menu_id LIMIT 15"
+            sql = select_sql + where_clause + order_clause
+            rows = await conn.fetch(sql, *args)
+
     results = [dict(r) for r in rows]
-    logger.info("search_menu  query=%r  found=%d", query, len(results))
+    logger.info("search_menu query=%r employee_id=%s found=%d", query, employee_id, len(results))
     return results
 
 
-async def search_group(query: str) -> list[dict[str, Any]]:
+async def search_group(query: str, employee_id: int | None = None) -> list[dict[str, Any]]:
     """
     Поиск групп (ролей) по названию.
-    Только активные. Включает module_name для контекста.
-    Использует нечёткий поиск (pg_trgm similarity), если расширение включено —
-    так находятся варианты вроде «Менеджер call-centra» по запросу «менеджера call-центра».
-    Fallback на ILIKE, если pg_trgm не установлен.
+    Приоритет: совпадение модуля (если передан employee_id).
     """
     query = query.strip()
     if not query:
         return []
     pool = get_pool()
     async with pool.acquire() as conn:
+        target_module_id = None
+        if employee_id:
+            target_module_id = await _get_employee_module_id(conn, employee_id)
+
+        select_sql = (
+            "SELECT g.group_id, g.group_name, g.group_code, m.module_name, g.module_id "
+            "FROM admin.group_tab g "
+            "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
+            "WHERE g.is_active = true "
+        )
+
+        args = [query]
+        if target_module_id:
+            args.append(target_module_id)
+            module_boost = "(CASE WHEN g.module_id = $2 THEN 1 ELSE 0 END) DESC, "
+        else:
+            module_boost = ""
+
         try:
-            rows = await conn.fetch(
-                "SELECT g.group_id, g.group_name, g.group_code, m.module_name "
-                "FROM admin.group_tab g "
-                "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
-                "WHERE g.is_active = true "
-                "  AND (g.group_name ILIKE '%' || $1 || '%' OR g.group_name % $1) "
-                "ORDER BY similarity(g.group_name, $1) DESC NULLS LAST, g.group_id "
-                "LIMIT 15",
-                query,
-            )
+            where_clause = "AND (g.group_name ILIKE '%' || $1 || '%' OR g.group_name % $1) "
+            order_clause = f"ORDER BY {module_boost} similarity(g.group_name, $1) DESC NULLS LAST, g.group_id LIMIT 15"
+            sql = select_sql + where_clause + order_clause
+            rows = await conn.fetch(sql, *args)
         except asyncpg.UndefinedFunctionError:
-            rows = await conn.fetch(
-                "SELECT g.group_id, g.group_name, g.group_code, m.module_name "
-                "FROM admin.group_tab g "
-                "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
-                "WHERE g.is_active = true "
-                "  AND g.group_name ILIKE '%' || $1 || '%' "
-                "ORDER BY g.group_id LIMIT 15",
-                query,
-            )
+            where_clause = "AND g.group_name ILIKE '%' || $1 || '%' "
+            order_clause = f"ORDER BY {module_boost} g.group_id LIMIT 15"
+            sql = select_sql + where_clause + order_clause
+            rows = await conn.fetch(sql, *args)
+
     results = [dict(r) for r in rows]
-    logger.info("search_group  query=%r  found=%d", query, len(results))
+    logger.info("search_group query=%r employee_id=%s found=%d", query, employee_id, len(results))
     return results
 
 
-async def search_grant(query: str) -> list[dict[str, Any]]:
+async def search_grant(query: str, employee_id: int | None = None) -> list[dict[str, Any]]:
     """
     Поиск грантов по названию.
-    Только активные. Включает parent_name и module_name.
-    Нечёткий поиск (pg_trgm), если доступен; иначе ILIKE.
+    Приоритет: совпадение модуля (если передан employee_id).
     """
     query = query.strip()
     if not query:
         return []
     pool = get_pool()
     async with pool.acquire() as conn:
+        target_module_id = None
+        if employee_id:
+            target_module_id = await _get_employee_module_id(conn, employee_id)
+
+        select_sql = (
+            "SELECT g.grant_id, g.grant_name, g.grant_code, "
+            "       p.grant_name AS parent_name, m.module_name, g.module_id "
+            "FROM admin.grant_tab g "
+            "LEFT JOIN admin.grant_tab p ON g.grant_pid = p.grant_id "
+            "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
+            "WHERE g.is_active = 1 "
+        )
+
+        args = [query]
+        if target_module_id:
+            args.append(target_module_id)
+            module_boost = "(CASE WHEN g.module_id = $2 THEN 1 ELSE 0 END) DESC, "
+        else:
+            module_boost = ""
+
         try:
-            rows = await conn.fetch(
-                "SELECT g.grant_id, g.grant_name, g.grant_code, "
-                "       p.grant_name AS parent_name, m.module_name "
-                "FROM admin.grant_tab g "
-                "LEFT JOIN admin.grant_tab p ON g.grant_pid = p.grant_id "
-                "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
-                "WHERE g.is_active = 1 "
-                "  AND (g.grant_name ILIKE '%' || $1 || '%' OR g.grant_name % $1) "
-                "ORDER BY similarity(g.grant_name, $1) DESC NULLS LAST, g.grant_id "
-                "LIMIT 15",
-                query,
-            )
+            where_clause = "AND (g.grant_name ILIKE '%' || $1 || '%' OR g.grant_name % $1) "
+            order_clause = f"ORDER BY {module_boost} similarity(g.grant_name, $1) DESC NULLS LAST, g.grant_id LIMIT 15"
+            sql = select_sql + where_clause + order_clause
+            rows = await conn.fetch(sql, *args)
         except asyncpg.UndefinedFunctionError:
-            rows = await conn.fetch(
-                "SELECT g.grant_id, g.grant_name, g.grant_code, "
-                "       p.grant_name AS parent_name, m.module_name "
-                "FROM admin.grant_tab g "
-                "LEFT JOIN admin.grant_tab p ON g.grant_pid = p.grant_id "
-                "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
-                "WHERE g.is_active = 1 AND g.grant_name ILIKE '%' || $1 || '%' "
-                "ORDER BY g.grant_id LIMIT 15",
-                query,
-            )
+            where_clause = "AND g.grant_name ILIKE '%' || $1 || '%' "
+            order_clause = f"ORDER BY {module_boost} g.grant_id LIMIT 15"
+            sql = select_sql + where_clause + order_clause
+            rows = await conn.fetch(sql, *args)
+
     results = [dict(r) for r in rows]
-    logger.info("search_grant  query=%r  found=%d", query, len(results))
+    logger.info("search_grant query=%r employee_id=%s found=%d", query, employee_id, len(results))
     return results
 
 
@@ -228,16 +278,26 @@ async def search_grant(query: str) -> list[dict[str, Any]]:
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-async def employee_group_link(employee_id: int, group_id: int) -> str:
+async def employee_group_link(employee_id: int, group_id: int) -> dict[str, Any]:
     """
     Назначить сотруднику группу (роль).
 
     ⚠ PG-функция — Toggle: повторный вызов УДАЛИТ роль.
     Smart Assign: проверяем существование перед вызовом.
-    Returns: Executed SQL statement or skip message.
+    Returns: Dict with Executed SQL statement and entity info.
     """
     pool = get_pool()
     async with pool.acquire() as conn:
+        # Fetch name for logging
+        group_name = await conn.fetchval(
+            "SELECT group_name FROM admin.group_tab WHERE group_id = $1",
+            group_id,
+        )
+        entity_info = {
+            "entity_name": group_name or f"Unknown Group {group_id}",
+            "entity_id": group_id,
+        }
+
         exists = await conn.fetchval(
             "SELECT count(1) FROM admin.employee_group_tab "
             "WHERE employee_id = $1 AND group_id = $2",
@@ -249,7 +309,7 @@ async def employee_group_link(employee_id: int, group_id: int) -> str:
                 f"-- SKIPPED (already assigned) employee_id={employee_id} group_id={group_id}"
             )
             logger.warning("employee_group_link %s", msg)
-            return msg
+            return {"sql": msg, **entity_info}
 
         query = (
             "SELECT admin.employee_group_link("
@@ -281,7 +341,7 @@ async def employee_group_link(employee_id: int, group_id: int) -> str:
         employee_id,
         group_id,
     )
-    return query
+    return {"sql": query, **entity_info}
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -291,14 +351,36 @@ async def employee_group_link(employee_id: int, group_id: int) -> str:
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-async def employee_menu_add(employee_id: int, menu_id: int) -> str:
+async def employee_menu_add(employee_id: int, menu_id: int) -> dict[str, Any]:
     """
     Открыть сотруднику доступ к кнопке/пункту меню.
     Безопасное добавление — функция делает только INSERT.
-    Returns: Executed SQL statement.
+    Returns: Dict with Executed SQL statement and entity info.
     """
     pool = get_pool()
     async with pool.acquire() as conn:
+        # Fetch name for logging (with module context)
+        row = await conn.fetchrow(
+            """
+            SELECT t.menu_name, m.module_name 
+            FROM admin.menu_tab t
+            LEFT JOIN admin.module_tab m ON t.module_id = m.module_id
+            WHERE t.menu_id = $1
+            """,
+            menu_id,
+        )
+        if row:
+            menu_name = row["menu_name"]
+            module_name = row["module_name"] or "Unknown Module"
+            entity_name = f"{menu_name} ({module_name})"
+        else:
+            entity_name = f"Unknown Menu {menu_id}"
+
+        entity_info = {
+            "entity_name": entity_name,
+            "entity_id": menu_id,
+        }
+
         query = (
             "SELECT admin.employee_menu__add("
             f"employee_id_ := {employee_id}, menu_id_ := {menu_id})"
@@ -328,7 +410,7 @@ async def employee_menu_add(employee_id: int, menu_id: int) -> str:
         employee_id,
         menu_id,
     )
-    return query
+    return {"sql": query, **entity_info}
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -339,16 +421,26 @@ async def employee_menu_add(employee_id: int, menu_id: int) -> str:
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-async def employee_module_link(employee_id: int, module_id: int) -> str:
+async def employee_module_link(employee_id: int, module_id: int) -> dict[str, Any]:
     """
     Дать сотруднику доступ к модулю (CRM, Склад, Офис…).
 
     ⚠ PG-функция — Toggle: повторный вызов ОТКЛЮЧИТ модуль.
     Smart Assign: проверяем существование перед вызовом.
-    Returns: Executed SQL statement or skip message.
+    Returns: Dict with Executed SQL statement and entity info.
     """
     pool = get_pool()
     async with pool.acquire() as conn:
+        # Fetch name for logging
+        module_name = await conn.fetchval(
+            "SELECT module_name FROM admin.module_tab WHERE module_id = $1",
+            module_id,
+        )
+        entity_info = {
+            "entity_name": module_name or f"Unknown Module {module_id}",
+            "entity_id": module_id,
+        }
+
         exists = await conn.fetchval(
             "SELECT count(1) FROM admin.employee_module_tab "
             "WHERE employee_id = $1 AND module_id = $2",
@@ -360,7 +452,7 @@ async def employee_module_link(employee_id: int, module_id: int) -> str:
                 f"-- SKIPPED (already assigned) employee_id={employee_id} module_id={module_id}"
             )
             logger.warning("employee_module_link %s", msg)
-            return msg
+            return {"sql": msg, **entity_info}
 
         query = (
             "SELECT admin.employee_module_link("
@@ -391,7 +483,7 @@ async def employee_module_link(employee_id: int, module_id: int) -> str:
         employee_id,
         module_id,
     )
-    return query
+    return {"sql": query, **entity_info}
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -401,20 +493,43 @@ async def employee_module_link(employee_id: int, module_id: int) -> str:
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-async def employee_grant_add(employee_id: int, grant_id: int) -> str:
+async def employee_grant_add(employee_id: int, grant_id: int) -> dict[str, Any]:
     """
     Выдать сотруднику точечное право (grant).
 
     ⚠ PG-функции employee_grant_add НЕТ в базе — прямой INSERT.
     ON CONFLICT DO NOTHING для идемпотентности.
-    Returns: Executed SQL statement.
+    Returns: Dict with Executed SQL statement and entity info.
     """
-    query = (
-        "INSERT INTO admin.employee_grant_tab (employee_id, grant_id) "
-        f"VALUES ({employee_id}, {grant_id}) ON CONFLICT DO NOTHING"
-    )
     pool = get_pool()
     async with pool.acquire() as conn:
+        # Fetch name for logging (with module context)
+        row = await conn.fetchrow(
+            """
+            SELECT g.grant_name, m.module_name 
+            FROM admin.grant_tab g
+            LEFT JOIN admin.module_tab m ON g.module_id = m.module_id
+            WHERE g.grant_id = $1
+            """,
+            grant_id,
+        )
+        if row:
+            grant_name = row["grant_name"]
+            module_name = row["module_name"] or "Unknown Module"
+            entity_name = f"{grant_name} ({module_name})"
+        else:
+            entity_name = f"Unknown Grant {grant_id}"
+
+        entity_info = {
+            "entity_name": entity_name,
+            "entity_id": grant_id,
+        }
+
+        query = (
+            "INSERT INTO admin.employee_grant_tab (employee_id, grant_id) "
+            f"VALUES ({employee_id}, {grant_id}) ON CONFLICT DO NOTHING"
+        )
+
         tr = conn.transaction()
         await tr.start()
         try:
@@ -440,7 +555,7 @@ async def employee_grant_add(employee_id: int, grant_id: int) -> str:
         employee_id,
         grant_id,
     )
-    return query
+    return {"sql": query, **entity_info}
 
 
 # ═══════════════════════════════════════════════════════════════════════════

@@ -27,6 +27,8 @@ class ToolCallResult(BaseModel):
     args: dict = Field(default_factory=dict, description="Аргументы, переданные инструменту")
     status: str = Field(..., description="ok | error | ignored")
     error: str | None = Field(default=None, description="Сообщение об ошибке (если status != ok)")
+    entity_name: str | None = Field(default=None, description="Человекочитаемое имя объекта")
+    entity_id: int | None = Field(default=None, description="ID объекта")
 
 
 class ProcessRequestResponse(BaseModel):

@@ -36,15 +36,24 @@ logger = logging.getLogger(__name__)
 
 
 async def _handle_search_menu(args: dict[str, Any]) -> list[dict[str, Any]]:
-    return await db_service.search_menu(query=str(args["query"]))
+    return await db_service.search_menu(
+        query=str(args["query"]),
+        employee_id=args.get("_employee_id_context"),
+    )
 
 
 async def _handle_search_group(args: dict[str, Any]) -> list[dict[str, Any]]:
-    return await db_service.search_group(query=str(args["query"]))
+    return await db_service.search_group(
+        query=str(args["query"]),
+        employee_id=args.get("_employee_id_context"),
+    )
 
 
 async def _handle_search_grant(args: dict[str, Any]) -> list[dict[str, Any]]:
-    return await db_service.search_grant(query=str(args["query"]))
+    return await db_service.search_grant(
+        query=str(args["query"]),
+        employee_id=args.get("_employee_id_context"),
+    )
 
 
 # ── Fetch handlers (read-only, return data) ──────────────────────────────────
@@ -62,7 +71,7 @@ async def _handle_get_menu_by_url(args: dict[str, Any]) -> dict[str, Any]:
 # ── Action handlers (write, side effects) ────────────────────────────────────
 
 
-async def _handle_assign_role(args: dict[str, Any]) -> str:
+async def _handle_assign_role(args: dict[str, Any]) -> dict[str, Any]:
     group_id = int(args["group_id"])
     if is_group_blocked(group_id):
         raise PermissionError(
@@ -75,7 +84,7 @@ async def _handle_assign_role(args: dict[str, Any]) -> str:
     )
 
 
-async def _handle_add_interface_button(args: dict[str, Any]) -> str:
+async def _handle_add_interface_button(args: dict[str, Any]) -> dict[str, Any]:
     menu_id = int(args["menu_id"])
     if is_menu_blocked(menu_id):
         raise PermissionError(
@@ -88,14 +97,14 @@ async def _handle_add_interface_button(args: dict[str, Any]) -> str:
     )
 
 
-async def _handle_link_module(args: dict[str, Any]) -> str:
+async def _handle_link_module(args: dict[str, Any]) -> dict[str, Any]:
     return await db_service.employee_module_link(
         employee_id=int(args["employee_id"]),
         module_id=int(args["module_id"]),
     )
 
 
-async def _handle_add_grant(args: dict[str, Any]) -> str:
+async def _handle_add_grant(args: dict[str, Any]) -> dict[str, Any]:
     grant_id = int(args["grant_id"])
     if is_grant_blocked(grant_id):
         raise PermissionError(
@@ -137,7 +146,7 @@ _DATA_TOOLS: frozenset[str] = frozenset({
 # ── Public API ───────────────────────────────────────────────────────────────
 
 
-async def execute_tool_call(call: Any) -> dict[str, Any]:
+async def execute_tool_call(call: Any, user_id: int) -> dict[str, Any]:
     """
     Parse a single OpenAI tool-call object, dispatch to the right handler,
     and return a structured result dict.
@@ -151,6 +160,9 @@ async def execute_tool_call(call: Any) -> dict[str, Any]:
         args: dict[str, Any] = json.loads(call.function.arguments or "{}")
     except json.JSONDecodeError:
         args = {}
+
+    # Inject context for search tools
+    args["_employee_id_context"] = user_id
 
     result: dict[str, Any] = {
         "tool_call_id": call_id,
@@ -170,7 +182,13 @@ async def execute_tool_call(call: Any) -> dict[str, Any]:
         handler_result = await handler(args)
         if name in _DATA_TOOLS and handler_result is not None:
             result["data"] = handler_result
+        elif name not in _DATA_TOOLS and isinstance(handler_result, dict):
+            # It's an action result with sql + entity info
+            result["sql"] = handler_result.get("sql")
+            result["entity_name"] = handler_result.get("entity_name")
+            result["entity_id"] = handler_result.get("entity_id")
         elif name not in _DATA_TOOLS and isinstance(handler_result, str):
+            # Legacy string return (just in case)
             result["sql"] = handler_result
     except PermissionError as exc:
         result["status"] = "blocked"
