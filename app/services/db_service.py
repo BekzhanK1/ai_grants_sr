@@ -25,7 +25,16 @@ from typing import Any
 
 import asyncpg
 
+from app.core.config import settings
 from app.core.database import get_pool
+
+# Visual feedback for TEST_MODE
+if settings.TEST_MODE:
+    # Yellow
+    print(f"\033[93m============TEST_MODE ON============\033[0m (Rollback enabled)")
+else:
+    # Red
+    print(f"\033[91m============TEST_MODE OFF============\033[0m (Commit enabled)")
 
 logger = logging.getLogger(__name__)
 
@@ -246,13 +255,26 @@ async def employee_group_link(employee_id: int, group_id: int) -> str:
             "SELECT admin.employee_group_link("
             f"group_id_ := {group_id}, employee_id_ := {employee_id})"
         )
-        await conn.fetchval(
-            "SELECT admin.employee_group_link("
-            "  group_id_ := $1, employee_id_ := $2"
-            ")",
-            group_id,
-            employee_id,
-        )
+
+        tr = conn.transaction()
+        await tr.start()
+        try:
+            await conn.fetchval(
+                "SELECT admin.employee_group_link("
+                "  group_id_ := $1, employee_id_ := $2"
+                ")",
+                group_id,
+                employee_id,
+            )
+            if settings.TEST_MODE:
+                await tr.rollback()
+                logger.info("TEST_MODE: Rolled back employee_group_link")
+                query += " [TEST_MODE: ROLLED BACK]"
+            else:
+                await tr.commit()
+        except Exception:
+            await tr.rollback()
+            raise
 
     logger.info(
         "employee_group_link OK  employee_id=%s group_id=%s",
@@ -281,13 +303,25 @@ async def employee_menu_add(employee_id: int, menu_id: int) -> str:
             "SELECT admin.employee_menu__add("
             f"employee_id_ := {employee_id}, menu_id_ := {menu_id})"
         )
-        await conn.fetchval(
-            "SELECT admin.employee_menu__add("
-            "  employee_id_ := $1, menu_id_ := $2"
-            ")",
-            employee_id,
-            menu_id,
-        )
+        tr = conn.transaction()
+        await tr.start()
+        try:
+            await conn.fetchval(
+                "SELECT admin.employee_menu__add("
+                "  employee_id_ := $1, menu_id_ := $2"
+                ")",
+                employee_id,
+                menu_id,
+            )
+            if settings.TEST_MODE:
+                await tr.rollback()
+                logger.info("TEST_MODE: Rolled back employee_menu_add")
+                query += " [TEST_MODE: ROLLED BACK]"
+            else:
+                await tr.commit()
+        except Exception:
+            await tr.rollback()
+            raise
 
     logger.info(
         "employee_menu__add OK  employee_id=%s menu_id=%s",
@@ -332,13 +366,25 @@ async def employee_module_link(employee_id: int, module_id: int) -> str:
             "SELECT admin.employee_module_link("
             f"module_id_ := {module_id}, employee_id_ := {employee_id})"
         )
-        await conn.fetchval(
-            "SELECT admin.employee_module_link("
-            "  module_id_ := $1, employee_id_ := $2"
-            ")",
-            module_id,
-            employee_id,
-        )
+        tr = conn.transaction()
+        await tr.start()
+        try:
+            await conn.fetchval(
+                "SELECT admin.employee_module_link("
+                "  module_id_ := $1, employee_id_ := $2"
+                ")",
+                module_id,
+                employee_id,
+            )
+            if settings.TEST_MODE:
+                await tr.rollback()
+                logger.info("TEST_MODE: Rolled back employee_module_link")
+                query += " [TEST_MODE: ROLLED BACK]"
+            else:
+                await tr.commit()
+        except Exception:
+            await tr.rollback()
+            raise
 
     logger.info(
         "employee_module_link OK  employee_id=%s module_id=%s",
@@ -369,13 +415,25 @@ async def employee_grant_add(employee_id: int, grant_id: int) -> str:
     )
     pool = get_pool()
     async with pool.acquire() as conn:
-        await conn.execute(
-            "INSERT INTO admin.employee_grant_tab (employee_id, grant_id) "
-            "VALUES ($1, $2) "
-            "ON CONFLICT DO NOTHING",
-            employee_id,
-            grant_id,
-        )
+        tr = conn.transaction()
+        await tr.start()
+        try:
+            await conn.execute(
+                "INSERT INTO admin.employee_grant_tab (employee_id, grant_id) "
+                "VALUES ($1, $2) "
+                "ON CONFLICT DO NOTHING",
+                employee_id,
+                grant_id,
+            )
+            if settings.TEST_MODE:
+                await tr.rollback()
+                logger.info("TEST_MODE: Rolled back employee_grant_add")
+                query += " [TEST_MODE: ROLLED BACK]"
+            else:
+                await tr.commit()
+        except Exception:
+            await tr.rollback()
+            raise
 
     logger.info(
         "employee_grant_add OK  employee_id=%s grant_id=%s",

@@ -58,7 +58,8 @@ OPENAI_API_KEY=sk-...
 |---|---|---|---|
 | `OPENAI_API_KEY` | да | — | Ключ OpenAI API |
 | `OPENAI_MODEL` | нет | `gpt-4.1-mini` | Модель для chat completions |
-| `DATA_DIR` | нет | `json` | Путь к папке с JSON-справочниками |
+| `TEST_MODE` | нет | `False` | Режим тестирования (rollback изменений) |
+| `reference_ttl` | нет | `300` | Время жизни кэша справочников (секунды) |
 
 ## Запуск
 

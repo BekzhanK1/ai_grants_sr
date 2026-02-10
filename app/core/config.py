@@ -28,5 +28,10 @@ class Settings(BaseSettings):
         default=300, description="Reference data cache TTL in seconds"
     )
 
+    # Test Mode: if True, all write actions will be rolled back.
+    TEST_MODE: bool = Field(
+        default=False, description="Simulate actions without committing to DB"
+    )
+
 
 settings = Settings()
