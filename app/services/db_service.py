@@ -23,6 +23,8 @@ import json
 import logging
 from typing import Any
 
+import asyncpg
+
 from app.core.database import get_pool
 
 logger = logging.getLogger(__name__)
@@ -92,25 +94,39 @@ async def _fetch_all_permissions(
 
 async def search_menu(query: str) -> list[dict[str, Any]]:
     """
-    Поиск пунктов меню по названию (ILIKE).
-    Только активные. Включает parent_name и module_name для контекста.
-    Возвращает до 15 подходящих записей.
+    Поиск пунктов меню по названию.
+    Только активные. Включает parent_name и module_name.
+    Нечёткий поиск (pg_trgm), если доступен; иначе ILIKE.
     """
+    query = query.strip()
+    if not query:
+        return []
     pool = get_pool()
     async with pool.acquire() as conn:
-        rows = await conn.fetch(
-            "SELECT t.menu_id, t.menu_name, t.menu_action, "
-            "       p.menu_name AS parent_name, "
-            "       m.module_name "
-            "FROM admin.menu_tab t "
-            "LEFT JOIN admin.menu_tab p ON t.menu_pid = p.menu_id "
-            "LEFT JOIN admin.module_tab m ON t.module_id = m.module_id "
-            "WHERE t.is_active = 1 "
-            "  AND t.menu_name ILIKE '%' || $1 || '%' "
-            "ORDER BY t.menu_id "
-            "LIMIT 15",
-            query,
-        )
+        try:
+            rows = await conn.fetch(
+                "SELECT t.menu_id, t.menu_name, t.menu_action, "
+                "       p.menu_name AS parent_name, m.module_name "
+                "FROM admin.menu_tab t "
+                "LEFT JOIN admin.menu_tab p ON t.menu_pid = p.menu_id "
+                "LEFT JOIN admin.module_tab m ON t.module_id = m.module_id "
+                "WHERE t.is_active = 1 "
+                "  AND (t.menu_name ILIKE '%' || $1 || '%' OR t.menu_name % $1) "
+                "ORDER BY similarity(t.menu_name, $1) DESC NULLS LAST, t.menu_id "
+                "LIMIT 15",
+                query,
+            )
+        except asyncpg.UndefinedFunctionError:
+            rows = await conn.fetch(
+                "SELECT t.menu_id, t.menu_name, t.menu_action, "
+                "       p.menu_name AS parent_name, m.module_name "
+                "FROM admin.menu_tab t "
+                "LEFT JOIN admin.menu_tab p ON t.menu_pid = p.menu_id "
+                "LEFT JOIN admin.module_tab m ON t.module_id = m.module_id "
+                "WHERE t.is_active = 1 AND t.menu_name ILIKE '%' || $1 || '%' "
+                "ORDER BY t.menu_id LIMIT 15",
+                query,
+            )
     results = [dict(r) for r in rows]
     logger.info("search_menu  query=%r  found=%d", query, len(results))
     return results
@@ -118,23 +134,38 @@ async def search_menu(query: str) -> list[dict[str, Any]]:
 
 async def search_group(query: str) -> list[dict[str, Any]]:
     """
-    Поиск групп (ролей) по названию (ILIKE).
+    Поиск групп (ролей) по названию.
     Только активные. Включает module_name для контекста.
-    Возвращает до 15 подходящих записей.
+    Использует нечёткий поиск (pg_trgm similarity), если расширение включено —
+    так находятся варианты вроде «Менеджер call-centra» по запросу «менеджера call-центра».
+    Fallback на ILIKE, если pg_trgm не установлен.
     """
+    query = query.strip()
+    if not query:
+        return []
     pool = get_pool()
     async with pool.acquire() as conn:
-        rows = await conn.fetch(
-            "SELECT g.group_id, g.group_name, g.group_code, "
-            "       m.module_name "
-            "FROM admin.group_tab g "
-            "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
-            "WHERE g.is_active = true "
-            "  AND g.group_name ILIKE '%' || $1 || '%' "
-            "ORDER BY g.group_id "
-            "LIMIT 15",
-            query,
-        )
+        try:
+            rows = await conn.fetch(
+                "SELECT g.group_id, g.group_name, g.group_code, m.module_name "
+                "FROM admin.group_tab g "
+                "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
+                "WHERE g.is_active = true "
+                "  AND (g.group_name ILIKE '%' || $1 || '%' OR g.group_name % $1) "
+                "ORDER BY similarity(g.group_name, $1) DESC NULLS LAST, g.group_id "
+                "LIMIT 15",
+                query,
+            )
+        except asyncpg.UndefinedFunctionError:
+            rows = await conn.fetch(
+                "SELECT g.group_id, g.group_name, g.group_code, m.module_name "
+                "FROM admin.group_tab g "
+                "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
+                "WHERE g.is_active = true "
+                "  AND g.group_name ILIKE '%' || $1 || '%' "
+                "ORDER BY g.group_id LIMIT 15",
+                query,
+            )
     results = [dict(r) for r in rows]
     logger.info("search_group  query=%r  found=%d", query, len(results))
     return results
@@ -142,25 +173,39 @@ async def search_group(query: str) -> list[dict[str, Any]]:
 
 async def search_grant(query: str) -> list[dict[str, Any]]:
     """
-    Поиск грантов (точечных прав) по названию (ILIKE).
-    Только активные. Включает parent_name и module_name для контекста.
-    Возвращает до 15 подходящих записей.
+    Поиск грантов по названию.
+    Только активные. Включает parent_name и module_name.
+    Нечёткий поиск (pg_trgm), если доступен; иначе ILIKE.
     """
+    query = query.strip()
+    if not query:
+        return []
     pool = get_pool()
     async with pool.acquire() as conn:
-        rows = await conn.fetch(
-            "SELECT g.grant_id, g.grant_name, g.grant_code, "
-            "       p.grant_name AS parent_name, "
-            "       m.module_name "
-            "FROM admin.grant_tab g "
-            "LEFT JOIN admin.grant_tab p ON g.grant_pid = p.grant_id "
-            "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
-            "WHERE g.is_active = 1 "
-            "  AND g.grant_name ILIKE '%' || $1 || '%' "
-            "ORDER BY g.grant_id "
-            "LIMIT 15",
-            query,
-        )
+        try:
+            rows = await conn.fetch(
+                "SELECT g.grant_id, g.grant_name, g.grant_code, "
+                "       p.grant_name AS parent_name, m.module_name "
+                "FROM admin.grant_tab g "
+                "LEFT JOIN admin.grant_tab p ON g.grant_pid = p.grant_id "
+                "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
+                "WHERE g.is_active = 1 "
+                "  AND (g.grant_name ILIKE '%' || $1 || '%' OR g.grant_name % $1) "
+                "ORDER BY similarity(g.grant_name, $1) DESC NULLS LAST, g.grant_id "
+                "LIMIT 15",
+                query,
+            )
+        except asyncpg.UndefinedFunctionError:
+            rows = await conn.fetch(
+                "SELECT g.grant_id, g.grant_name, g.grant_code, "
+                "       p.grant_name AS parent_name, m.module_name "
+                "FROM admin.grant_tab g "
+                "LEFT JOIN admin.grant_tab p ON g.grant_pid = p.grant_id "
+                "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
+                "WHERE g.is_active = 1 AND g.grant_name ILIKE '%' || $1 || '%' "
+                "ORDER BY g.grant_id LIMIT 15",
+                query,
+            )
     results = [dict(r) for r in rows]
     logger.info("search_grant  query=%r  found=%d", query, len(results))
     return results
