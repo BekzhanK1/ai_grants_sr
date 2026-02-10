@@ -131,7 +131,7 @@ curl http://localhost:8000/health
 2. **AI-проверка причины** — модель оценивает адекватность `reason` и отказывает, если причина бессмысленная или не связана с запросом.
 3. **Fetch-before-action** — перед любым назначением AI запрашивает текущие права (`get_user_current_permissions`), чтобы не сработал Toggle-переключатель (повторный вызов `employee_group_link` / `employee_module_link` **удаляет** право).
 4. **Чёрные списки** (`core/safety.py`) — запрещены: группа «Администраторы» (`group_id=1`), меню администрирования (`menu_id=1, 2, 4, 10`). Блокировка на уровне кода, даже если LLM сгенерирует запрещённый вызов.
-5. **Аудит** — все значимые действия (кроме read-only) сохраняются в таблицу `ai_admin.audit_logs`.
+5. **Аудит** — все значимые действия (кроме read-only) сохраняются в таблицу `ai_admin.audit_logs_tab`.
 
 ## Доступные инструменты AI
 
@@ -156,7 +156,7 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 ## Аудит и логирование
 
-Все изменения прав доступа (вызовы `assign_role`, `link_module` и др.) фиксируются в таблице `ai_admin.audit_logs`.
+Все изменения прав доступа (вызовы `assign_role`, `link_module` и др.) фиксируются в таблице `ai_admin.audit_logs_tab`.
 
 **Схема таблицы:**
 
@@ -166,6 +166,7 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm;
 | `employee_id` | `int` | Инициатор запроса (он же получатель прав) |
 | `user_prompt` | `text` | Исходный запрос ("дай доступ к...") |
 | `business_reason` | `text` | Обоснование ("нужно для...") |
-| `ai_decision` | `jsonb` | Список выполненных действий (инструмент + аргументы) |
+| `ai_decision` | `jsonb` | Список действий (tool + args + status + error + sql) |
+| `ai_message` | `text` | Пояснение от AI (финальный ответ пользователю) |
 | `execution_status` | `varchar` | Статус: `success`, `error`, `blocked` |
 | `created_at` | `timestamp` | Время создания записи (default now()) |

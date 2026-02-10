@@ -186,7 +186,13 @@ async def process_user_request(
     # Usually audit logs care about changes. Let's log effective actions.
     
     significant_actions = [
-        {"tool": r["tool"], "args": r["args"]}
+        {
+            "tool": r["tool"],
+            "args": r["args"],
+            "status": r.get("status"),
+            "error": r.get("error"),
+            "sql": r.get("sql"),
+        }
         for r in all_results 
         if r["tool"] not in _READ_ONLY_TOOLS
     ]
@@ -210,6 +216,7 @@ async def process_user_request(
             prompt=prompt,
             reason=reason,
             ai_decision=significant_actions,
+            ai_message=message.content,
             execution_status=status,
         )
     )

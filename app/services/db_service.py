@@ -219,12 +219,13 @@ async def search_grant(query: str) -> list[dict[str, Any]]:
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-async def employee_group_link(employee_id: int, group_id: int) -> None:
+async def employee_group_link(employee_id: int, group_id: int) -> str:
     """
     Назначить сотруднику группу (роль).
 
     ⚠ PG-функция — Toggle: повторный вызов УДАЛИТ роль.
     Smart Assign: проверяем существование перед вызовом.
+    Returns: Executed SQL statement or skip message.
     """
     pool = get_pool()
     async with pool.acquire() as conn:
@@ -235,14 +236,16 @@ async def employee_group_link(employee_id: int, group_id: int) -> None:
             group_id,
         )
         if exists:
-            logger.warning(
-                "employee_group_link SKIPPED (already assigned)  "
-                "employee_id=%s group_id=%s",
-                employee_id,
-                group_id,
+            msg = (
+                f"-- SKIPPED (already assigned) employee_id={employee_id} group_id={group_id}"
             )
-            return
+            logger.warning("employee_group_link %s", msg)
+            return msg
 
+        query = (
+            "SELECT admin.employee_group_link("
+            f"group_id_ := {group_id}, employee_id_ := {employee_id})"
+        )
         await conn.fetchval(
             "SELECT admin.employee_group_link("
             "  group_id_ := $1, employee_id_ := $2"
@@ -256,6 +259,7 @@ async def employee_group_link(employee_id: int, group_id: int) -> None:
         employee_id,
         group_id,
     )
+    return query
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -265,13 +269,18 @@ async def employee_group_link(employee_id: int, group_id: int) -> None:
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-async def employee_menu_add(employee_id: int, menu_id: int) -> None:
+async def employee_menu_add(employee_id: int, menu_id: int) -> str:
     """
     Открыть сотруднику доступ к кнопке/пункту меню.
     Безопасное добавление — функция делает только INSERT.
+    Returns: Executed SQL statement.
     """
     pool = get_pool()
     async with pool.acquire() as conn:
+        query = (
+            "SELECT admin.employee_menu__add("
+            f"employee_id_ := {employee_id}, menu_id_ := {menu_id})"
+        )
         await conn.fetchval(
             "SELECT admin.employee_menu__add("
             "  employee_id_ := $1, menu_id_ := $2"
@@ -285,6 +294,7 @@ async def employee_menu_add(employee_id: int, menu_id: int) -> None:
         employee_id,
         menu_id,
     )
+    return query
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -295,12 +305,13 @@ async def employee_menu_add(employee_id: int, menu_id: int) -> None:
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-async def employee_module_link(employee_id: int, module_id: int) -> None:
+async def employee_module_link(employee_id: int, module_id: int) -> str:
     """
     Дать сотруднику доступ к модулю (CRM, Склад, Офис…).
 
     ⚠ PG-функция — Toggle: повторный вызов ОТКЛЮЧИТ модуль.
     Smart Assign: проверяем существование перед вызовом.
+    Returns: Executed SQL statement or skip message.
     """
     pool = get_pool()
     async with pool.acquire() as conn:
@@ -311,14 +322,16 @@ async def employee_module_link(employee_id: int, module_id: int) -> None:
             module_id,
         )
         if exists:
-            logger.warning(
-                "employee_module_link SKIPPED (already assigned)  "
-                "employee_id=%s module_id=%s",
-                employee_id,
-                module_id,
+            msg = (
+                f"-- SKIPPED (already assigned) employee_id={employee_id} module_id={module_id}"
             )
-            return
+            logger.warning("employee_module_link %s", msg)
+            return msg
 
+        query = (
+            "SELECT admin.employee_module_link("
+            f"module_id_ := {module_id}, employee_id_ := {employee_id})"
+        )
         await conn.fetchval(
             "SELECT admin.employee_module_link("
             "  module_id_ := $1, employee_id_ := $2"
@@ -332,6 +345,7 @@ async def employee_module_link(employee_id: int, module_id: int) -> None:
         employee_id,
         module_id,
     )
+    return query
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -341,13 +355,18 @@ async def employee_module_link(employee_id: int, module_id: int) -> None:
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-async def employee_grant_add(employee_id: int, grant_id: int) -> None:
+async def employee_grant_add(employee_id: int, grant_id: int) -> str:
     """
     Выдать сотруднику точечное право (grant).
 
     ⚠ PG-функции employee_grant_add НЕТ в базе — прямой INSERT.
     ON CONFLICT DO NOTHING для идемпотентности.
+    Returns: Executed SQL statement.
     """
+    query = (
+        "INSERT INTO admin.employee_grant_tab (employee_id, grant_id) "
+        f"VALUES ({employee_id}, {grant_id}) ON CONFLICT DO NOTHING"
+    )
     pool = get_pool()
     async with pool.acquire() as conn:
         await conn.execute(
@@ -363,6 +382,7 @@ async def employee_grant_add(employee_id: int, grant_id: int) -> None:
         employee_id,
         grant_id,
     )
+    return query
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -396,6 +416,7 @@ async def log_ai_request(
     prompt: str,
     reason: str,
     ai_decision: list[dict[str, Any]],
+    ai_message: str | None,
     execution_status: str,
 ) -> None:
     """
@@ -406,13 +427,14 @@ async def log_ai_request(
         pool = get_pool()
         async with pool.acquire() as conn:
             await conn.execute(
-                "INSERT INTO ai_admin.audit_logs "
-                "(employee_id, user_prompt, business_reason, ai_decision, execution_status) "
-                "VALUES ($1, $2, $3, $4::jsonb, $5)",
+                "INSERT INTO ai_admin.audit_logs_tab "
+                "(employee_id, user_prompt, business_reason, ai_decision, ai_message, execution_status) "
+                "VALUES ($1, $2, $3, $4::jsonb, $5, $6)",
                 user_id,
                 prompt,
                 reason,
                 json.dumps(ai_decision, ensure_ascii=False),
+                ai_message,
                 execution_status,
             )
         logger.info("log_ai_request saved for user_id=%s status=%s", user_id, execution_status)

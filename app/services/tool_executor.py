@@ -62,46 +62,46 @@ async def _handle_get_menu_by_url(args: dict[str, Any]) -> dict[str, Any]:
 # ── Action handlers (write, side effects) ────────────────────────────────────
 
 
-async def _handle_assign_role(args: dict[str, Any]) -> None:
+async def _handle_assign_role(args: dict[str, Any]) -> str:
     group_id = int(args["group_id"])
     if is_group_blocked(group_id):
         raise PermissionError(
             f"Назначение группы group_id={group_id} заблокировано политикой безопасности. "
             "Администраторские роли нельзя выдавать через AI-интерфейс."
         )
-    await db_service.employee_group_link(
+    return await db_service.employee_group_link(
         employee_id=int(args["employee_id"]),
         group_id=group_id,
     )
 
 
-async def _handle_add_interface_button(args: dict[str, Any]) -> None:
+async def _handle_add_interface_button(args: dict[str, Any]) -> str:
     menu_id = int(args["menu_id"])
     if is_menu_blocked(menu_id):
         raise PermissionError(
             f"Доступ к меню menu_id={menu_id} заблокирован политикой безопасности. "
             "Меню администрирования нельзя выдавать через AI-интерфейс."
         )
-    await db_service.employee_menu_add(
+    return await db_service.employee_menu_add(
         employee_id=int(args["employee_id"]),
         menu_id=menu_id,
     )
 
 
-async def _handle_link_module(args: dict[str, Any]) -> None:
-    await db_service.employee_module_link(
+async def _handle_link_module(args: dict[str, Any]) -> str:
+    return await db_service.employee_module_link(
         employee_id=int(args["employee_id"]),
         module_id=int(args["module_id"]),
     )
 
 
-async def _handle_add_grant(args: dict[str, Any]) -> None:
+async def _handle_add_grant(args: dict[str, Any]) -> str:
     grant_id = int(args["grant_id"])
     if is_grant_blocked(grant_id):
         raise PermissionError(
             f"Грант grant_id={grant_id} заблокирован политикой безопасности."
         )
-    await db_service.employee_grant_add(
+    return await db_service.employee_grant_add(
         employee_id=int(args["employee_id"]),
         grant_id=grant_id,
     )
@@ -143,6 +143,7 @@ async def execute_tool_call(call: Any) -> dict[str, Any]:
     and return a structured result dict.
 
     For data tools the result includes a "data" key with the fetched payload.
+    For action tools the result includes a "sql" key with the executed query.
     """
     name = call.function.name
     call_id = call.id
@@ -169,6 +170,8 @@ async def execute_tool_call(call: Any) -> dict[str, Any]:
         handler_result = await handler(args)
         if name in _DATA_TOOLS and handler_result is not None:
             result["data"] = handler_result
+        elif name not in _DATA_TOOLS and isinstance(handler_result, str):
+            result["sql"] = handler_result
     except PermissionError as exc:
         result["status"] = "blocked"
         result["error"] = str(exc)
