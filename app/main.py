@@ -9,7 +9,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.router import router as api_router
-from app.core.config import settings
 from app.core.database import close_pool, init_pool
 from app.core.logging import setup_logging
 from app.data.reference import load_reference_data
@@ -20,7 +19,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     """Startup: logging → DB pool → reference data.  Shutdown: close pool."""
     setup_logging()
     await init_pool()
-    _app.state.reference_data = await load_reference_data(settings.DATA_DIR)
+    await load_reference_data()  # initial fetch, cached with TTL
     yield
     await close_pool()
 

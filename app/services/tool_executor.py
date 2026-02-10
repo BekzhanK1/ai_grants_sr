@@ -3,9 +3,13 @@ Tool executor — dispatches OpenAI tool-call objects to db_service functions.
 
 Safety layer:
   - Blocked IDs (admin groups, admin menus) are rejected before DB call.
-  - Fetch tools return data without side effects.
+  - Fetch/search tools return data without side effects.
 
 Tool → DB mapping:
+  SEARCH:
+    search_menu                   → db_service.search_menu
+    search_group                  → db_service.search_group
+    search_grant                  → db_service.search_grant
   FETCH:
     get_user_current_permissions  → db_service.get_user_permissions
     get_menu_by_url               → db_service.get_menu_by_url
@@ -26,6 +30,21 @@ from app.core.safety import is_grant_blocked, is_group_blocked, is_menu_blocked
 from app.services import db_service
 
 logger = logging.getLogger(__name__)
+
+
+# ── Search handlers (read-only, return data) ─────────────────────────────────
+
+
+async def _handle_search_menu(args: dict[str, Any]) -> list[dict[str, Any]]:
+    return await db_service.search_menu(query=str(args["query"]))
+
+
+async def _handle_search_group(args: dict[str, Any]) -> list[dict[str, Any]]:
+    return await db_service.search_group(query=str(args["query"]))
+
+
+async def _handle_search_grant(args: dict[str, Any]) -> list[dict[str, Any]]:
+    return await db_service.search_grant(query=str(args["query"]))
 
 
 # ── Fetch handlers (read-only, return data) ──────────────────────────────────
@@ -91,6 +110,10 @@ async def _handle_add_grant(args: dict[str, Any]) -> None:
 # ── Registry ─────────────────────────────────────────────────────────────────
 
 _TOOL_HANDLERS: dict[str, Any] = {
+    # Search
+    "search_menu": _handle_search_menu,
+    "search_group": _handle_search_group,
+    "search_grant": _handle_search_grant,
     # Fetch
     "get_user_current_permissions": _handle_get_permissions,
     "get_menu_by_url": _handle_get_menu_by_url,
@@ -103,6 +126,9 @@ _TOOL_HANDLERS: dict[str, Any] = {
 
 # Tools that return data (their result goes back to the model as content)
 _DATA_TOOLS: frozenset[str] = frozenset({
+    "search_menu",
+    "search_group",
+    "search_grant",
     "get_user_current_permissions",
     "get_menu_by_url",
 })

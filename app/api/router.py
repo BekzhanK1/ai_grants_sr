@@ -4,13 +4,11 @@ API router — all HTTP endpoints live here.
 
 import logging
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from app.api.dependencies import get_reference_data
 from app.api.schemas import ProcessRequestBody, ProcessRequestResponse, ToolCallResult
 from app.core.exceptions import AIServiceError, DatabaseError
-from app.data.reference import ReferenceData
 from app.services.ai_service import process_user_request
 
 logger = logging.getLogger(__name__)
@@ -21,7 +19,6 @@ router = APIRouter()
 @router.post("/process-request", response_model=ProcessRequestResponse)
 async def process_request(
     body: ProcessRequestBody,
-    reference_data: ReferenceData = Depends(get_reference_data),
 ) -> ProcessRequestResponse | JSONResponse:
     """
     Принимает user_id + prompt + reason, вызывает OpenAI с tools,
@@ -32,7 +29,6 @@ async def process_request(
             user_id=body.user_id,
             prompt=body.prompt,
             reason=body.reason,
-            reference_data=reference_data,
         )
     except (AIServiceError, DatabaseError) as exc:
         logger.exception("Domain error while processing request")

@@ -2,11 +2,11 @@
 FastAPI dependency functions.
 """
 
-from fastapi import Request
-
-from app.data.reference import ReferenceData
+from app.data.reference import ReferenceData, get_reference_data
 
 
-def get_reference_data(request: Request) -> ReferenceData:
-    """Retrieve in-memory reference data loaded at startup."""
-    return request.app.state.reference_data
+async def get_ref_data() -> ReferenceData:
+    """
+    Return cached reference data, auto-refreshing from DB when TTL expires.
+    """
+    return await get_reference_data()

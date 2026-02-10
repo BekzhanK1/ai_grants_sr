@@ -2,8 +2,6 @@
 Application settings loaded from environment / .env file.
 """
 
-from pathlib import Path
-
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -17,7 +15,7 @@ class Settings(BaseSettings):
 
     # OpenAI
     OPENAI_API_KEY: str = Field(..., description="API key for OpenAI")
-    OPENAI_MODEL: str = Field(default="gpt-4.1-mini", description="Chat model to use")
+    OPENAI_MODEL: str = Field(default="gpt-4o", description="Chat model to use")
 
     # PostgreSQL
     DATABASE_URL: str = Field(
@@ -25,8 +23,10 @@ class Settings(BaseSettings):
         description="PostgreSQL DSN, e.g. postgresql://user:pass@host:5432/dbname",
     )
 
-    # Reference data directory (exported JSONs)
-    DATA_DIR: Path = Field(default=Path("json"), description="Directory with JSON reference data")
+    # TTL for reference data cache (seconds).  0 = never refresh automatically.
+    REFERENCE_TTL: int = Field(
+        default=300, description="Reference data cache TTL in seconds"
+    )
 
 
 settings = Settings()

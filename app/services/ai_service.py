@@ -21,7 +21,6 @@ from openai import AsyncOpenAI
 
 from app.core.config import settings
 from app.core.exceptions import AIServiceError
-from app.data.reference import ReferenceData
 from app.services import db_service
 from app.services.tool_definitions import build_tools
 from app.services.tool_executor import execute_tool_call
@@ -49,9 +48,14 @@ SYSTEM_PROMPT = """\
 
 ПОРЯДОК ДЕЙСТВИЙ:
 1. Проверь адекватность причины (reason). Если не прошла — откажи сразу.
-2. Перед ЛЮБЫМ назначением прав вызови get_user_current_permissions, чтобы узнать текущие права.
-3. Посмотри результат: если нужный ID УЖЕ есть в списке — НЕ вызывай функцию назначения. Сообщи: «Этот доступ уже открыт».
-4. Если пользователь скинул URL вместо menu_id — вызови get_menu_by_url.
+2. Если пользователь указал название (а не числовой ID) — сначала найди ID через search_menu / search_group / search_grant.
+3. Выбор из результатов поиска:
+   - Если найдена ровно одна запись — используй её.
+   - Если найдено несколько, но одна из них ТОЧНО совпадает по названию с запросом пользователя (например, пользователь написал «Подрядчики» и есть запись с menu_name ровно «Подрядчики») — выбери её и продолжай. В ответе укажи, какой именно элемент выбран.
+   - Если точных совпадений нет или их больше одного — перечисли варианты и попроси пользователя уточнить.
+4. Перед ЛЮБЫМ назначением прав вызови get_user_current_permissions, чтобы узнать текущие права.
+5. Посмотри результат: если нужный ID УЖЕ есть в списке — НЕ вызывай функцию назначения. Сообщи: «Этот доступ уже открыт».
+6. Если пользователь скинул URL вместо menu_id — вызови get_menu_by_url.
 
 КРИТИЧНЫЕ ПРАВИЛА БЕЗОПАСНОСТИ:
 - assign_role и link_module — это Toggle-переключатели. Повторный вызов УДАЛИТ право! Поэтому проверка через get_user_current_permissions обязательна.
@@ -73,18 +77,18 @@ async def process_user_request(
     user_id: int,
     prompt: str,
     reason: str,
-    reference_data: ReferenceData,
 ) -> dict[str, Any]:
     """
     End-to-end pipeline with multi-turn tool calling.
 
     The model may do several rounds:
       round 0: validate reason adequacy (LLM refuses if bad reason)
-      round 1: get_user_current_permissions → sees current state
-      round 2: assign_role / add_grant / ... → performs actions
+      round 1: search_menu / search_group / search_grant → finds IDs
+      round 2: get_user_current_permissions → sees current state
+      round 3: assign_role / add_grant / ... → performs actions
       (optionally more rounds if model chains calls)
     """
-    tools = build_tools(reference_data)
+    tools = build_tools()
     all_results: list[dict[str, Any]] = []
 
     logger.info(
@@ -167,7 +171,10 @@ async def process_user_request(
             })
 
         # ── Audit logging (fire-and-forget, skip read-only tools) ─────
-        _FETCH_TOOLS = {"get_user_current_permissions", "get_menu_by_url"}
+        _FETCH_TOOLS = {
+            "search_menu", "search_group", "search_grant",
+            "get_user_current_permissions", "get_menu_by_url",
+        }
         for res in results:
             if res["tool"] not in _FETCH_TOOLS:
                 asyncio.create_task(
