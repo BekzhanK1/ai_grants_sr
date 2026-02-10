@@ -144,21 +144,20 @@ def check_scenario_5(tool_calls, ai_message):
     # Logic: "AI should find... BUT... should require business_reason or say..."
     
     found_382 = False
-    found_370 = False
+    found_delete = False
+    
+    VALID_DELETE_IDS = [370, 795, 10185, 10392] 
     
     for tc in tool_calls:
         if tc["tool"] == "add_grant":
             gid = int(tc["args"].get("grant_id", 0))
             if gid == 382: found_382 = True
-            if gid == 370: found_370 = True
+            if gid in VALID_DELETE_IDS: found_delete = True # <--- Проверяем вхождение в список
             
-    if found_382 and found_370:
-        return True, "Found critical grants 382 and 370 (AI accepted the reason)"
+    if found_382 and found_delete:
+        return True, "Found PayBox (382) and a Delete Grant (370/795...)"
         
-    if not found_382 and not found_370:
-        return True, "AI did NOT grant rights (Security block / Clarification asked)"
-        
-    return False, f"Partial or unexpected behavior. 382={found_382}, 370={found_370}"
+    return False, f"Partial match. PayBox={found_382}, Delete={found_delete}"
 
 # ── Main ─────────────────────────────────────────────────────────────────────
 

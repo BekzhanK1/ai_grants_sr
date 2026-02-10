@@ -36,6 +36,11 @@ else:
     # Red
     print(f"\033[91m============TEST_MODE OFF============\033[0m (Commit enabled)")
 
+if settings.DAILY_LIMIT_ON:
+    print(f"\033[93m===========DAILY_LIMIT ON==========\033[0m (Daily limit enabled)")
+else:
+    print(f"\033[91m===========DAILY_LIMIT OFF==========\033[0m (Daily limit disabled)")
+
 logger = logging.getLogger(__name__)
 
 
@@ -613,3 +618,17 @@ async def log_ai_request(
         logger.info("log_ai_request saved for user_id=%s status=%s", user_id, execution_status)
     except Exception as e:
         logger.error("Failed to save audit log: %s", e)
+
+
+async def check_daily_limit(employee_id: int) -> dict[str, Any]:
+    """
+    Check if the user has exceeded their daily AI request limit.
+    Calls PostgreSQL function: ai_admin.check_daily_limit(employee_id)
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow(
+            "SELECT * FROM ai_admin.check_daily_limit($1)",
+            employee_id,
+        )
+    return dict(row) if row else {}

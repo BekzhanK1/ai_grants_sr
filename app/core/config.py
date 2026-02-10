@@ -33,5 +33,9 @@ class Settings(BaseSettings):
         default=False, description="Simulate actions without committing to DB"
     )
 
+    DAILY_LIMIT_ON: bool = Field(
+        default=True, description="Enable daily limit on requests"
+    )
+
 
 settings = Settings()
