@@ -143,7 +143,7 @@ async def process_user_request(
         results = list(await asyncio.gather(*(execute_tool_call(tc) for tc in tool_calls)))
         all_results.extend(results)
 
-        # ── Build tool-result messages for the next round ────────────
+        # ── Collect results for the next round ───────────────────────
         # Append assistant message with tool_calls
         messages.append(message.model_dump())
 
@@ -170,28 +170,52 @@ async def process_user_request(
                 "content": content,
             })
 
-        # ── Audit logging (fire-and-forget, skip read-only tools) ─────
-        _FETCH_TOOLS = {
-            "search_menu", "search_group", "search_grant",
-            "get_user_current_permissions", "get_menu_by_url",
-        }
-        for res in results:
-            if res["tool"] not in _FETCH_TOOLS:
-                asyncio.create_task(
-                    db_service.log_ai_request(
-                        user_id=user_id,
-                        prompt=prompt,
-                        reason=reason,
-                        tool_name=res["tool"],
-                        tool_args=res["args"],
-                        result_summary=res["status"],
-                    )
-                )
     else:
         logger.warning("Reached MAX_TOOL_ROUNDS=%d, forcing stop", MAX_TOOL_ROUNDS)
 
+    # ── Audit logging ────────────────────────────────────────────────
+    # Filter "write" actions (exclude search_* and get_*)
+    _READ_ONLY_TOOLS = {
+        "search_menu", "search_group", "search_grant",
+        "get_user_current_permissions", "get_menu_by_url",
+    }
+    
+    # We only want to log significant actions, but the user requested:
+    # "ai_decision jsonb -- список выполненных действий (инструмент + аргументы)."
+    # So we should probably log EVERYTHING strictly speaking, or just the write actions.
+    # Usually audit logs care about changes. Let's log effective actions.
+    
+    significant_actions = [
+        {"tool": r["tool"], "args": r["args"]}
+        for r in all_results 
+        if r["tool"] not in _READ_ONLY_TOOLS
+    ]
+
+    # Determine execution status
+    # 'error' if any action failed
+    # 'blocked' if any action was blocked
+    # 'success' otherwise (even if no actions were taken, e.g. "already exists")
+    
+    status = "success"
+    if any(r.get("status") == "error" for r in all_results):
+        status = "error"
+    elif any(r.get("status") == "blocked" for r in all_results):
+        status = "blocked"
+    # If no significant actions were taken, it might be a refusal or just Info.
+    # But let's stick to the requested statuses.
+    
+    asyncio.create_task(
+        db_service.log_ai_request(
+            user_id=user_id,
+            prompt=prompt,
+            reason=reason,
+            ai_decision=significant_actions,
+            execution_status=status,
+        )
+    )
+
     return {
         "id": completion_id,
-        "tool_calls": [r for r in all_results if r["tool"] not in _FETCH_TOOLS],
+        "tool_calls": [r for r in all_results if r["tool"] not in _READ_ONLY_TOOLS],
         "ai_message": message.content,
     }

@@ -395,17 +395,26 @@ async def log_ai_request(
     user_id: int,
     prompt: str,
     reason: str,
-    tool_name: str | None,
-    tool_args: dict[str, Any] | None,
-    result_summary: str | None,
+    ai_decision: list[dict[str, Any]],
+    execution_status: str,
 ) -> None:
-    """Log an AI interaction event, but do not save to database."""
-    logger.info(
-        "log_ai_request  user_id=%s  tool=%s  prompt=%r  reason=%r  tool_args=%r  status=%s",
-        user_id,
-        tool_name,
-        prompt,
-        reason,
-        tool_args,
-        result_summary,
-    )
+    """
+    Log an AI interaction event to the database.
+    Fire-and-forget style (catches exceptions to avoid breaking the main flow).
+    """
+    try:
+        pool = get_pool()
+        async with pool.acquire() as conn:
+            await conn.execute(
+                "INSERT INTO ai_admin.audit_logs "
+                "(employee_id, user_prompt, business_reason, ai_decision, execution_status) "
+                "VALUES ($1, $2, $3, $4::jsonb, $5)",
+                user_id,
+                prompt,
+                reason,
+                json.dumps(ai_decision, ensure_ascii=False),
+                execution_status,
+            )
+        logger.info("log_ai_request saved for user_id=%s status=%s", user_id, execution_status)
+    except Exception as e:
+        logger.error("Failed to save audit log: %s", e)

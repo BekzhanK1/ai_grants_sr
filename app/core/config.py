@@ -15,7 +15,7 @@ class Settings(BaseSettings):
 
     # OpenAI
     OPENAI_API_KEY: str = Field(..., description="API key for OpenAI")
-    OPENAI_MODEL: str = Field(default="gpt-4o", description="Chat model to use")
+    OPENAI_MODEL: str = Field(default="gpt-4.1-mini", description="Chat model to use")
 
     # PostgreSQL
     DATABASE_URL: str = Field(
