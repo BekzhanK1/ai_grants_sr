@@ -652,6 +652,41 @@ async def log_ai_request(
         logger.error("Failed to save audit log: %s", e)
 
 
+async def get_recent_audit_logs(limit: int = 10) -> list[dict[str, Any]]:
+    """
+    Return most recent audit log records (default 10).
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT log_id,
+                   employee_id,
+                   user_prompt,
+                   business_reason,
+                   ai_decision,
+                   ai_message,
+                   execution_status,
+                   created_at
+            FROM ai_admin.audit_logs_tab
+            ORDER BY created_at DESC, log_id DESC
+            LIMIT $1
+            """,
+            limit,
+        )
+    results: list[dict[str, Any]] = []
+    for r in rows:
+        item = dict(r)
+        # asyncpg may return jsonb as a string depending on codec setup
+        if isinstance(item.get("ai_decision"), str):
+            try:
+                item["ai_decision"] = json.loads(item["ai_decision"])
+            except Exception:
+                item["ai_decision"] = []
+        results.append(item)
+    return results
+
+
 async def check_daily_limit(employee_id: int) -> dict[str, Any]:
     """
     Check if the user has exceeded their daily AI request limit.

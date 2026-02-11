@@ -8,9 +8,10 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
 from app.api.dependencies import verify_api_key
-from app.api.schemas import ProcessRequestBody, ProcessRequestResponse, ToolCallResult
+from app.api.schemas import AuditLogEntry, ProcessRequestBody, ProcessRequestResponse, ToolCallResult
 from app.core.exceptions import AIServiceError, DatabaseError
 from app.services.ai_service import process_user_request
+from app.services.db_service import get_recent_audit_logs
 
 logger = logging.getLogger(__name__)
 
@@ -50,3 +51,12 @@ async def process_request(
         explanation=explanation,
         ai_message=result.get("ai_message"),
     )
+
+
+@router.get("/logs", response_model=list[AuditLogEntry])
+async def get_logs() -> list[AuditLogEntry]:
+    """
+    Возвращает последние 10 записей аудита AI.
+    """
+    rows = await get_recent_audit_logs(10)
+    return [AuditLogEntry(**row) for row in rows]
