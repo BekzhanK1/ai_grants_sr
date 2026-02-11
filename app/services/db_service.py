@@ -583,6 +583,38 @@ async def get_menu_by_url(url: str) -> int | None:
     return result
 
 
+async def get_employee_context(employee_id: int) -> str:
+    """
+    Return a short textual context with real employee identity data from DB.
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow(
+            """
+            SELECT
+                e.fio,
+                p.position_name,
+                m.module_name
+            FROM admin.employee_tab e
+            LEFT JOIN admin.position_tab p ON e.position_id = p.position_id
+            LEFT JOIN admin.module_tab m ON p.module_id = m.module_id
+            WHERE e.employee_id = $1
+            """,
+            employee_id,
+        )
+
+    if not row:
+        logger.warning("get_employee_context employee_id=%s not found", employee_id)
+        return "Сотрудник не найден."
+
+    fio = row["fio"] or "Не указано"
+    position_name = row["position_name"] or "Не указана"
+    module_name = row["module_name"] or "Не указан"
+    context = f"ФИО: {fio}, Должность: {position_name}, Модуль: {module_name}"
+    logger.info("get_employee_context employee_id=%s position=%r", employee_id, position_name)
+    return context
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 # AUDIT: логирование AI-запросов
 # ═══════════════════════════════════════════════════════════════════════════

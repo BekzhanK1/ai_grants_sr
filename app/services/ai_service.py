@@ -115,7 +115,9 @@ async def process_user_request(
 
     logger.info(
         "Processing request  user_id=%s  prompt=%r  reason=%r",
-        user_id, prompt[:120], reason[:120],
+        user_id,
+        prompt[:120],
+        reason[:120],
     )
 
     # 0. Check Daily Limit
@@ -126,12 +128,16 @@ async def process_user_request(
             logger.warning("User %s blocked by daily limit: %s", user_id, error_msg)
             raise AIServiceError(error_msg)
 
+    employee_context = await db_service.get_employee_context(user_id)
+    logger.info("Employee context loaded for user_id=%s: %s", user_id, employee_context)
+
     messages: list[dict[str, Any]] = [
         {"role": "system", "content": SYSTEM_PROMPT},
         {
             "role": "user",
             "content": (
                 f"employee_id: {user_id}\n"
+                f"employee_context: {employee_context}\n"
                 f"запрос: {prompt}\n"
                 f"причина: {reason}"
             ),
@@ -170,7 +176,11 @@ async def process_user_request(
             break
 
         # ── Execute tool calls ───────────────────────────────────────
-        results = list(await asyncio.gather(*(execute_tool_call(tc, user_id=user_id) for tc in tool_calls)))
+        results = list(
+            await asyncio.gather(
+                *(execute_tool_call(tc, user_id=user_id) for tc in tool_calls)
+            )
+        )
         all_results.extend(results)
 
         # ── Collect results for the next round ───────────────────────
@@ -194,11 +204,13 @@ async def process_user_request(
                     ensure_ascii=False,
                 )
 
-            messages.append({
-                "role": "tool",
-                "tool_call_id": res["tool_call_id"],
-                "content": content,
-            })
+            messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": res["tool_call_id"],
+                    "content": content,
+                }
+            )
 
     else:
         logger.warning("Reached MAX_TOOL_ROUNDS=%d, forcing stop", MAX_TOOL_ROUNDS)
@@ -206,15 +218,18 @@ async def process_user_request(
     # ── Audit logging ────────────────────────────────────────────────
     # Filter "write" actions (exclude search_* and get_*)
     _READ_ONLY_TOOLS = {
-        "search_menu", "search_group", "search_grant",
-        "get_user_current_permissions", "get_menu_by_url",
+        "search_menu",
+        "search_group",
+        "search_grant",
+        "get_user_current_permissions",
+        "get_menu_by_url",
     }
-    
+
     # We only want to log significant actions, but the user requested:
     # "ai_decision jsonb -- список выполненных действий (инструмент + аргументы)."
     # So we should probably log EVERYTHING strictly speaking, or just the write actions.
     # Usually audit logs care about changes. Let's log effective actions.
-    
+
     significant_actions = [
         {
             "tool": r["tool"],
@@ -225,7 +240,7 @@ async def process_user_request(
             "entity_name": r.get("entity_name"),
             "entity_id": r.get("entity_id"),
         }
-        for r in all_results 
+        for r in all_results
         if r["tool"] not in _READ_ONLY_TOOLS
     ]
 
@@ -233,7 +248,7 @@ async def process_user_request(
     # 'error' if any action failed
     # 'blocked' if any action was blocked
     # 'success' otherwise (even if no actions were taken, e.g. "already exists")
-    
+
     status = "success"
     if any(r.get("status") == "error" for r in all_results):
         status = "error"
@@ -241,7 +256,7 @@ async def process_user_request(
         status = "blocked"
     # If no significant actions were taken, it might be a refusal or just Info.
     # But let's stick to the requested statuses.
-    
+
     asyncio.create_task(
         db_service.log_ai_request(
             user_id=user_id,
