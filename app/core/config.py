@@ -37,5 +37,7 @@ class Settings(BaseSettings):
         default=True, description="Enable daily limit on requests"
     )
 
+    API_KEY: str = Field(..., description="Secret API Key for authentication")
+
 
 settings = Settings()

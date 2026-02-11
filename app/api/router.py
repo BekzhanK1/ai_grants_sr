@@ -4,16 +4,17 @@ API router — all HTTP endpoints live here.
 
 import logging
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
+from app.api.dependencies import verify_api_key
 from app.api.schemas import ProcessRequestBody, ProcessRequestResponse, ToolCallResult
 from app.core.exceptions import AIServiceError, DatabaseError
 from app.services.ai_service import process_user_request
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(verify_api_key)])
 
 
 @router.post("/process-request", response_model=ProcessRequestResponse)

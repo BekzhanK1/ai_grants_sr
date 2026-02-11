@@ -8,7 +8,8 @@ import requests
 import json
 import time
 
-API_URL = "http://127.0.0.1:8000/api/process-request"
+API_URL = "http://127.0.0.1:8555/api/process-request"
+API_KEY = "my-secret-key"
 USER_ID = 1842  # Test User
 
 # Colors
@@ -25,7 +26,7 @@ def run_test(name, prompt, reason, expected_check):
     
     try:
         start_time = time.time()
-        response = requests.post(API_URL, json=payload, timeout=60)
+        response = requests.post(API_URL, json=payload, headers={"X-API-KEY": API_KEY}, timeout=60)
         duration = time.time() - start_time
         
         if response.status_code != 200:

@@ -1,12 +1,24 @@
-"""
-FastAPI dependency functions.
-"""
 
-from app.data.reference import ReferenceData, get_reference_data
+from fastapi import Security, HTTPException, status
+from fastapi.security import APIKeyHeader
+
+from app.core.config import settings
+
+api_key_header = APIKeyHeader(
+    name="X-API-KEY",
+    auto_error=True,
+    scheme_name="API Key",
+    description="Enter your API key (same value as API_KEY in .env)",
+)
 
 
-async def get_ref_data() -> ReferenceData:
+async def verify_api_key(api_key: str = Security(api_key_header)):
     """
-    Return cached reference data, auto-refreshing from DB when TTL expires.
+    Validate the X-API-KEY header against the configured secret.
     """
-    return await get_reference_data()
+    if api_key != settings.API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid API Key",
+        )
+    return api_key

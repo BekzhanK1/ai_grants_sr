@@ -18,6 +18,6 @@ COPY --from=builder /deps /usr/local/lib/python3.12/site-packages
 COPY --from=builder /deps/bin /usr/local/bin
 COPY app ./app
 
-EXPOSE 8000
+EXPOSE 8555
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8555"]
