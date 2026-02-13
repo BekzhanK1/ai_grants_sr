@@ -1,16 +1,17 @@
 """
-Grants creation service — отдельный поток от process_user_request.
-
-Принимает дерево прав (например M__Tier → M__TierBlock → M__TierBlockRead)
-и список сотрудников; строит контекст из admin.grant_tab, отдаёт ИИ,
-получает INSERT в grant_tab и employee_grant_tab.
-
-Логика не смешивается с основным ai_service; вызов GPT — через app.services.llm.
+Grants creation — подготовка иерархии прав по дереву (Markdown) и выдача доступа сотрудникам.
 """
 
 from app.services.grants_creation.service import (
+    confirm_and_generate_sql,
+    execute_grants_sql,
     get_all_modules,
-    process_grants_creation_request,
+    prepare_access_hierarchy,
 )
 
-__all__ = ["get_all_modules", "process_grants_creation_request"]
+__all__ = [
+    "confirm_and_generate_sql",
+    "execute_grants_sql",
+    "get_all_modules",
+    "prepare_access_hierarchy",
+]

@@ -704,6 +704,27 @@ async def search_users_by_fios(fios: list[str]) -> list[EmployeeDto]:
     return [EmployeeDto.model_validate(dict(r)) for r in rows]
 
 
+async def get_company_id(employee_id: int) -> int | None:
+    """
+    Возвращает company_id для сотрудника (хранимая процедура get_company_id).
+    Если функция в БД отсутствует или возвращает NULL — возвращаем None.
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        try:
+            row = await conn.fetchrow(
+                "SELECT get_company_id($1) AS company_id",
+                employee_id,
+            )
+            if row and row["company_id"] is not None:
+                return int(row["company_id"])
+        except asyncpg.UndefinedFunctionError:
+            logger.debug("get_company_id not found in DB, employee_id=%s", employee_id)
+        except Exception as e:
+            logger.warning("get_company_id failed employee_id=%s: %s", employee_id, e)
+    return None
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 # AUDIT: логирование AI-запросов
 # ═══════════════════════════════════════════════════════════════════════════

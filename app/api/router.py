@@ -10,7 +10,13 @@ from fastapi.responses import JSONResponse
 from app.api.dependencies import verify_api_key
 from app.api.schemas import (
     AuditLogEntry,
+    ConfirmGrantsRequestBody,
+    ConfirmGrantsResult,
+    ExecuteGrantsRequestBody,
+    ExecuteGrantsResult,
+    GrantsPreparationResult,
     ModuleDto,
+    PrepareGrantsRequestBody,
     ProcessRequestBody,
     ProcessRequestResponse,
     ToolCallResult,
@@ -18,7 +24,12 @@ from app.api.schemas import (
 from app.core.exceptions import AIServiceError, DatabaseError
 from app.services.access_request import process_user_request
 from app.services.db_service import get_recent_audit_logs
-from app.services.grants_creation.service import get_all_modules
+from app.services.grants_creation.service import (
+    confirm_and_generate_sql,
+    execute_grants_sql,
+    get_all_modules,
+    prepare_access_hierarchy,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -75,3 +86,39 @@ async def get_modules() -> list[ModuleDto]:
     Возвращает все модули из admin.module_tab.
     """
     return await get_all_modules()
+
+
+@router.post("/prepare-grants", response_model=GrantsPreparationResult)
+async def prepare_grants(body: PrepareGrantsRequestBody) -> GrantsPreparationResult:
+    """
+    Шаг 1: Подготовка иерархии прав по дереву.
+    Возвращает new_grants, existing_grants_in_tree, users, sql_queries, visual_tree.
+    Пользователь ревьюит ответ, может удалить лишнее и отправить на /confirm-grants.
+    """
+    return await prepare_access_hierarchy(
+        module_id=body.module_id,
+        prompt_text=body.prompt_text,
+    )
+
+
+@router.post("/confirm-grants", response_model=ConfirmGrantsResult)
+async def confirm_grants(body: ConfirmGrantsRequestBody) -> ConfirmGrantsResult:
+    """
+    Шаг 2: Пользователь подтвердил данные (мог удалить new_grants / users).
+    Генерирует финальный SQL через LLM. SQL не выполняется.
+    """
+    return await confirm_and_generate_sql(
+        module_id=body.module_id,
+        new_grants=body.new_grants,
+        existing_grants_in_tree=body.existing_grants_in_tree,
+        users=body.users,
+    )
+
+
+@router.post("/execute-grants", response_model=ExecuteGrantsResult)
+async def execute_grants(body: ExecuteGrantsRequestBody) -> ExecuteGrantsResult:
+    """
+    Шаг 3: Исполнение финального SQL.
+    В TEST_MODE — откатывает транзакцию.
+    """
+    return await execute_grants_sql(sql_queries=body.sql_queries)
