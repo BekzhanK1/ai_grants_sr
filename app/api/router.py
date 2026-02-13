@@ -8,10 +8,17 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
 from app.api.dependencies import verify_api_key
-from app.api.schemas import AuditLogEntry, ProcessRequestBody, ProcessRequestResponse, ToolCallResult
+from app.api.schemas import (
+    AuditLogEntry,
+    ModuleDto,
+    ProcessRequestBody,
+    ProcessRequestResponse,
+    ToolCallResult,
+)
 from app.core.exceptions import AIServiceError, DatabaseError
 from app.services.access_request import process_user_request
 from app.services.db_service import get_recent_audit_logs
+from app.services.grants_creation.service import get_all_modules
 
 logger = logging.getLogger(__name__)
 
@@ -60,3 +67,11 @@ async def get_logs() -> list[AuditLogEntry]:
     """
     rows = await get_recent_audit_logs(10)
     return [AuditLogEntry(**row) for row in rows]
+
+
+@router.get("/modules", response_model=list[ModuleDto])
+async def get_modules() -> list[ModuleDto]:
+    """
+    Возвращает все модули из admin.module_tab.
+    """
+    return await get_all_modules()

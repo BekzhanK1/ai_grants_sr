@@ -17,7 +17,17 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from app.api.schemas import ModuleDto
+from app.services.db_service import get_all_modules as _get_all_modules_db
+
 logger = logging.getLogger(__name__)
+
+
+async def get_all_modules() -> list[ModuleDto]:
+    """
+    Возвращает все модули (прослойка над db_service).
+    """
+    return await _get_all_modules_db()
 
 
 async def process_grants_creation_request(

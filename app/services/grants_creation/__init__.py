@@ -8,6 +8,9 @@ Grants creation service — отдельный поток от process_user_requ
 Логика не смешивается с основным ai_service; вызов GPT — через app.services.llm.
 """
 
-from app.services.grants_creation.service import process_grants_creation_request
+from app.services.grants_creation.service import (
+    get_all_modules,
+    process_grants_creation_request,
+)
 
-__all__ = ["process_grants_creation_request"]
+__all__ = ["get_all_modules", "process_grants_creation_request"]

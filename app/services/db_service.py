@@ -24,7 +24,7 @@ import logging
 from typing import Any
 
 import asyncpg
-
+from app.api.schemas import EmployeeDto, GrantDto, ModuleDto
 from app.core.config import settings
 from app.core.database import get_pool
 
@@ -126,7 +126,9 @@ async def _get_employee_module_id(conn: Any, employee_id: int) -> int | None:
         return None
 
 
-async def search_menu(query: str, employee_id: int | None = None) -> list[dict[str, Any]]:
+async def search_menu(
+    query: str, employee_id: int | None = None
+) -> list[dict[str, Any]]:
     """
     Поиск пунктов меню по названию.
     Только активные. Включает parent_name и module_name.
@@ -136,7 +138,7 @@ async def search_menu(query: str, employee_id: int | None = None) -> list[dict[s
     query = query.strip()
     if not query:
         return []
-    
+
     pool = get_pool()
     async with pool.acquire() as conn:
         target_module_id = None
@@ -156,10 +158,10 @@ async def search_menu(query: str, employee_id: int | None = None) -> list[dict[s
         # Ordering logic: boost raw match and module match
         # If target_module_id is set, we use it to boost relevance
         # We need conditional SQL construction or pass parameter conditionally
-        
+
         args = [query]
         order_clause = ""
-        
+
         if target_module_id:
             args.append(target_module_id)
             # $2 is target_module_id
@@ -169,7 +171,9 @@ async def search_menu(query: str, employee_id: int | None = None) -> list[dict[s
 
         try:
             # TRY pg_trgm
-            where_clause = "AND (t.menu_name ILIKE '%' || $1 || '%' OR t.menu_name % $1) "
+            where_clause = (
+                "AND (t.menu_name ILIKE '%' || $1 || '%' OR t.menu_name % $1) "
+            )
             order_clause = f"ORDER BY {module_boost} similarity(t.menu_name, $1) DESC NULLS LAST, t.menu_id LIMIT 15"
             sql = select_sql + where_clause + order_clause
             rows = await conn.fetch(sql, *args)
@@ -181,11 +185,15 @@ async def search_menu(query: str, employee_id: int | None = None) -> list[dict[s
             rows = await conn.fetch(sql, *args)
 
     results = [dict(r) for r in rows]
-    logger.info("search_menu query=%r employee_id=%s found=%d", query, employee_id, len(results))
+    logger.info(
+        "search_menu query=%r employee_id=%s found=%d", query, employee_id, len(results)
+    )
     return results
 
 
-async def search_group(query: str, employee_id: int | None = None) -> list[dict[str, Any]]:
+async def search_group(
+    query: str, employee_id: int | None = None
+) -> list[dict[str, Any]]:
     """
     Поиск групп (ролей) по названию.
     Приоритет: совпадение модуля (если передан employee_id).
@@ -214,7 +222,9 @@ async def search_group(query: str, employee_id: int | None = None) -> list[dict[
             module_boost = ""
 
         try:
-            where_clause = "AND (g.group_name ILIKE '%' || $1 || '%' OR g.group_name % $1) "
+            where_clause = (
+                "AND (g.group_name ILIKE '%' || $1 || '%' OR g.group_name % $1) "
+            )
             order_clause = f"ORDER BY {module_boost} similarity(g.group_name, $1) DESC NULLS LAST, g.group_id LIMIT 15"
             sql = select_sql + where_clause + order_clause
             rows = await conn.fetch(sql, *args)
@@ -225,11 +235,18 @@ async def search_group(query: str, employee_id: int | None = None) -> list[dict[
             rows = await conn.fetch(sql, *args)
 
     results = [dict(r) for r in rows]
-    logger.info("search_group query=%r employee_id=%s found=%d", query, employee_id, len(results))
+    logger.info(
+        "search_group query=%r employee_id=%s found=%d",
+        query,
+        employee_id,
+        len(results),
+    )
     return results
 
 
-async def search_grant(query: str, employee_id: int | None = None) -> list[dict[str, Any]]:
+async def search_grant(
+    query: str, employee_id: int | None = None
+) -> list[dict[str, Any]]:
     """
     Поиск грантов по названию.
     Приоритет: совпадение модуля (если передан employee_id).
@@ -260,7 +277,9 @@ async def search_grant(query: str, employee_id: int | None = None) -> list[dict[
             module_boost = ""
 
         try:
-            where_clause = "AND (g.grant_name ILIKE '%' || $1 || '%' OR g.grant_name % $1) "
+            where_clause = (
+                "AND (g.grant_name ILIKE '%' || $1 || '%' OR g.grant_name % $1) "
+            )
             order_clause = f"ORDER BY {module_boost} similarity(g.grant_name, $1) DESC NULLS LAST, g.grant_id LIMIT 15"
             sql = select_sql + where_clause + order_clause
             rows = await conn.fetch(sql, *args)
@@ -271,7 +290,12 @@ async def search_grant(query: str, employee_id: int | None = None) -> list[dict[
             rows = await conn.fetch(sql, *args)
 
     results = [dict(r) for r in rows]
-    logger.info("search_grant query=%r employee_id=%s found=%d", query, employee_id, len(results))
+    logger.info(
+        "search_grant query=%r employee_id=%s found=%d",
+        query,
+        employee_id,
+        len(results),
+    )
     return results
 
 
@@ -310,9 +334,7 @@ async def employee_group_link(employee_id: int, group_id: int) -> dict[str, Any]
             group_id,
         )
         if exists:
-            msg = (
-                f"-- SKIPPED (already assigned) employee_id={employee_id} group_id={group_id}"
-            )
+            msg = f"-- SKIPPED (already assigned) employee_id={employee_id} group_id={group_id}"
             logger.warning("employee_group_link %s", msg)
             return {"sql": msg, **entity_info}
 
@@ -453,9 +475,7 @@ async def employee_module_link(employee_id: int, module_id: int) -> dict[str, An
             module_id,
         )
         if exists:
-            msg = (
-                f"-- SKIPPED (already assigned) employee_id={employee_id} module_id={module_id}"
-            )
+            msg = f"-- SKIPPED (already assigned) employee_id={employee_id} module_id={module_id}"
             logger.warning("employee_module_link %s", msg)
             return {"sql": msg, **entity_info}
 
@@ -611,8 +631,77 @@ async def get_employee_context(employee_id: int) -> str:
     position_name = row["position_name"] or "Не указана"
     module_name = row["module_name"] or "Не указан"
     context = f"ФИО: {fio}, Должность: {position_name}, Модуль: {module_name}"
-    logger.info("get_employee_context employee_id=%s position=%r", employee_id, position_name)
+    logger.info(
+        "get_employee_context employee_id=%s position=%r", employee_id, position_name
+    )
     return context
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FETCH: все модули из admin.module_tab
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+async def get_all_modules() -> list[ModuleDto]:
+    """
+    Return all modules from admin.module_tab.
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch("SELECT * FROM admin.module_tab")
+    return [ModuleDto.model_validate(dict(r)) for r in rows]
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FETCH: все права из admin.grant_tab
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+async def get_all_grants_by_module(module_id: int) -> list[GrantDto]:
+    """
+    Return all grants from admin.grant_tab by module_id.
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            "SELECT * FROM admin.grant_tab WHERE module_id = $1", module_id
+        )
+    return [GrantDto.model_validate(dict(r)) for r in rows]
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SEARCH: поиск пользователей по ФИО (similarity)
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+async def search_users_by_fios(fios: list[str]) -> list[EmployeeDto]:
+    """
+    Search users by FIOs (pg_trgm similarity). Tolerates typos / minor mistakes.
+    Returns same shape as get_employee_context: employee_id, fio, position_name, module_name.
+    """
+    if not fios:
+        return []
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT DISTINCT ON (e.employee_id)
+                e.employee_id,
+                e.fio,
+                p.position_name,
+                m.module_name
+            FROM admin.employee_tab e
+            LEFT JOIN admin.position_tab p ON e.position_id = p.position_id
+            LEFT JOIN admin.module_tab m ON p.module_id = m.module_id
+            WHERE EXISTS (
+                SELECT 1 FROM unnest($1::text[]) AS u(f)
+                WHERE e.fio % u.f
+            )
+            ORDER BY e.employee_id
+            """,
+            fios,
+        )
+    return [EmployeeDto.model_validate(dict(r)) for r in rows]
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -647,7 +736,9 @@ async def log_ai_request(
                 ai_message,
                 execution_status,
             )
-        logger.info("log_ai_request saved for user_id=%s status=%s", user_id, execution_status)
+        logger.info(
+            "log_ai_request saved for user_id=%s status=%s", user_id, execution_status
+        )
     except Exception as e:
         logger.error("Failed to save audit log: %s", e)
 
