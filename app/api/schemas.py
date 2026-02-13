@@ -141,7 +141,9 @@ class NewGrantItem(BaseModel):
 
     grant_code: str = Field(..., description="Код доступа")
     grant_name: str = Field(..., description="Наименование доступа")
-    grant_pid: int | None = Field(default=None, description="ID родителя (если родитель из БД)")
+    grant_pid: int | None = Field(
+        default=None, description="ID родителя (если родитель из БД)"
+    )
     parent_grant_code: str | None = Field(
         default=None,
         description="Код родителя, если родитель новый (для подзапроса в SQL)",
@@ -154,7 +156,9 @@ class UserWithCompany(BaseModel):
     """Сотрудник с company_id для выдачи прав."""
 
     employee_id: int = Field(..., description="ID сотрудника")
-    company_id: int | None = Field(default=None, description="ID компании (get_company_id)")
+    company_id: int | None = Field(
+        default=None, description="ID компании (get_company_id)"
+    )
     fio: str = Field(..., description="ФИО")
     position_name: str | None = Field(default=None, description="Должность")
     module_name: str | None = Field(default=None, description="Модуль")

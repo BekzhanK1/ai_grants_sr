@@ -4,9 +4,6 @@ API router — all HTTP endpoints live here.
 
 import logging
 
-from fastapi import APIRouter, Depends
-from fastapi.responses import JSONResponse
-
 from app.api.dependencies import verify_api_key
 from app.api.schemas import (
     AuditLogEntry,
@@ -30,6 +27,8 @@ from app.services.grants_creation.service import (
     get_all_modules,
     prepare_access_hierarchy,
 )
+from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +54,9 @@ async def process_request(
         return JSONResponse(status_code=400, content={"detail": str(exc)})
 
     # Build human-readable explanation
-    ok_tools = [tc["tool"] for tc in result.get("tool_calls", []) if tc.get("status") == "ok"]
+    ok_tools = [
+        tc["tool"] for tc in result.get("tool_calls", []) if tc.get("status") == "ok"
+    ]
     if ok_tools:
         explanation = "Назначены права: " + ", ".join(sorted(set(ok_tools)))
     elif not result.get("tool_calls"):

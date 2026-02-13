@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+
 from app.api.schemas import (
     ConfirmGrantsResult,
     ExecuteGrantsResult,
@@ -23,12 +24,9 @@ from app.api.schemas import (
 )
 from app.core.config import settings
 from app.core.database import get_pool
-from app.services.db_service import (
-    get_all_grants_by_module,
-    get_all_modules as _get_all_modules_db,
-    get_company_id,
-    search_users_by_fios,
-)
+from app.services.db_service import get_all_grants_by_module
+from app.services.db_service import get_all_modules as _get_all_modules_db
+from app.services.db_service import get_company_id, search_users_by_fios
 from app.services.llm import create_chat_completion
 
 logger = logging.getLogger(__name__)
@@ -99,7 +97,9 @@ def parse_tree_to_grants(
         # Родитель — последняя строка с меньшим отступом
         while stack and stack[-1][0] >= indent:
             stack.pop()
-        parent_indent, parent_code, parent_grant_id = stack[-1] if stack else (-1, "", None)
+        parent_indent, parent_code, parent_grant_id = (
+            stack[-1] if stack else (-1, "", None)
+        )
 
         if code in existing_by_code:
             g = existing_by_code[code]
@@ -161,7 +161,11 @@ def _extract_fios_from_tree_text(prompt_text: str) -> list[str]:
                 continue
             # убираем маркеры списка и дерева
             cleaned = re.sub(r"^[\s\-*├│└┤]+", "", line).strip()
-            if cleaned and 2 <= len(cleaned.split()) <= 5 and re.search(r"[а-яА-ЯёЁ]", cleaned):
+            if (
+                cleaned
+                and 2 <= len(cleaned.split()) <= 5
+                and re.search(r"[а-яА-ЯёЁ]", cleaned)
+            ):
                 fios.append(cleaned)
 
     if fios:
@@ -227,7 +231,14 @@ def _build_sql_only_user_prompt(
         indent=2,
     )
     existing_json = json.dumps(
-        [{"grant_id": g.grant_id, "grant_code": g.grant_code, "grant_name": g.grant_name} for g in existing_grants_in_tree],
+        [
+            {
+                "grant_id": g.grant_id,
+                "grant_code": g.grant_code,
+                "grant_name": g.grant_name,
+            }
+            for g in existing_grants_in_tree
+        ],
         ensure_ascii=False,
         indent=2,
     )
@@ -274,8 +285,8 @@ async def prepare_access_hierarchy(
     """
     existing_grants = await get_all_grants_by_module(module_id)
     tree_section = _extract_tree_section(prompt_text)
-    existing_grants_in_tree, new_grants, visual_tree, all_grant_codes = parse_tree_to_grants(
-        tree_section, existing_grants
+    existing_grants_in_tree, new_grants, visual_tree, all_grant_codes = (
+        parse_tree_to_grants(tree_section, existing_grants)
     )
 
     fios = _extract_fios_from_tree_text(prompt_text)
@@ -326,8 +337,14 @@ async def prepare_access_hierarchy(
     # visual_tree строится только в Python, LLM не трогает
     no_company = [u.fio for u in users if u.company_id is None]
     if no_company:
-        warning = "⚠️ Внимание: для [" + "], [".join(no_company) + "] не найден company_id, доступ может быть не полным."
-        visual_tree = (visual_tree + "\n\n" + warning).strip() if visual_tree else warning
+        warning = (
+            "⚠️ Внимание: для ["
+            + "], [".join(no_company)
+            + "] не найден company_id, доступ может быть не полным."
+        )
+        visual_tree = (
+            (visual_tree + "\n\n" + warning).strip() if visual_tree else warning
+        )
 
     return GrantsPreparationResult(
         new_grants=new_grants,
@@ -354,10 +371,9 @@ async def confirm_and_generate_sql(
     visual_tree и all_grant_codes пересчитываются из переданных данных.
     """
     # Пересчитать all_grant_codes из подтверждённых данных
-    all_grant_codes = (
-        [g.grant_code for g in existing_grants_in_tree]
-        + [g.grant_code for g in new_grants]
-    )
+    all_grant_codes = [g.grant_code for g in existing_grants_in_tree] + [
+        g.grant_code for g in new_grants
+    ]
 
     # Пересобрать visual_tree из подтверждённых данных
     visual_tree = _rebuild_visual_tree(existing_grants_in_tree, new_grants)
@@ -393,8 +409,14 @@ async def confirm_and_generate_sql(
 
     no_company = [u.fio for u in users if u.company_id is None]
     if no_company:
-        warning = "⚠️ Внимание: для [" + "], [".join(no_company) + "] не найден company_id, доступ может быть не полным."
-        visual_tree = (visual_tree + "\n\n" + warning).strip() if visual_tree else warning
+        warning = (
+            "⚠️ Внимание: для ["
+            + "], [".join(no_company)
+            + "] не найден company_id, доступ может быть не полным."
+        )
+        visual_tree = (
+            (visual_tree + "\n\n" + warning).strip() if visual_tree else warning
+        )
 
     return ConfirmGrantsResult(sql_queries=sql_queries, visual_tree=visual_tree)
 
