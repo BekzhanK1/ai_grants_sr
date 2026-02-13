@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 from app.api.dependencies import verify_api_key
 from app.api.schemas import AuditLogEntry, ProcessRequestBody, ProcessRequestResponse, ToolCallResult
 from app.core.exceptions import AIServiceError, DatabaseError
-from app.services.ai_service import process_user_request
+from app.services.access_request import process_user_request
 from app.services.db_service import get_recent_audit_logs
 
 logger = logging.getLogger(__name__)

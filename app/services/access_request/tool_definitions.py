@@ -1,5 +1,5 @@
 """
-OpenAI function-calling tool definitions.
+OpenAI function-calling tool definitions (access_request flow).
 
 Each tool maps to a stored procedure / query in Smart Remont.
 

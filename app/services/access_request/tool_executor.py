@@ -1,5 +1,5 @@
 """
-Tool executor — dispatches OpenAI tool-call objects to db_service functions.
+Tool executor — dispatches OpenAI tool-call objects to db_service functions (access_request flow).
 
 Safety layer:
   - Blocked IDs (admin groups, admin menus) are rejected before DB call.
