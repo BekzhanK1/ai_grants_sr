@@ -190,17 +190,38 @@ async def _resolve_grants_for_review(
 
 
 def _build_clone_sql(from_employee_id: int, email: str, fio: str, phone: str) -> str:
-    """Build single SQL call for admin.employee_clone."""
+    """
+    Build SQL for admin.employee_clone + выравнивание пароля под Django-схему.
+
+    1) Вызываем admin.employee_clone (как раньше).
+    2) Сразу после этого ПЕРЕЗАПИСЫВАЕМ password так же, как при create:
+       password = md5(right(get_phone_number(phone), len-1) || 'dki#ds%$').
+
+    Так новый пользователь, созданный через clone в ai-admin, будет логиниться
+    по паролю = телефон без первой цифры (как и при создании с нуля), даже если
+    внутри employee_clone используется другая формула.
+    """
     e = _escape_sql(email.strip().lower())
     f = _escape_sql(fio.strip())
     p = _escape_sql(phone.strip())
-    return (
+    clone_call = (
         f"SELECT admin.employee_clone("
         f"from_employee_id_ := {from_employee_id}, "
         f"email_ := '{e}', "
         f"fio_ := '{f}', "
         f"phone_ := '{p}')"
     )
+    # Пересчитываем пароль по той же формуле, что и _build_create_sql,
+    # чтобы Django-аутентификация работала одинаково для create и clone.
+    reset_password = f"""
+WITH ph AS (SELECT admin.get_phone_number('{p}') AS p)
+UPDATE admin.employee_tab e
+SET password = md5(
+  right((SELECT p FROM ph), length((SELECT p FROM ph)) - 1) || 'dki#ds%$'
+)
+WHERE e.email = trim(lower('{e}'))
+"""
+    return f"{clone_call};\n{reset_password.strip()}"
 
 
 def _build_clone_plus_extras_sql(
@@ -319,9 +340,7 @@ def _build_create_sql(
         )
 
     if groups:
-        values = ", ".join(
-            f"({g.group_id}, {g.company_id})" for g in groups
-        )
+        values = ", ".join(f"({g.group_id}, {g.company_id})" for g in groups)
         statements.append(
             f"INSERT INTO admin.employee_group_tab (employee_id, group_id, company_id, rowversion) "
             f"SELECT (SELECT employee_id FROM _uc_new_employee), v.gid, v.cid, now() FROM (VALUES {values}) AS v(gid, cid) "
@@ -361,10 +380,9 @@ async def _resolve_module_ids_by_names(module_names: list[str]) -> list[int]:
         for m in all_mods:
             if m.module_id in seen:
                 continue
-            if (
-                (m.module_name or "").strip().lower() == name_clean
-                or (m.module_code or "").strip().lower() == name_clean
-            ):
+            if (m.module_name or "").strip().lower() == name_clean or (
+                m.module_code or ""
+            ).strip().lower() == name_clean:
                 result.append(m.module_id)
                 seen.add(m.module_id)
                 break
@@ -384,9 +402,7 @@ async def _resolve_group_ids_by_names(
         name_clean = (name or "").strip()
         if not name_clean:
             continue
-        found = await search_group(
-            name_clean, employee_id=None, module_id=module_id
-        )
+        found = await search_group(name_clean, employee_id=None, module_id=module_id)
         if found:
             out.append(
                 GroupAssignment(
@@ -409,9 +425,7 @@ async def _resolve_grant_ids_by_names(
         name_clean = (name or "").strip()
         if not name_clean:
             continue
-        found = await search_grant(
-            name_clean, employee_id=None, module_id=module_id
-        )
+        found = await search_grant(name_clean, employee_id=None, module_id=module_id)
         if found and found[0]["grant_id"] not in seen:
             result.append(int(found[0]["grant_id"]))
             seen.add(int(found[0]["grant_id"]))
@@ -482,7 +496,9 @@ async def prepare_user_creation_from_prompt(prompt: str) -> UserPreparationResul
         data = json.loads(content)
     except json.JSONDecodeError as e:
         logger.warning("LLM user-creation extract JSON invalid: %s", e)
-        raise DatabaseError("Не удалось разобрать запрос. Уточните: ФИО, email, телефон; компанию, модуль, группу — или «создай как у пользователя X».") from e
+        raise DatabaseError(
+            "Не удалось разобрать запрос. Уточните: ФИО, email, телефон; компанию, модуль, группу — или «создай как у пользователя X»."
+        ) from e
     except Exception as e:
         logger.exception("LLM user-creation extract failed: %s", e)
         raise DatabaseError(f"Ошибка при разборе запроса: {e}") from e
@@ -537,7 +553,10 @@ async def prepare_user_creation_from_prompt(prompt: str) -> UserPreparationResul
     if data.get("module_names"):
         module_ids = await _resolve_module_ids_by_names(data.get("module_names") or [])
         if mode == "create" and not module_ids:
-            raise DatabaseError("Не найдены модули по названиям: " + ", ".join(data.get("module_names") or []))
+            raise DatabaseError(
+                "Не найдены модули по названиям: "
+                + ", ".join(data.get("module_names") or [])
+            )
 
     # Группы и права — только из выбранного модуля (первый из запрошенных)
     primary_module_id: int | None = module_ids[0] if module_ids else None
@@ -656,7 +675,11 @@ async def prepare_user_creation(body: PrepareUserRequestBody) -> UserPreparation
             )
             visual_lines.append(
                 f"Копируем права от: {source_employee_for_review.fio}"
-                + (f" ({source_employee_for_review.email})" if source_employee_for_review.email else "")
+                + (
+                    f" ({source_employee_for_review.email})"
+                    if source_employee_for_review.email
+                    else ""
+                )
                 + f", ID {body.from_employee_id}",
             )
         else:
@@ -664,11 +687,17 @@ async def prepare_user_creation(body: PrepareUserRequestBody) -> UserPreparation
 
         if clone_module_ids or clone_groups or clone_grant_ids:
             if modules_for_review:
-                visual_lines.append(f"Дополнительно модули: {[m.module_name for m in modules_for_review]}")
+                visual_lines.append(
+                    f"Дополнительно модули: {[m.module_name for m in modules_for_review]}"
+                )
             if groups_for_review:
-                visual_lines.append(f"Дополнительно группы: {[g.group_name for g in groups_for_review]}")
+                visual_lines.append(
+                    f"Дополнительно группы: {[g.group_name for g in groups_for_review]}"
+                )
             if grants_for_review:
-                visual_lines.append(f"Дополнительно права: {[g.grant_name for g in grants_for_review]}")
+                visual_lines.append(
+                    f"Дополнительно права: {[g.grant_name for g in grants_for_review]}"
+                )
 
     else:
         # create
@@ -681,25 +710,41 @@ async def prepare_user_creation(body: PrepareUserRequestBody) -> UserPreparation
         modules_for_review = await _resolve_modules_for_review(module_ids)
         groups_for_review = await _resolve_groups_for_review(groups)
         grants_for_review = await _resolve_grants_for_review(grant_ids, company_id)
-        position_id = body.position_id if body.position_id is not None else 2  # 2 = Сотрудник Smart Remont
-        city_id_create = body.city_id if body.city_id is not None else 1  # 1 = Астана по умолчанию
-        
+        position_id = (
+            body.position_id if body.position_id is not None else 2
+        )  # 2 = Сотрудник Smart Remont
+        city_id_create = (
+            body.city_id if body.city_id is not None else 1
+        )  # 1 = Астана по умолчанию
+
         # Определяем office_id для офисных пользователей (is_smart=true)
         office_id: int | None = None
         pos_info = await get_position_info(position_id)
         is_smart_val = pos_info.get("is_smart") if pos_info else None
         # is_smart может быть строкой "True"/"False" или boolean
-        is_smart = is_smart_val in (True, 1, "True", "true", "1") if is_smart_val is not None else False
+        is_smart = (
+            is_smart_val in (True, 1, "True", "true", "1")
+            if is_smart_val is not None
+            else False
+        )
         if is_smart:
             office_id = await get_default_office_id_for_company(company_id)
             if office_id:
-                visual_lines.append(f"Office ID: {office_id} (автоматически определён для офисного пользователя)")
+                visual_lines.append(
+                    f"Office ID: {office_id} (автоматически определён для офисного пользователя)"
+                )
 
-        position_name = (pos_info.get("position_name") or "").strip() if pos_info else ""
-        visual_lines.append(f"Должность: {position_name or position_id} (ID {position_id})")
+        position_name = (
+            (pos_info.get("position_name") or "").strip() if pos_info else ""
+        )
+        visual_lines.append(
+            f"Должность: {position_name or position_id} (ID {position_id})"
+        )
         city_name = await get_city_name(city_id_create)
-        visual_lines.append(f"Город: {city_name or city_id_create} (ID {city_id_create})")
-        
+        visual_lines.append(
+            f"Город: {city_name or city_id_create} (ID {city_id_create})"
+        )
+
         password_plain = _temporary_password_from_phone(phone)
         one_sql = _build_create_sql(
             email=email,
@@ -772,7 +817,9 @@ async def confirm_user_creation(body: ConfirmUserRequestBody) -> ConfirmUserResu
                     company_id=company_id_clone,
                 )
             )
-            visual_lines.append(f"Клонирование с ID {body.from_employee_id} + доп. модули/группы/права")
+            visual_lines.append(
+                f"Клонирование с ID {body.from_employee_id} + доп. модули/группы/права"
+            )
         else:
             sql_queries.append(
                 _build_clone_sql(body.from_employee_id, email, fio, phone)
@@ -785,17 +832,25 @@ async def confirm_user_creation(body: ConfirmUserRequestBody) -> ConfirmUserResu
         grant_ids = list(body.grant_ids) if body.grant_ids else []
         if not module_ids:
             raise DatabaseError("Для create необходимо указать хотя бы один module_id")
-        position_id = body.position_id if body.position_id is not None else 2  # 2 = Сотрудник Smart Remont
-        city_id_confirm = body.city_id if body.city_id is not None else 1  # 1 = Астана по умолчанию
-        
+        position_id = (
+            body.position_id if body.position_id is not None else 2
+        )  # 2 = Сотрудник Smart Remont
+        city_id_confirm = (
+            body.city_id if body.city_id is not None else 1
+        )  # 1 = Астана по умолчанию
+
         # Определяем office_id для офисных пользователей (is_smart=true)
         office_id: int | None = None
         pos_info = await get_position_info(position_id)
         is_smart_val = pos_info.get("is_smart") if pos_info else None
-        is_smart = is_smart_val in (True, 1, "True", "true", "1") if is_smart_val is not None else False
+        is_smart = (
+            is_smart_val in (True, 1, "True", "true", "1")
+            if is_smart_val is not None
+            else False
+        )
         if is_smart:
             office_id = await get_default_office_id_for_company(company_id)
-        
+
         password_plain = _temporary_password_from_phone(phone)
         one_sql = _build_create_sql(
             email=email,
@@ -811,10 +866,14 @@ async def confirm_user_creation(body: ConfirmUserRequestBody) -> ConfirmUserResu
             password_plain=password_plain,
         )
         sql_queries.append(one_sql)
-        visual_lines.append(f"Company ID: {company_id}, Selected Company ID: {company_id}")
+        visual_lines.append(
+            f"Company ID: {company_id}, Selected Company ID: {company_id}"
+        )
         if office_id:
             visual_lines.append(f"Office ID: {office_id}")
-        visual_lines.append(f"Модули: {module_ids}, Группы: {len(groups)} шт., Права: {len(grant_ids)} шт.")
+        visual_lines.append(
+            f"Модули: {module_ids}, Группы: {len(groups)} шт., Права: {len(grant_ids)} шт."
+        )
 
     return ConfirmUserResult(
         sql_queries=sql_queries,
@@ -836,7 +895,9 @@ def _temporary_password_from_phone(phone: str | None) -> str | None:
     if len(digits) <= 1:
         return None
     password = digits[1:]
-    logger.info(f"Generated temporary_password from phone '{phone}': digits='{digits}', password='{password}'")
+    logger.info(
+        f"Generated temporary_password from phone '{phone}': digits='{digits}', password='{password}'"
+    )
     return password
 
 
@@ -888,7 +949,9 @@ async def execute_user_creation(
                     email_for_lookup,
                 )
 
-        temporary_password = _temporary_password_from_phone(phone) if not settings.TEST_MODE else None
+        temporary_password = (
+            _temporary_password_from_phone(phone) if not settings.TEST_MODE else None
+        )
 
         return ExecuteUserResult(
             status="success",

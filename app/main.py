@@ -5,13 +5,12 @@ Application entry point — FastAPI app factory with lifespan management.
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
 from app.api.router import router as api_router
 from app.core.database import close_pool, init_pool
 from app.core.logging import setup_logging
 from app.data.reference import load_reference_data
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 
 @asynccontextmanager
@@ -33,8 +32,14 @@ app = FastAPI(
         {"name": "System", "description": "Health and availability"},
         {"name": "Reference", "description": "Справочники (модули и т.д.)"},
         {"name": "Access Request", "description": "Заявки на доступ (AI + tools)"},
-        {"name": "Grants Creation", "description": "Подготовка и выдача прав по дереву"},
-        {"name": "User Creation", "description": "Создание пользователя (clone или с нуля)"},
+        {
+            "name": "Grants Creation",
+            "description": "Подготовка и выдача прав по дереву",
+        },
+        {
+            "name": "User Creation",
+            "description": "Создание пользователя (clone или с нуля)",
+        },
     ],
 )
 

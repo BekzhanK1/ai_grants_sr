@@ -24,7 +24,7 @@ import logging
 from typing import Any
 
 import asyncpg
-from app.api.schemas import CityDto, EmployeeDto, GrantDto, ModuleDto, PositionDto
+from app.api.schemas import CityDto, EmployeeDto, EmployeeSearchItem, GrantDto, ModuleDto, PositionDto
 from app.core.config import settings
 from app.core.database import get_pool
 
@@ -42,6 +42,14 @@ else:
     print(f"\033[91m===========DAILY_LIMIT OFF==========\033[0m (Daily limit disabled)")
 
 logger = logging.getLogger(__name__)
+
+def _log_db_response(func_name: str, data: Any) -> None:
+    """Log database response to console."""
+    print(f"\n{'='*60}")
+    print(f"DB RESPONSE from {func_name}")
+    print(f"{'='*60}")
+    print(data)
+    print(f"{'='*60}\n")
 
 
 async def get_default_office_id_for_company(company_id: int) -> int | None:
@@ -64,7 +72,11 @@ async def get_default_office_id_for_company(company_id: int) -> int | None:
             )
             return office_id
     except Exception as e:
-        logger.warning("get_default_office_id_for_company failed for company_id=%s: %s", company_id, e)
+        logger.warning(
+            "get_default_office_id_for_company failed for company_id=%s: %s",
+            company_id,
+            e,
+        )
         return None
 
 
@@ -85,7 +97,9 @@ async def get_position_info(position_id: int) -> dict[str, Any] | None:
             )
             return dict(row) if row else None
     except Exception as e:
-        logger.warning("get_position_info failed for position_id=%s: %s", position_id, e)
+        logger.warning(
+            "get_position_info failed for position_id=%s: %s", position_id, e
+        )
         return None
 
 
@@ -110,6 +124,12 @@ async def get_user_permissions(employee_id: int) -> dict[str, list[int]]:
         len(modules),
         len(grants),
     )
+    _log_db_response("get_user_permissions", {
+        "group_ids": groups,
+        "menu_ids": menus,
+        "module_ids": modules,
+        "grant_ids": grants,
+    })
     return {
         "group_ids": groups,
         "menu_ids": menus,
@@ -233,6 +253,7 @@ async def search_menu(
     logger.info(
         "search_menu query=%r employee_id=%s found=%d", query, employee_id, len(results)
     )
+    _log_db_response("search_menu", results)
     return results
 
 
@@ -293,6 +314,7 @@ async def search_group(
         module_id,
         len(results),
     )
+    _log_db_response("search_group", results)
     return results
 
 
@@ -355,6 +377,7 @@ async def search_grant(
         module_id,
         len(results),
     )
+    _log_db_response("search_grant", results)
     return results
 
 
@@ -659,6 +682,7 @@ async def get_menu_by_url(url: str) -> int | None:
         )
 
     logger.info("get_menu_by_url  url=%r  result=%s", url, result)
+    _log_db_response("get_menu_by_url", {"url": url, "result": result})
     return result
 
 
@@ -693,6 +717,11 @@ async def get_employee_context(employee_id: int) -> str:
     logger.info(
         "get_employee_context employee_id=%s position=%r", employee_id, position_name
     )
+    _log_db_response("get_employee_context", {
+        "fio": fio,
+        "position_name": position_name,
+        "module_name": module_name,
+    })
     return context
 
 
@@ -708,7 +737,9 @@ async def get_all_modules() -> list[ModuleDto]:
     pool = get_pool()
     async with pool.acquire() as conn:
         rows = await conn.fetch("SELECT * FROM admin.module_tab")
-    return [ModuleDto.model_validate(dict(r)) for r in rows]
+    result = [ModuleDto.model_validate(dict(r)) for r in rows]
+    _log_db_response("get_all_modules", result)
+    return result
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -731,7 +762,9 @@ async def get_all_positions() -> list[PositionDto]:
                 ORDER BY position_id
                 """
             )
-        return [PositionDto.model_validate(dict(r)) for r in rows]
+        result = [PositionDto.model_validate(dict(r)) for r in rows]
+        _log_db_response("get_all_positions", result)
+        return result
     except Exception as e:
         logger.warning("get_all_positions failed: %s", e)
         return []
@@ -751,9 +784,14 @@ async def get_all_cities() -> list[CityDto]:
                 ORDER BY city_id
                 """
             )
-        return [CityDto.model_validate(dict(r)) for r in rows]
+        result = [CityDto.model_validate(dict(r)) for r in rows]
+        _log_db_response("get_all_cities", result)
+        return result
     except Exception as e:
-        logger.warning("get_all_cities failed (проверьте наличие admin.city_tab и колонки city_name): %s", e)
+        logger.warning(
+            "get_all_cities failed (проверьте наличие admin.city_tab и колонки city_name): %s",
+            e,
+        )
         return []
 
 
@@ -786,12 +824,48 @@ async def get_all_grants_by_module(module_id: int) -> list[GrantDto]:
         rows = await conn.fetch(
             "SELECT * FROM admin.grant_tab WHERE module_id = $1", module_id
         )
-    return [GrantDto.model_validate(dict(r)) for r in rows]
+    result = [GrantDto.model_validate(dict(r)) for r in rows]
+    _log_db_response("get_all_grants_by_module", result)
+    return result
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # SEARCH: поиск пользователей по ФИО (similarity)
 # ═══════════════════════════════════════════════════════════════════════════
+
+
+async def search_employees_for_autocomplete(
+    query: str, limit: int = 10
+) -> list[EmployeeSearchItem]:
+    """
+    Поиск сотрудников по подстроке ФИО (pg_trgm similarity).
+    Для автокомплита «Копируем права от»: топ N по similarity.
+    """
+    q = (query or "").strip()
+    if not q or len(q) < 2:
+        return []
+    pool = get_pool()
+    try:
+        async with pool.acquire() as conn:
+            rows = await conn.fetch(
+                """
+                SELECT e.employee_id, e.fio, e.email
+                FROM admin.employee_tab e
+                WHERE e.fio % $1::text
+                   OR e.fio ILIKE $2
+                ORDER BY similarity(e.fio, $1::text) DESC NULLS LAST
+                LIMIT $3
+                """,
+                q,
+                f"%{q}%",
+                limit,
+            )
+        result = [EmployeeSearchItem.model_validate(dict(r)) for r in rows]
+        _log_db_response("search_employees_for_autocomplete", result)
+        return result
+    except Exception as e:
+        logger.warning("search_employees_for_autocomplete failed: %s", e)
+        return []
 
 
 async def search_users_by_fios(fios: list[str]) -> list[EmployeeDto]:
@@ -821,7 +895,9 @@ async def search_users_by_fios(fios: list[str]) -> list[EmployeeDto]:
             """,
             fios,
         )
-    return [EmployeeDto.model_validate(dict(r)) for r in rows]
+    result = [EmployeeDto.model_validate(dict(r)) for r in rows]
+    _log_db_response("search_users_by_fios", result)
+    return result
 
 
 async def check_email_exists(email: str) -> bool:
@@ -868,7 +944,9 @@ async def get_employee_display_info(employee_id: int) -> dict[str, Any] | None:
             "SELECT employee_id, fio, email FROM admin.employee_tab WHERE employee_id = $1",
             employee_id,
         )
-    return dict(row) if row else None
+    result = dict(row) if row else None
+    _log_db_response("get_employee_display_info", result)
+    return result
 
 
 async def get_company_id(employee_id: int) -> int | None:
@@ -884,11 +962,14 @@ async def get_company_id(employee_id: int) -> int | None:
                 employee_id,
             )
             if row and row["company_id"] is not None:
-                return int(row["company_id"])
+                company_id = int(row["company_id"])
+                _log_db_response("get_company_id", {"employee_id": employee_id, "company_id": company_id})
+                return company_id
         except asyncpg.UndefinedFunctionError:
             logger.debug("get_company_id not found in DB, employee_id=%s", employee_id)
         except Exception as e:
             logger.warning("get_company_id failed employee_id=%s: %s", employee_id, e)
+    _log_db_response("get_company_id", {"employee_id": employee_id, "company_id": None})
     return None
 
 
@@ -903,7 +984,9 @@ async def get_companies() -> list[dict[str, Any]]:
             rows = await conn.fetch(
                 "SELECT company_id, company_name FROM admin.company_tab ORDER BY company_id"
             )
-        return [dict(r) for r in rows]
+        result = [dict(r) for r in rows]
+        _log_db_response("get_companies", result)
+        return result
     except (asyncpg.UndefinedTableError, asyncpg.PostgresError) as e:
         logger.debug("get_companies skipped (table or column missing): %s", e)
         return []
@@ -980,6 +1063,7 @@ async def get_recent_audit_logs(limit: int = 10) -> list[dict[str, Any]]:
             except Exception:
                 item["ai_decision"] = []
         results.append(item)
+    _log_db_response("get_recent_audit_logs", results)
     return results
 
 
@@ -994,4 +1078,6 @@ async def check_daily_limit(employee_id: int) -> dict[str, Any]:
             "SELECT * FROM ai_admin.check_daily_limit($1)",
             employee_id,
         )
-    return dict(row) if row else {}
+    result = dict(row) if row else {}
+    _log_db_response("check_daily_limit", result)
+    return result

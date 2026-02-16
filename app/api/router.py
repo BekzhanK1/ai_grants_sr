@@ -9,6 +9,7 @@ from app.api.schemas import (
     AuditLogEntry,
     CityDto,
     ConfirmGrantsRequestBody,
+    EmployeeSearchItem,
     ConfirmGrantsResult,
     ConfirmUserRequestBody,
     ConfirmUserResult,
@@ -33,6 +34,7 @@ from app.services.db_service import (
     get_all_cities,
     get_all_positions,
     get_recent_audit_logs,
+    search_employees_for_autocomplete,
 )
 from app.services.grants_creation.service import (
     confirm_and_generate_sql,
@@ -144,6 +146,22 @@ async def get_cities() -> list[CityDto]:
     По умолчанию в user-creation используется city_id=1 (Астана).
     """
     return await get_all_cities()
+
+
+@router.get(
+    "/employees/search",
+    response_model=list[EmployeeSearchItem],
+    tags=["Reference"],
+)
+async def search_employees(
+    q: str = "",
+    limit: int = 10,
+) -> list[EmployeeSearchItem]:
+    """
+    Поиск сотрудников по подстроке ФИО (pg_trgm similarity).
+    Для автокомплита «Копируем права от»: топ до limit по similarity.
+    """
+    return await search_employees_for_autocomplete(query=q, limit=min(limit, 20))
 
 
 @router.post(

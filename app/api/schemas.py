@@ -115,7 +115,9 @@ class PositionDto(BaseModel):
     position_id: int = Field(..., description="Идентификатор должности")
     position_name: str = Field(..., description="Наименование должности")
     position_code: str | None = Field(default=None, description="Код должности")
-    is_smart: bool | str | None = Field(default=None, description="Офисный пользователь")
+    is_smart: bool | str | None = Field(
+        default=None, description="Офисный пользователь"
+    )
     is_active: bool | str | None = Field(default=None, description="Активна")
     module_id: int | None = Field(default=None, description="Модуль должности")
 
@@ -140,6 +142,16 @@ class EmployeeDto(BaseModel):
     fio: str = Field(..., description="ФИО сотрудника")
     position_name: str | None = Field(default=None, description="Должность")
     module_name: str | None = Field(default=None, description="Модуль")
+
+    model_config = {"from_attributes": True}
+
+
+class EmployeeSearchItem(BaseModel):
+    """Сотрудник для автокомплита (поиск по ФИО, similarity)."""
+
+    employee_id: int = Field(..., description="ID сотрудника")
+    fio: str = Field(..., description="ФИО")
+    email: str | None = Field(default=None, description="Email")
 
     model_config = {"from_attributes": True}
 
@@ -307,7 +319,9 @@ class PrepareUserRequestBody(BaseModel):
         default_factory=list, description="ID прав/грантов (для create, точечные права)"
     )
     city_id: int | None = Field(default=None, description="ID города (для create)")
-    position_id: int | None = Field(default=None, description="ID должности (для create)")
+    position_id: int | None = Field(
+        default=None, description="ID должности (для create)"
+    )
 
 
 class ModuleForReview(BaseModel):
@@ -350,13 +364,16 @@ class UserPreparationResult(BaseModel):
     )
     visual_summary: str = Field(default="", description="Текстовая сводка для UI")
     modules_for_review: list[ModuleForReview] = Field(
-        default_factory=list, description="Модули для ревью (можно убрать перед confirm)"
+        default_factory=list,
+        description="Модули для ревью (можно убрать перед confirm)",
     )
     groups_for_review: list[GroupForReview] = Field(
-        default_factory=list, description="Группы для ревью (можно убрать перед confirm)"
+        default_factory=list,
+        description="Группы для ревью (можно убрать перед confirm)",
     )
     grants_for_review: list[GrantForReview] = Field(
-        default_factory=list, description="Права (гранты) для ревью (можно убрать перед confirm)"
+        default_factory=list,
+        description="Права (гранты) для ревью (можно убрать перед confirm)",
     )
     prepared_payload: PrepareUserRequestBody | None = Field(
         default=None,
