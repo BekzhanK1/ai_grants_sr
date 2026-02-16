@@ -24,7 +24,7 @@ import logging
 from typing import Any
 
 import asyncpg
-from app.api.schemas import EmployeeDto, GrantDto, ModuleDto
+from app.api.schemas import CityDto, EmployeeDto, GrantDto, ModuleDto, PositionDto
 from app.core.config import settings
 from app.core.database import get_pool
 
@@ -42,6 +42,51 @@ else:
     print(f"\033[91m===========DAILY_LIMIT OFF==========\033[0m (Daily limit disabled)")
 
 logger = logging.getLogger(__name__)
+
+
+async def get_default_office_id_for_company(company_id: int) -> int | None:
+    """
+    Возвращает дефолтный office_id для компании (для создания офисных пользователей).
+    Берём первый офис компании по office_id.
+    """
+    pool = get_pool()
+    try:
+        async with pool.acquire() as conn:
+            office_id = await conn.fetchval(
+                """
+                SELECT office_id 
+                FROM public.office_tab 
+                WHERE company_id = $1
+                ORDER BY office_id 
+                LIMIT 1
+                """,
+                company_id,
+            )
+            return office_id
+    except Exception as e:
+        logger.warning("get_default_office_id_for_company failed for company_id=%s: %s", company_id, e)
+        return None
+
+
+async def get_position_info(position_id: int) -> dict[str, Any] | None:
+    """
+    Возвращает информацию о должности: is_smart, is_sale_point, position_code, module_id.
+    """
+    pool = get_pool()
+    try:
+        async with pool.acquire() as conn:
+            row = await conn.fetchrow(
+                """
+                SELECT position_id, position_name, position_code, is_smart, is_sale_point, module_id
+                FROM admin.position_tab
+                WHERE position_id = $1
+                """,
+                position_id,
+            )
+            return dict(row) if row else None
+    except Exception as e:
+        logger.warning("get_position_info failed for position_id=%s: %s", position_id, e)
+        return None
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -664,6 +709,67 @@ async def get_all_modules() -> list[ModuleDto]:
     async with pool.acquire() as conn:
         rows = await conn.fetch("SELECT * FROM admin.module_tab")
     return [ModuleDto.model_validate(dict(r)) for r in rows]
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FETCH: должности из admin.position_tab и города из admin.city_tab
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+async def get_all_positions() -> list[PositionDto]:
+    """
+    Возвращает все активные должности из admin.position_tab (is_active = true).
+    """
+    pool = get_pool()
+    try:
+        async with pool.acquire() as conn:
+            rows = await conn.fetch(
+                """
+                SELECT position_id, position_name, position_code, is_smart, is_active, module_id
+                FROM admin.position_tab
+                WHERE (is_active = true OR is_active::text = 'True')
+                ORDER BY position_id
+                """
+            )
+        return [PositionDto.model_validate(dict(r)) for r in rows]
+    except Exception as e:
+        logger.warning("get_all_positions failed: %s", e)
+        return []
+
+
+async def get_all_cities() -> list[CityDto]:
+    """
+    Возвращает города из admin.city_tab (для привязки к пользователю).
+    """
+    pool = get_pool()
+    try:
+        async with pool.acquire() as conn:
+            rows = await conn.fetch(
+                """
+                SELECT city_id, city_name
+                FROM admin.city_tab
+                ORDER BY city_id
+                """
+            )
+        return [CityDto.model_validate(dict(r)) for r in rows]
+    except Exception as e:
+        logger.warning("get_all_cities failed (проверьте наличие admin.city_tab и колонки city_name): %s", e)
+        return []
+
+
+async def get_city_name(city_id: int) -> str | None:
+    """Возвращает название города по city_id для превью."""
+    pool = get_pool()
+    try:
+        async with pool.acquire() as conn:
+            name = await conn.fetchval(
+                "SELECT city_name FROM admin.city_tab WHERE city_id = $1",
+                city_id,
+            )
+            return (name or "").strip() or None
+    except Exception as e:
+        logger.warning("get_city_name failed for city_id=%s: %s", city_id, e)
+        return None
 
 
 # ═══════════════════════════════════════════════════════════════════════════

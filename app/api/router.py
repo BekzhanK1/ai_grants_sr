@@ -7,6 +7,7 @@ import logging
 from app.api.dependencies import verify_api_key
 from app.api.schemas import (
     AuditLogEntry,
+    CityDto,
     ConfirmGrantsRequestBody,
     ConfirmGrantsResult,
     ConfirmUserRequestBody,
@@ -17,6 +18,7 @@ from app.api.schemas import (
     ExecuteUserResult,
     GrantsPreparationResult,
     ModuleDto,
+    PositionDto,
     PrepareFromPromptRequestBody,
     PrepareGrantsRequestBody,
     PrepareUserRequestBody,
@@ -27,7 +29,11 @@ from app.api.schemas import (
 )
 from app.core.exceptions import AIServiceError, DatabaseError
 from app.services.access_request import process_user_request
-from app.services.db_service import get_recent_audit_logs
+from app.services.db_service import (
+    get_all_cities,
+    get_all_positions,
+    get_recent_audit_logs,
+)
 from app.services.grants_creation.service import (
     confirm_and_generate_sql,
     execute_grants_sql,
@@ -112,6 +118,32 @@ async def get_modules() -> list[ModuleDto]:
     Возвращает все модули из admin.module_tab.
     """
     return await get_all_modules()
+
+
+@router.get(
+    "/positions",
+    response_model=list[PositionDto],
+    tags=["Reference"],
+)
+async def get_positions() -> list[PositionDto]:
+    """
+    Возвращает активные должности из admin.position_tab (для выбора при создании пользователя).
+    По умолчанию в user-creation используется position_id=2 (Сотрудник Smart Remont).
+    """
+    return await get_all_positions()
+
+
+@router.get(
+    "/cities",
+    response_model=list[CityDto],
+    tags=["Reference"],
+)
+async def get_cities() -> list[CityDto]:
+    """
+    Возвращает города из admin.city_tab (для привязки к пользователю).
+    По умолчанию в user-creation используется city_id=1 (Астана).
+    """
+    return await get_all_cities()
 
 
 @router.post(
@@ -239,6 +271,8 @@ async def user_creation_execute(
         return await execute_user_creation(
             sql_queries=body.sql_queries,
             email_for_lookup=body.email,
+            phone=body.phone,
+            initiator_id=body.initiator_id,
         )
     except DatabaseError as exc:
         logger.warning("user_creation execute failed: %s", exc)

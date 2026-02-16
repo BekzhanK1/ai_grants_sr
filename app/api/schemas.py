@@ -109,6 +109,28 @@ class ModuleDto(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class PositionDto(BaseModel):
+    """Одна запись из admin.position_tab (должность)."""
+
+    position_id: int = Field(..., description="Идентификатор должности")
+    position_name: str = Field(..., description="Наименование должности")
+    position_code: str | None = Field(default=None, description="Код должности")
+    is_smart: bool | str | None = Field(default=None, description="Офисный пользователь")
+    is_active: bool | str | None = Field(default=None, description="Активна")
+    module_id: int | None = Field(default=None, description="Модуль должности")
+
+    model_config = {"from_attributes": True}
+
+
+class CityDto(BaseModel):
+    """Одна запись из admin.city_tab (город)."""
+
+    city_id: int = Field(..., description="Идентификатор города")
+    city_name: str = Field(..., description="Наименование города")
+
+    model_config = {"from_attributes": True}
+
+
 class EmployeeDto(BaseModel):
     """
     Сотрудник с контекстом (employee_tab + position_tab + module_tab).
@@ -379,6 +401,14 @@ class ExecuteUserRequestBody(BaseModel):
         default=None,
         description="Email созданного пользователя (для возврата employee_id в ответе)",
     )
+    phone: str | None = Field(
+        default=None,
+        description="Телефон созданного пользователя (для возврата временного пароля в ответе)",
+    )
+    initiator_id: int = Field(
+        ...,
+        description="ID сотрудника (админа), от имени которого выполняется операция. Устанавливается в myapp.user_id для триггеров.",
+    )
 
 
 class ExecuteUserResult(BaseModel):
@@ -389,4 +419,8 @@ class ExecuteUserResult(BaseModel):
     rows_affected: int = Field(default=0, description="Кол-во затронутых строк")
     employee_id: int | None = Field(
         default=None, description="ID созданного сотрудника (при успехе)"
+    )
+    temporary_password: str | None = Field(
+        default=None,
+        description="Временный пароль для входа (телефон без первой цифры). Показать админу для передачи сотруднику.",
     )
