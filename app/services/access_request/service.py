@@ -23,7 +23,7 @@ from app.services import db_service
 from app.services.llm import create_chat_completion
 
 from .tool_definitions import build_tools
-from .tool_executor import execute_tool_call
+from .tool_executor import execute_tool_call, execute_tool_call_preview
 
 logger = logging.getLogger(__name__)
 
@@ -261,3 +261,161 @@ async def process_user_request(
         "tool_calls": [r for r in all_results if r["tool"] not in _READ_ONLY_TOOLS],
         "ai_message": message.content,
     }
+
+
+async def preview_user_request(
+    *,
+    user_id: int,
+    prompt: str,
+    reason: str,
+    module_id: int | None = None,
+) -> dict[str, Any]:
+    """
+    Preview-only вариант access request:
+    - Запускает тот же LLM с tools, но action-инструменты НЕ пишут в БД.
+    - Возвращает список планируемых действий (tool_calls) + SQL для каждого.
+    - Используется для шага \"preview\" на фронте, перед фактическим исполнением.
+    """
+    tools = build_tools()
+    all_results: list[dict[str, Any]] = []
+
+    logger.info(
+        "Previewing access request  user_id=%s  module_id=%s  prompt=%r  reason=%r",
+        user_id,
+        module_id,
+        prompt[:120],
+        reason[:120],
+    )
+
+    employee_context = await db_service.get_employee_context(user_id)
+
+    # Добавляем модуль в контекст, чтобы LLM фокусировался на нужном модуле
+    module_context_line = ""
+    if module_id is not None:
+        module_context_line = f"module_id_context: {module_id}\n"
+
+    messages: list[dict[str, Any]] = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {
+            "role": "user",
+            "content": (
+                f"employee_id: {user_id}\n"
+                f"employee_context: {employee_context}\n"
+                f"{module_context_line}"
+                f"запрос: {prompt}\n"
+                f"причина: {reason}"
+            ),
+        },
+    ]
+
+    completion_id = ""
+
+    for _round in range(MAX_TOOL_ROUNDS):
+        # ── Call OpenAI (shared LLM module) ───────────────────────────
+        try:
+            completion = await create_chat_completion(
+                messages,
+                tools=tools,
+                tool_choice="auto",
+            )
+        except Exception as exc:
+            raise AIServiceError(f"OpenAI API error (preview): {exc}") from exc
+
+        completion_id = completion.id
+        message = completion.choices[0].message
+        tool_calls = message.tool_calls or []
+
+        logger.info(
+            "[PREVIEW] Round %d: model returned %d tool call(s), finish_reason=%s",
+            _round + 1,
+            len(tool_calls),
+            completion.choices[0].finish_reason,
+        )
+
+        # If no tool calls, model is done — it produced a text answer
+        if not tool_calls:
+            break
+
+        # ── Execute tool calls in PREVIEW mode ────────────────────────
+        results = list(
+            await asyncio.gather(
+                *(execute_tool_call_preview(tc, user_id=user_id) for tc in tool_calls)
+            )
+        )
+        all_results.extend(results)
+
+        # ── Collect results for the next round ───────────────────────
+        messages.append(message.model_dump())
+
+        for res in results:
+            if "data" in res:
+                content = json.dumps(res["data"], ensure_ascii=False)
+            elif res.get("sql"):
+                # Для action-инструментов достаточно вернуть sql+args
+                content = json.dumps(
+                    {
+                        "status": res.get("status"),
+                        "sql": res.get("sql"),
+                        "entity_id": res.get("entity_id"),
+                        "entity_name": res.get("entity_name"),
+                    },
+                    ensure_ascii=False,
+                )
+            else:
+                content = json.dumps(
+                    {"status": res.get("status"), "error": res.get("error", "")},
+                    ensure_ascii=False,
+                )
+
+            messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": res["tool_call_id"],
+                    "content": content,
+                }
+            )
+    else:
+        logger.warning("[PREVIEW] Reached MAX_TOOL_ROUNDS=%d, forcing stop", MAX_TOOL_ROUNDS)
+
+    # Для превью аудита не пишем (ничего не применили)
+    return {
+        "id": completion_id,
+        "tool_calls": all_results,
+        "ai_message": message.content if message and message.content else None,
+    }
+
+
+async def execute_user_actions(
+    *,
+    user_id: int,
+    actions: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """
+    Исполнение заранее просмотренных действий без повторного вызова LLM.
+
+    На вход:
+      - user_id: ID сотрудника
+      - actions: список dict {tool, args}
+    Для каждого элемента вызывается execute_tool_call с теми же tool/args,
+    что использовались на шаге превью.
+    """
+    from types import SimpleNamespace
+
+    results: list[dict[str, Any]] = []
+    for idx, action in enumerate(actions):
+        name = action.get("tool")
+        args = action.get("args") or {}
+        if not name:
+            continue
+
+        dummy_call = SimpleNamespace(
+            id=f"manual-{idx}",
+            function=SimpleNamespace(
+                name=name,
+                arguments=json.dumps(args, ensure_ascii=False),
+            ),
+        )
+        res = await execute_tool_call(dummy_call, user_id=user_id)
+        results.append(res)
+
+    return results

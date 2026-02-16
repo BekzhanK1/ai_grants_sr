@@ -200,3 +200,100 @@ async def execute_tool_call(call: Any, user_id: int) -> dict[str, Any]:
         logger.exception("Tool %s failed", name)
 
     return result
+
+
+async def execute_tool_call_preview(call: Any, user_id: int) -> dict[str, Any]:
+    """
+    Preview variant of execute_tool_call used for access-request \"prepare\" step.
+
+    - SEARCH/FETCH tools работают как обычно (читают из БД, без сайд-эффектов).
+    - ACTION tools НЕ выполняют записи в БД, а только возвращают
+      планируемое действие и SQL, который будет выполнен на шаге execute.
+    """
+    name = call.function.name
+    call_id = call.id
+    try:
+        args: dict[str, Any] = json.loads(call.function.arguments or "{}")
+    except json.JSONDecodeError:
+        args = {}
+
+    # Inject context for search tools
+    args["_employee_id_context"] = user_id
+
+    result: dict[str, Any] = {
+        "tool_call_id": call_id,
+        "tool": name,
+        "args": args,
+        # Для превью помечаем действие как \"pending\" (ещё не выполнено)
+        "status": "pending" if name not in _DATA_TOOLS else "ok",
+    }
+
+    # Data tools — исполняем как обычно и возвращаем payload
+    if name in _DATA_TOOLS:
+        handler = _TOOL_HANDLERS.get(name)
+        if handler is None:
+            result["status"] = "ignored"
+            result["error"] = f"Unknown tool: {name}"
+            logger.warning("Unknown tool requested by model (preview): %s", name)
+            return result
+        try:
+            handler_result = await handler(args)
+            if handler_result is not None:
+                result["data"] = handler_result
+        except Exception as exc:  # noqa: BLE001
+            result["status"] = "error"
+            result["error"] = str(exc)
+            logger.exception("Preview data tool %s failed", name)
+        return result
+
+    # Action tools — только строим SQL, без фактического вызова db_service.*
+    try:
+        employee_id = int(args.get("employee_id"))
+        sql = None
+        entity_id = None
+        entity_name = None
+
+        if name == "assign_role":
+            group_id = int(args["group_id"])
+            sql = (
+                "SELECT admin.employee_group_link("
+                f"group_id_ := {group_id}, employee_id_ := {employee_id})"
+            )
+            entity_id = group_id
+        elif name == "add_interface_button":
+            menu_id = int(args["menu_id"])
+            sql = (
+                "SELECT admin.employee_menu__add("
+                f"employee_id_ := {employee_id}, menu_id_ := {menu_id})"
+            )
+            entity_id = menu_id
+        elif name == "link_module":
+            module_id = int(args["module_id"])
+            sql = (
+                "SELECT admin.employee_module_link("
+                f"module_id_ := {module_id}, employee_id_ := {employee_id})"
+            )
+            entity_id = module_id
+        elif name == "add_grant":
+            grant_id = int(args["grant_id"])
+            sql = (
+                "INSERT INTO admin.employee_grant_tab (employee_id, grant_id) "
+                f"VALUES ({employee_id}, {grant_id}) ON CONFLICT DO NOTHING"
+            )
+            entity_id = grant_id
+        else:
+            # Неизвестный action-инструмент — помечаем как ignored
+            result["status"] = "ignored"
+            result["error"] = f"Unknown action tool for preview: {name}"
+            logger.warning("Unknown action tool requested in preview: %s", name)
+            return result
+
+        result["sql"] = sql
+        result["entity_id"] = entity_id
+        result["entity_name"] = entity_name
+    except Exception as exc:  # noqa: BLE001
+        result["status"] = "error"
+        result["error"] = str(exc)
+        logger.exception("Preview action tool %s failed", name)
+
+    return result

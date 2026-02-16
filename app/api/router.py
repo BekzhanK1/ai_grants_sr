@@ -6,13 +6,16 @@ import logging
 
 from app.api.dependencies import verify_api_key
 from app.api.schemas import (
+    AccessRequestExecuteBody,
+    AccessRequestExecuteResult,
+    AccessRequestPrepareBody,
     AuditLogEntry,
     CityDto,
     ConfirmGrantsRequestBody,
-    EmployeeSearchItem,
     ConfirmGrantsResult,
     ConfirmUserRequestBody,
     ConfirmUserResult,
+    EmployeeSearchItem,
     ExecuteGrantsRequestBody,
     ExecuteGrantsResult,
     ExecuteUserRequestBody,
@@ -29,7 +32,7 @@ from app.api.schemas import (
     UserPreparationResult,
 )
 from app.core.exceptions import AIServiceError, DatabaseError
-from app.services.access_request import process_user_request
+from app.services.access_request import preview_user_request, process_user_request
 from app.services.db_service import (
     get_all_cities,
     get_all_positions,
@@ -94,6 +97,73 @@ async def process_request(
         tool_calls=[ToolCallResult(**tc) for tc in result.get("tool_calls", [])],
         explanation=explanation,
         ai_message=result.get("ai_message"),
+    )
+
+
+@router.post(
+    "/access-request/preview",
+    response_model=ProcessRequestResponse,
+    tags=["Access Request"],
+)
+async def access_request_preview(
+    body: AccessRequestPrepareBody,
+) -> ProcessRequestResponse | JSONResponse:
+    """
+    Превью AI-заявки на доступ:
+    - НИЧЕГО не применяет в БД.
+    - Возвращает планируемые действия (tool_calls) со статусом pending и SQL.
+    """
+    try:
+        result = await preview_user_request(
+            user_id=body.user_id,
+            prompt=body.prompt,
+            reason=body.reason,
+            module_id=body.module_id,
+        )
+    except (AIServiceError, DatabaseError) as exc:
+        logger.exception("Domain error while previewing access request")
+        return JSONResponse(status_code=400, content={"detail": str(exc)})
+
+    explanation = (
+        "Предварительный план действий (SQL ещё не выполнен). "
+        "Проверьте список действий перед исполнением."
+    )
+
+    return ProcessRequestResponse(
+        id=str(result.get("id", "")),
+        tool_calls=[ToolCallResult(**tc) for tc in result.get("tool_calls", [])],
+        explanation=explanation,
+        ai_message=result.get("ai_message"),
+    )
+
+
+@router.post(
+    "/access-request/execute",
+    response_model=AccessRequestExecuteResult,
+    tags=["Access Request"],
+)
+async def access_request_execute(
+    body: AccessRequestExecuteBody,
+) -> AccessRequestExecuteResult | JSONResponse:
+    """
+    Исполнение заранее просмотренных действий (assign_role, add_grant и т.д.).
+
+    Для каждого action-инструмента повторно вызывается execute_tool_call
+    с теми же tool/args, уже с реальными изменениями в БД.
+    """
+    from app.services.access_request.service import execute_user_actions  # локальный импорт, чтобы избежать циклов
+
+    try:
+        raw_results = await execute_user_actions(
+            user_id=body.user_id,
+            actions=[a.model_dump() for a in body.actions],
+        )
+    except (AIServiceError, DatabaseError) as exc:
+        logger.exception("Domain error while executing access request actions")
+        return JSONResponse(status_code=400, content={"detail": str(exc)})
+
+    return AccessRequestExecuteResult(
+        tool_calls=[ToolCallResult(**tc) for tc in raw_results],
     )
 
 

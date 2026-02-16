@@ -31,7 +31,7 @@ class ToolCallResult(BaseModel):
     args: dict = Field(
         default_factory=dict, description="Аргументы, переданные инструменту"
     )
-    status: str = Field(..., description="ok | error | ignored")
+    status: str = Field(..., description="ok | error | ignored | pending")
     error: str | None = Field(
         default=None, description="Сообщение об ошибке (если status != ok)"
     )
@@ -39,6 +39,10 @@ class ToolCallResult(BaseModel):
         default=None, description="Человекочитаемое имя объекта"
     )
     entity_id: int | None = Field(default=None, description="ID объекта")
+    sql: str | None = Field(
+        default=None,
+        description="SQL-запрос, связанный с действием (для превью / аудита)",
+    )
 
 
 class ProcessRequestResponse(BaseModel):
@@ -49,6 +53,63 @@ class ProcessRequestResponse(BaseModel):
     )
     ai_message: str | None = Field(
         default=None, description="Текстовый ответ модели (если есть)"
+    )
+
+
+class AccessRequestPrepareBody(BaseModel):
+    """
+    Тело запроса для превью AI-заявки на доступ (без применения SQL).
+    """
+
+    user_id: int = Field(..., description="ID сотрудника в Smart Remont")
+    module_id: int | None = Field(
+        default=None,
+        description="ID модуля, в контексте которого ищутся права (по умолчанию MySpace=5 на фронте)",
+    )
+    prompt: str = Field(
+        ..., min_length=1, description="Естественно-языковой запрос о правах доступа"
+    )
+    reason: str = Field(
+        ...,
+        min_length=10,
+        max_length=500,
+        description="Причина запроса прав (минимум 10 символов). Объясните, зачем нужен доступ.",
+    )
+
+
+class AccessRequestAction(BaseModel):
+    """
+    Одно действие для ручного исполнения (execute): tool + args.
+    """
+
+    tool: str = Field(..., description="Имя инструмента (assign_role, add_grant и т.д.)")
+    args: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Аргументы, которые были использованы в превью (employee_id, group_id и т.д.)",
+    )
+
+
+class AccessRequestExecuteBody(BaseModel):
+    """
+    Тело запроса на исполнение заранее просмотренных действий.
+    """
+
+    user_id: int = Field(..., description="ID сотрудника, которому выдаются права")
+    actions: list[AccessRequestAction] = Field(
+        ...,
+        min_length=1,
+        description="Список действий для выполнения (обычно подмножество превью tool_calls)",
+    )
+
+
+class AccessRequestExecuteResult(BaseModel):
+    """
+    Результат исполнения: список фактически выполненных действий.
+    """
+
+    tool_calls: list[ToolCallResult] = Field(
+        default_factory=list,
+        description="Список выполненных действий с финальным статусом и SQL",
     )
 
 

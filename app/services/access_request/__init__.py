@@ -8,6 +8,6 @@ Access request service — заявки на доступ (grants, menu, module)
 Общее: вызов GPT через app.services.llm, БД через app.services.db_service.
 """
 
-from app.services.access_request.service import process_user_request
+from app.services.access_request.service import process_user_request, preview_user_request
 
-__all__ = ["process_user_request"]
+__all__ = ["process_user_request", "preview_user_request"]
