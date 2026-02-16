@@ -240,3 +240,153 @@ class ExecuteGrantsResult(BaseModel):
     status: str = Field(..., description="success | error | rolled_back")
     message: str = Field(..., description="Описание результата")
     rows_affected: int = Field(default=0, description="Кол-во затронутых строк")
+
+
+# ── User creation (prepare → confirm → execute) ──────────────────────────────
+
+
+class PrepareFromPromptRequestBody(BaseModel):
+    """Запрос на подготовку создания пользователя из текстового промпта."""
+
+    prompt: str = Field(
+        ...,
+        min_length=1,
+        description="Текст: кого создать (ФИО, email, телефон), в какую компанию, модуль, группу; либо «создай как у пользователя X» (клонирование)",
+    )
+
+
+class GroupAssignment(BaseModel):
+    """Группа с company_id для привязки к сотруднику."""
+
+    group_id: int = Field(..., description="ID группы")
+    company_id: int = Field(..., description="ID компании")
+
+
+class PrepareUserRequestBody(BaseModel):
+    """Тело запроса на подготовку создания пользователя (шаг 1)."""
+
+    mode: str = Field(..., description="clone | create")
+    email: str = Field(..., min_length=1, description="Email нового пользователя")
+    fio: str = Field(..., min_length=1, description="ФИО")
+    phone: str = Field(..., min_length=1, description="Телефон")
+    # clone
+    from_employee_id: int | None = Field(
+        default=None, description="ID сотрудника-шаблона (для mode=clone)"
+    )
+    # create
+    company_id: int | None = Field(default=None, description="ID компании (для create)")
+    module_ids: list[int] = Field(
+        default_factory=list, description="ID модулей (для create, минимум 1)"
+    )
+    groups: list[GroupAssignment] = Field(
+        default_factory=list, description="Группы с company_id (для create)"
+    )
+    grant_ids: list[int] = Field(
+        default_factory=list, description="ID прав/грантов (для create, точечные права)"
+    )
+    city_id: int | None = Field(default=None, description="ID города (для create)")
+    position_id: int | None = Field(default=None, description="ID должности (для create)")
+
+
+class ModuleForReview(BaseModel):
+    """Модуль для отображения в ревью."""
+
+    module_id: int = Field(..., description="ID модуля")
+    module_name: str = Field(..., description="Название модуля")
+    module_code: str | None = Field(default=None, description="Код модуля")
+
+
+class GroupForReview(BaseModel):
+    """Группа для отображения в ревью."""
+
+    group_id: int = Field(..., description="ID группы")
+    group_name: str = Field(..., description="Название группы")
+    company_id: int = Field(..., description="ID компании")
+
+
+class GrantForReview(BaseModel):
+    """Право (грант) для отображения в ревью."""
+
+    grant_id: int = Field(..., description="ID права")
+    grant_name: str = Field(..., description="Название права")
+    company_id: int = Field(..., description="ID компании")
+
+
+class SourceEmployeeForReview(BaseModel):
+    """Пользователь-шаблон для превью при клонировании (от кого копируем)."""
+
+    employee_id: int = Field(..., description="ID сотрудника-шаблона")
+    fio: str = Field(..., description="ФИО")
+    email: str = Field(..., description="Email")
+
+
+class UserPreparationResult(BaseModel):
+    """Результат prepare: sql_queries и списки для ревью."""
+
+    sql_queries: list[str] = Field(
+        default_factory=list, description="SQL для ревью (не выполняется)"
+    )
+    visual_summary: str = Field(default="", description="Текстовая сводка для UI")
+    modules_for_review: list[ModuleForReview] = Field(
+        default_factory=list, description="Модули для ревью (можно убрать перед confirm)"
+    )
+    groups_for_review: list[GroupForReview] = Field(
+        default_factory=list, description="Группы для ревью (можно убрать перед confirm)"
+    )
+    grants_for_review: list[GrantForReview] = Field(
+        default_factory=list, description="Права (гранты) для ревью (можно убрать перед confirm)"
+    )
+    prepared_payload: PrepareUserRequestBody | None = Field(
+        default=None,
+        description="Структурированные данные для селектов на фронте (при prepare-from-prompt)",
+    )
+    source_employee_for_review: SourceEmployeeForReview | None = Field(
+        default=None,
+        description="При mode=clone: от кого копируем (ФИО, email, ID) для превью и редактирования на фронте",
+    )
+
+
+class ConfirmUserRequestBody(BaseModel):
+    """Подтверждённые пользователем данные (после правки списков)."""
+
+    mode: str = Field(..., description="clone | create")
+    email: str = Field(..., min_length=1)
+    fio: str = Field(..., min_length=1)
+    phone: str = Field(..., min_length=1)
+    from_employee_id: int | None = Field(default=None)
+    company_id: int | None = Field(default=None)
+    module_ids: list[int] = Field(default_factory=list)
+    groups: list[GroupAssignment] = Field(default_factory=list)
+    grant_ids: list[int] = Field(default_factory=list)
+    city_id: int | None = Field(default=None)
+    position_id: int | None = Field(default=None)
+
+
+class ConfirmUserResult(BaseModel):
+    """Результат confirm: финальные sql_queries."""
+
+    sql_queries: list[str] = Field(
+        default_factory=list, description="Финальный SQL для исполнения"
+    )
+    visual_summary: str = Field(default="", description="Визуальная сводка")
+
+
+class ExecuteUserRequestBody(BaseModel):
+    """Тело запроса на исполнение SQL (шаг 3)."""
+
+    sql_queries: list[str] = Field(..., description="SQL-скрипты для выполнения")
+    email: str | None = Field(
+        default=None,
+        description="Email созданного пользователя (для возврата employee_id в ответе)",
+    )
+
+
+class ExecuteUserResult(BaseModel):
+    """Результат исполнения SQL создания пользователя."""
+
+    status: str = Field(..., description="success | error | rolled_back")
+    message: str = Field(..., description="Описание результата")
+    rows_affected: int = Field(default=0, description="Кол-во затронутых строк")
+    employee_id: int | None = Field(
+        default=None, description="ID созданного сотрудника (при успехе)"
+    )

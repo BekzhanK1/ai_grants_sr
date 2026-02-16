@@ -29,6 +29,13 @@ app = FastAPI(
     description="Intelligent access-rights management for Smart Remont",
     version="0.1.0",
     lifespan=lifespan,
+    openapi_tags=[
+        {"name": "System", "description": "Health and availability"},
+        {"name": "Reference", "description": "Справочники (модули и т.д.)"},
+        {"name": "Access Request", "description": "Заявки на доступ (AI + tools)"},
+        {"name": "Grants Creation", "description": "Подготовка и выдача прав по дереву"},
+        {"name": "User Creation", "description": "Создание пользователя (clone или с нуля)"},
+    ],
 )
 
 app.add_middleware(
@@ -42,6 +49,6 @@ app.add_middleware(
 app.include_router(api_router, prefix="/api")
 
 
-@app.get("/health")
+@app.get("/health", tags=["System"])
 async def health_check() -> dict:
     return {"status": "ok"}

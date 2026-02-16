@@ -192,19 +192,22 @@ async def search_menu(
 
 
 async def search_group(
-    query: str, employee_id: int | None = None
+    query: str,
+    employee_id: int | None = None,
+    module_id: int | None = None,
 ) -> list[dict[str, Any]]:
     """
     Поиск групп (ролей) по названию.
-    Приоритет: совпадение модуля (если передан employee_id).
+    Если передан module_id — только группы этого модуля (для «группу/права из того же модуля»).
+    Иначе приоритет по модулю сотрудника (employee_id).
     """
     query = query.strip()
     if not query:
         return []
     pool = get_pool()
     async with pool.acquire() as conn:
-        target_module_id = None
-        if employee_id:
+        target_module_id: int | None = module_id
+        if target_module_id is None and employee_id:
             target_module_id = await _get_employee_module_id(conn, employee_id)
 
         select_sql = (
@@ -213,13 +216,16 @@ async def search_group(
             "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
             "WHERE g.is_active = true "
         )
-
-        args = [query]
-        if target_module_id:
+        args: list[Any] = [query]
+        if target_module_id is not None:
             args.append(target_module_id)
-            module_boost = "(CASE WHEN g.module_id = $2 THEN 1 ELSE 0 END) DESC, "
-        else:
-            module_boost = ""
+            select_sql += " AND g.module_id = $2 "
+
+        module_boost = (
+            "(CASE WHEN g.module_id = $2 THEN 1 ELSE 0 END) DESC, "
+            if target_module_id is not None
+            else ""
+        )
 
         try:
             where_clause = (
@@ -236,28 +242,32 @@ async def search_group(
 
     results = [dict(r) for r in rows]
     logger.info(
-        "search_group query=%r employee_id=%s found=%d",
+        "search_group query=%r employee_id=%s module_id=%s found=%d",
         query,
         employee_id,
+        module_id,
         len(results),
     )
     return results
 
 
 async def search_grant(
-    query: str, employee_id: int | None = None
+    query: str,
+    employee_id: int | None = None,
+    module_id: int | None = None,
 ) -> list[dict[str, Any]]:
     """
     Поиск грантов по названию.
-    Приоритет: совпадение модуля (если передан employee_id).
+    Если передан module_id — только гранты этого модуля (для «права из того же модуля»).
+    Иначе приоритет по модулю сотрудника (employee_id).
     """
     query = query.strip()
     if not query:
         return []
     pool = get_pool()
     async with pool.acquire() as conn:
-        target_module_id = None
-        if employee_id:
+        target_module_id: int | None = module_id
+        if target_module_id is None and employee_id:
             target_module_id = await _get_employee_module_id(conn, employee_id)
 
         select_sql = (
@@ -268,13 +278,16 @@ async def search_grant(
             "LEFT JOIN admin.module_tab m ON g.module_id = m.module_id "
             "WHERE g.is_active = 1 "
         )
-
-        args = [query]
-        if target_module_id:
+        args: list[Any] = [query]
+        if target_module_id is not None:
             args.append(target_module_id)
-            module_boost = "(CASE WHEN g.module_id = $2 THEN 1 ELSE 0 END) DESC, "
-        else:
-            module_boost = ""
+            select_sql += " AND g.module_id = $2 "
+
+        module_boost = (
+            "(CASE WHEN g.module_id = $2 THEN 1 ELSE 0 END) DESC, "
+            if target_module_id is not None
+            else ""
+        )
 
         try:
             where_clause = (
@@ -291,9 +304,10 @@ async def search_grant(
 
     results = [dict(r) for r in rows]
     logger.info(
-        "search_grant query=%r employee_id=%s found=%d",
+        "search_grant query=%r employee_id=%s module_id=%s found=%d",
         query,
         employee_id,
+        module_id,
         len(results),
     )
     return results
@@ -704,6 +718,53 @@ async def search_users_by_fios(fios: list[str]) -> list[EmployeeDto]:
     return [EmployeeDto.model_validate(dict(r)) for r in rows]
 
 
+async def check_email_exists(email: str) -> bool:
+    """
+    Проверяет, занят ли email в admin.employee_tab.
+    Возвращает True, если запись с таким email уже существует.
+    """
+    email_trimmed = email.strip().lower() if email else ""
+    if not email_trimmed:
+        return False
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchval(
+            "SELECT 1 FROM admin.employee_tab WHERE email = trim(lower($1)) LIMIT 1",
+            email,
+        )
+    return row is not None
+
+
+async def get_employee_id_by_email(email: str) -> int | None:
+    """
+    Возвращает employee_id по email из admin.employee_tab.
+    Для клонирования: «создай как у пользователя с email X».
+    """
+    email_trimmed = (email or "").strip().lower()
+    if not email_trimmed:
+        return None
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchval(
+            "SELECT employee_id FROM admin.employee_tab WHERE email = trim(lower($1)) LIMIT 1",
+            email,
+        )
+    return int(row) if row is not None else None
+
+
+async def get_employee_display_info(employee_id: int) -> dict[str, Any] | None:
+    """
+    Возвращает ФИО и email сотрудника для превью (от кого клонируем).
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow(
+            "SELECT employee_id, fio, email FROM admin.employee_tab WHERE employee_id = $1",
+            employee_id,
+        )
+    return dict(row) if row else None
+
+
 async def get_company_id(employee_id: int) -> int | None:
     """
     Возвращает company_id для сотрудника (хранимая процедура get_company_id).
@@ -723,6 +784,23 @@ async def get_company_id(employee_id: int) -> int | None:
         except Exception as e:
             logger.warning("get_company_id failed employee_id=%s: %s", employee_id, e)
     return None
+
+
+async def get_companies() -> list[dict[str, Any]]:
+    """
+    Список компаний для резолва по имени (admin.company_tab).
+    Если таблица отсутствует — возвращает [].
+    """
+    pool = get_pool()
+    try:
+        async with pool.acquire() as conn:
+            rows = await conn.fetch(
+                "SELECT company_id, company_name FROM admin.company_tab ORDER BY company_id"
+            )
+        return [dict(r) for r in rows]
+    except (asyncpg.UndefinedTableError, asyncpg.PostgresError) as e:
+        logger.debug("get_companies skipped (table or column missing): %s", e)
+        return []
 
 
 # ═══════════════════════════════════════════════════════════════════════════
