@@ -51,24 +51,8 @@ def build_tools() -> list[dict[str, Any]]:
                 "required": ["query"],
             },
         ),
-        _function_tool(
-            name="search_group",
-            description=(
-                "Поиск группы (роли) по названию. Используй, когда пользователь "
-                "указал название роли/группы текстом, а не group_id. "
-                "Возвращает список найденных: [{group_id, group_name, group_code}]."
-            ),
-            parameters={
-                "type": "object",
-                "properties": {
-                    "query": {
-                        "type": "string",
-                        "description": "Подстрока для поиска в названии группы",
-                    },
-                },
-                "required": ["query"],
-            },
-        ),
+        # Группы и модули временно выключены из AI-потока —
+        # оставляем только меню и точечные права (grants).
         _function_tool(
             name="search_grant",
             description=(
@@ -131,23 +115,6 @@ def build_tools() -> list[dict[str, Any]]:
         # ─────────────────────────────────────────────────────────────────
 
         _function_tool(
-            name="assign_role",
-            description=(
-                "Назначить сотруднику группу (роль/должность). "
-                "⚠ TOGGLE: если роль уже есть — НЕ вызывай, иначе она будет УДАЛЕНА. "
-                "Сначала проверь через get_user_current_permissions. "
-                "Если не знаешь group_id — сначала вызови search_group."
-            ),
-            parameters={
-                "type": "object",
-                "properties": {
-                    "employee_id": {"type": "integer", "description": "ID сотрудника"},
-                    "group_id": {"type": "integer", "description": "ID группы"},
-                },
-                "required": ["employee_id", "group_id"],
-            },
-        ),
-        _function_tool(
             name="add_interface_button",
             description=(
                 "Открыть сотруднику доступ к кнопке/пункту меню интерфейса. "
@@ -162,24 +129,6 @@ def build_tools() -> list[dict[str, Any]]:
                     "menu_id": {"type": "integer", "description": "ID пункта меню"},
                 },
                 "required": ["employee_id", "menu_id"],
-            },
-        ),
-        _function_tool(
-            name="link_module",
-            description=(
-                "Дать сотруднику доступ к целому модулю системы "
-                "(CRM, Склад, Офис и т.д.). "
-                "⚠ TOGGLE: если модуль уже привязан — НЕ вызывай, "
-                "иначе он будет ОТКЛЮЧЁН. "
-                "Сначала проверь через get_user_current_permissions."
-            ),
-            parameters={
-                "type": "object",
-                "properties": {
-                    "employee_id": {"type": "integer", "description": "ID сотрудника"},
-                    "module_id": {"type": "integer", "description": "ID модуля"},
-                },
-                "required": ["employee_id", "module_id"],
             },
         ),
         _function_tool(

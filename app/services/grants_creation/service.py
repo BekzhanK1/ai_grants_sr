@@ -25,8 +25,15 @@ from app.api.schemas import (
 from app.core.config import settings
 from app.core.database import get_pool
 from app.services.db_service import get_all_grants_by_module
-from app.services.db_service import get_all_modules as _get_all_modules_db
-from app.services.db_service import get_company_id, search_users_by_fios
+from app.services.db_service import (
+    get_all_modules as _get_all_modules_db,
+)
+from app.services.db_service import (
+    create_sql_approval_request,
+    get_company_id,
+    get_modules_for_employee,
+    search_users_by_fios,
+)
 from app.services.llm import create_chat_completion
 
 logger = logging.getLogger(__name__)
@@ -269,8 +276,15 @@ all_grant_codes (все коды из дерева для IN (...)):
 Верни только JSON: {{ "sql_queries": ["BEGIN;\\n...\\nCOMMIT;"] }}"""
 
 
-async def get_all_modules() -> list[ModuleDto]:
-    """Возвращает все модули (прослойка над db_service)."""
+async def get_all_modules(employee_id: int | None = None) -> list[ModuleDto]:
+    """
+    Возвращает модули для AI-интерфейса.
+
+    Если передан employee_id — только модули, привязанные к сотруднику.
+    Если None — все модули (fallback / сервисное использование).
+    """
+    if employee_id is not None:
+        return await get_modules_for_employee(employee_id)
     return await _get_all_modules_db()
 
 
@@ -426,11 +440,48 @@ async def confirm_and_generate_sql(
 # ═══════════════════════════════════════════════════════════════════════════
 
 
-async def execute_grants_sql(sql_queries: list[str]) -> ExecuteGrantsResult:
+async def execute_grants_sql(
+    sql_queries: list[str],
+    *,
+    user_prompt: str | None = None,
+    business_reason: str | None = None,
+    created_by: int | None = None,
+) -> ExecuteGrantsResult:
     """
     Выполняет финальные SQL-скрипты в одной транзакции.
     В TEST_MODE — откатывает транзакцию (ROLLBACK).
+
+    При settings.ADMIN_APPROVE = True фактическое исполнение не происходит:
+    заявка сохраняется в ai_admin.sql_approval_requests_tab (в т.ч. user_prompt и
+    business_reason — то, что написал пользователь), возвращается request_id.
     """
+    if settings.ADMIN_APPROVE:
+        try:
+            request_id = await create_sql_approval_request(
+                request_type="grants",
+                sql_queries=sql_queries,
+                user_prompt=user_prompt,
+                business_reason=business_reason,
+                created_by=created_by,
+            )
+        except Exception as e:
+            logger.exception("create_sql_approval_request failed: %s", e)
+            return ExecuteGrantsResult(
+                status="error",
+                message=f"Не удалось сохранить заявку на аппрув: {e}",
+                rows_affected=0,
+                request_id=None,
+            )
+        return ExecuteGrantsResult(
+            status="pending_approval",
+            message=(
+                "ADMIN_APPROVE включён: SQL не выполнен. "
+                "Заявка сохранена. Админ может прочитать запрос пользователя и утвердить или отклонить."
+            ),
+            rows_affected=0,
+            request_id=request_id,
+        )
+
     pool = get_pool()
     total_rows = 0
     try:

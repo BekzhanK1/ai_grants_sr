@@ -19,6 +19,7 @@ from typing import Any
 
 from app.core.config import settings
 from app.core.exceptions import AIServiceError
+from app.data.reference import build_permissions_tree_context
 from app.services import db_service
 from app.services.llm import create_chat_completion
 
@@ -132,6 +133,7 @@ async def process_user_request(
             raise AIServiceError(error_msg)
 
     employee_context = await db_service.get_employee_context(user_id)
+    permissions_tree = await build_permissions_tree_context()
     logger.info("Employee context loaded for user_id=%s: %s", user_id, employee_context)
 
     messages: list[dict[str, Any]] = [
@@ -141,6 +143,7 @@ async def process_user_request(
             "content": (
                 f"employee_id: {user_id}\n"
                 f"employee_context: {employee_context}\n"
+                f"permissions_reference_tree:\n{permissions_tree}\n"
                 f"запрос: {prompt}\n"
                 f"причина: {reason}"
             ),
@@ -288,6 +291,7 @@ async def preview_user_request(
     )
 
     employee_context = await db_service.get_employee_context(user_id)
+    permissions_tree = await build_permissions_tree_context()
 
     # Добавляем модуль в контекст, чтобы LLM фокусировался на нужном модуле
     module_context_line = ""
@@ -301,6 +305,7 @@ async def preview_user_request(
             "content": (
                 f"employee_id: {user_id}\n"
                 f"employee_context: {employee_context}\n"
+                f"permissions_reference_tree:\n{permissions_tree}\n"
                 f"{module_context_line}"
                 f"запрос: {prompt}\n"
                 f"причина: {reason}"
@@ -385,6 +390,118 @@ async def preview_user_request(
     }
 
 
+VERDICT_PROMPT = """\
+Ты — проверяющий заявки на доступ в Smart Remont.
+
+Сотрудник вручную выбрал пункты меню и права и указал обоснование.
+Твоя задача: по досье сотрудника и обоснованию дать вердикт — одобрить или отклонить заявку.
+
+Ответь строго в формате:
+ВЕРДИКТ: ОДОБРЕНО
+или
+ВЕРДИКТ: ОТКЛОНЕНО
+
+После строки с вердиктом напиши краткое объяснение (1–3 предложения) на русском.
+Одобряй, если обоснование связано с должностью/задачами. Отклоняй при явном несоответствии или пустом обосновании.
+"""
+
+
+async def preview_user_request_from_selection(
+    *,
+    user_id: int,
+    module_id: int | None,
+    menu_ids: list[int],
+    grant_ids: list[int],
+    reason: str,
+) -> dict[str, Any]:
+    """
+    Превью заявки по ручному выбору: ИИ даёт вердикт по обоснованию и досье,
+    без вызова инструментов. При одобрении возвращаем tool_calls для выбранных меню/прав.
+    """
+    if not menu_ids and not grant_ids:
+        return {
+            "id": "",
+            "tool_calls": [],
+            "ai_message": "Выберите хотя бы один пункт меню или право.",
+        }
+
+    employee_context = await db_service.get_employee_context(user_id)
+
+    menu_names: list[str] = []
+    for mid in menu_ids:
+        name = await db_service.get_menu_display_name(mid)
+        menu_names.append(name)
+    grant_names: list[str] = []
+    for gid in grant_ids:
+        name = await db_service.get_grant_display_name(gid)
+        grant_names.append(name)
+
+    selection_text = []
+    if menu_names:
+        selection_text.append("Меню: " + ", ".join(menu_names))
+    if grant_names:
+        selection_text.append("Права: " + ", ".join(grant_names))
+
+    user_content = (
+        f"Сотрудник запросил выдачу:\n"
+        f"{chr(10).join(selection_text)}\n\n"
+        f"Обоснование: {reason}\n\n"
+        f"Досье сотрудника:\n{employee_context}"
+    )
+
+    messages: list[dict[str, Any]] = [
+        {"role": "system", "content": VERDICT_PROMPT},
+        {"role": "user", "content": user_content},
+    ]
+
+    try:
+        completion = await create_chat_completion(messages, tools=None)
+    except Exception as exc:
+        raise AIServiceError(f"OpenAI API error (verdict): {exc}") from exc
+
+    completion_id = getattr(completion, "id", "") or ""
+    message = completion.choices[0].message
+    content = (message.content or "").strip().upper()
+
+    approved = "ОТКЛОНЕНО" not in content and "ОТКЛОНЕН" not in content
+    if "ВЕРДИКТ:" in content:
+        approved = "ОДОБРЕНО" in content.split("ВЕРДИКТ:")[-1].split("\n")[0]
+
+    tool_calls: list[dict[str, Any]] = []
+    if approved:
+        for mid in menu_ids:
+            name = await db_service.get_menu_display_name(mid)
+            tool_calls.append({
+                "tool_call_id": f"sel-menu-{mid}",
+                "tool": "add_interface_button",
+                "args": {"employee_id": user_id, "menu_id": mid},
+                "status": "pending",
+                "entity_id": mid,
+                "entity_name": name,
+                "sql": f"SELECT admin.employee_menu__add(employee_id_ := {user_id}, menu_id_ := {mid})",
+            })
+        for gid in grant_ids:
+            name = await db_service.get_grant_display_name(gid)
+            tool_calls.append({
+                "tool_call_id": f"sel-grant-{gid}",
+                "tool": "add_grant",
+                "args": {"employee_id": user_id, "grant_id": gid},
+                "status": "pending",
+                "entity_id": gid,
+                "entity_name": name,
+                "sql": (
+                    f"INSERT INTO admin.employee_grant_tab (employee_id, grant_id) "
+                    f"VALUES ({user_id}, {gid}) ON CONFLICT DO NOTHING"
+                ),
+            })
+
+    return {
+        "id": completion_id,
+        "tool_calls": tool_calls,
+        "ai_message": message.content if message and message.content else None,
+    }
+
+
 async def execute_user_actions(
     *,
     user_id: int,
@@ -415,7 +532,20 @@ async def execute_user_actions(
                 arguments=json.dumps(args, ensure_ascii=False),
             ),
         )
+        logger.info(
+            "[EXECUTE_USER_ACTIONS] Executing tool=%s for user_id=%s with args=%s",
+            name,
+            user_id,
+            args,
+        )
         res = await execute_tool_call(dummy_call, user_id=user_id)
+        logger.info(
+            "[EXECUTE_USER_ACTIONS] Result for tool=%s user_id=%s: status=%s sql=%s",
+            name,
+            user_id,
+            res.get("status"),
+            res.get("sql"),
+        )
         results.append(res)
 
     return results

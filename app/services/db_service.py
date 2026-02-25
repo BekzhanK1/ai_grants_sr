@@ -24,7 +24,14 @@ import logging
 from typing import Any
 
 import asyncpg
-from app.api.schemas import CityDto, EmployeeDto, EmployeeSearchItem, GrantDto, ModuleDto, PositionDto
+from app.api.schemas import (
+    CityDto,
+    EmployeeDto,
+    EmployeeSearchItem,
+    GrantDto,
+    ModuleDto,
+    PositionDto,
+)
 from app.core.config import settings
 from app.core.database import get_pool
 
@@ -41,7 +48,17 @@ if settings.DAILY_LIMIT_ON:
 else:
     print(f"\033[91m===========DAILY_LIMIT OFF==========\033[0m (Daily limit disabled)")
 
+if settings.ADMIN_APPROVE:
+    print(
+        f"\033[93m===========ADMIN_APPROVE ON==========\033[0m (Admin approve enabled)"
+    )
+else:
+    print(
+        f"\033[91m===========ADMIN_APPROVE OFF==========\033[0m (Admin approve disabled)"
+    )
+
 logger = logging.getLogger(__name__)
+
 
 def _log_db_response(func_name: str, data: Any) -> None:
     """Log database response to console."""
@@ -124,12 +141,15 @@ async def get_user_permissions(employee_id: int) -> dict[str, list[int]]:
         len(modules),
         len(grants),
     )
-    _log_db_response("get_user_permissions", {
-        "group_ids": groups,
-        "menu_ids": menus,
-        "module_ids": modules,
-        "grant_ids": grants,
-    })
+    _log_db_response(
+        "get_user_permissions",
+        {
+            "group_ids": groups,
+            "menu_ids": menus,
+            "module_ids": modules,
+            "grant_ids": grants,
+        },
+    )
     return {
         "group_ids": groups,
         "menu_ids": menus,
@@ -164,6 +184,43 @@ async def _fetch_all_permissions(
         [r["module_id"] for r in module_rows],
         [r["grant_id"] for r in grant_rows],
     )
+
+
+async def get_employee_current_menus_and_grants(
+    employee_id: int,
+) -> dict[str, list[int]]:
+    """
+    Текущие menu_id и grant_id сотрудника без дублей:
+    из employee_menu_tab / employee_grant_tab и через группы (group_menu_tab / group_grant_tab).
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        menu_rows = await conn.fetch(
+            """
+            SELECT menu_id FROM admin.employee_menu_tab WHERE employee_id = $1
+            UNION
+            SELECT gm.menu_id
+            FROM admin.group_menu_tab gm
+            INNER JOIN admin.employee_group_tab eg ON eg.group_id = gm.group_id
+            WHERE eg.employee_id = $1
+            """,
+            employee_id,
+        )
+        grant_rows = await conn.fetch(
+            """
+            SELECT grant_id FROM admin.employee_grant_tab WHERE employee_id = $1
+            UNION
+            SELECT gg.grant_id
+            FROM admin.group_grant_tab gg
+            INNER JOIN admin.employee_group_tab eg ON eg.group_id = gg.group_id
+            WHERE eg.employee_id = $1
+            """,
+            employee_id,
+        )
+    return {
+        "menu_ids": [r["menu_id"] for r in menu_rows],
+        "grant_ids": [r["grant_id"] for r in grant_rows],
+    }
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -686,21 +743,84 @@ async def get_menu_by_url(url: str) -> int | None:
     return result
 
 
+# ── Display names for preview (entity_id → human-readable name) ─────────────
+
+
+async def get_menu_display_name(menu_id: int) -> str:
+    """Название меню (без модуля в скобках) для отображения в превью."""
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        name = await conn.fetchval(
+            "SELECT menu_name FROM admin.menu_tab WHERE menu_id = $1",
+            menu_id,
+        )
+    return name or f"Меню #{menu_id}"
+
+
+async def get_grant_display_name(grant_id: int) -> str:
+    """Название права для отображения в превью."""
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        name = await conn.fetchval(
+            "SELECT grant_name FROM admin.grant_tab WHERE grant_id = $1",
+            grant_id,
+        )
+    return name or f"Право #{grant_id}"
+
+
+async def get_group_display_name(group_id: int) -> str:
+    """Название роли/группы для отображения в превью."""
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        name = await conn.fetchval(
+            "SELECT group_name FROM admin.group_tab WHERE group_id = $1",
+            group_id,
+        )
+    return name or f"Роль #{group_id}"
+
+
+async def get_module_display_name(module_id: int) -> str:
+    """Название модуля для отображения в превью."""
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        name = await conn.fetchval(
+            "SELECT module_name FROM admin.module_tab WHERE module_id = $1",
+            module_id,
+        )
+    return name or f"Модуль #{module_id}"
+
+
 async def get_employee_context(employee_id: int) -> str:
     """
     Return a short textual context with real employee identity data from DB.
+
+    Использует агрегаты по модулям и группам, чтобы LLM видел,
+    в каких модулях и ролях пользователь уже состоит.
     """
     pool = get_pool()
     async with pool.acquire() as conn:
         row = await conn.fetchrow(
             """
-            SELECT
+            SELECT 
                 e.fio,
                 p.position_name,
-                m.module_name
+                e.email,
+                -- Текущие модули сотрудника
+                (
+                    SELECT string_agg(m.module_name, ', ')
+                    FROM admin.employee_module_tab em
+                    JOIN admin.module_tab m ON em.module_id = m.module_id
+                    WHERE em.employee_id = e.employee_id
+                ) AS current_modules,
+                -- Текущие группы (роли) сотрудника
+                (
+                    SELECT string_agg(g.group_name, ', ')
+                    FROM admin.employee_group_tab eg
+                    JOIN admin.group_tab g ON eg.group_id = g.group_id
+                    WHERE eg.employee_id = e.employee_id
+                ) AS current_groups
             FROM admin.employee_tab e
             LEFT JOIN admin.position_tab p ON e.position_id = p.position_id
-            LEFT JOIN admin.module_tab m ON p.module_id = m.module_id
             WHERE e.employee_id = $1
             """,
             employee_id,
@@ -712,16 +832,30 @@ async def get_employee_context(employee_id: int) -> str:
 
     fio = row["fio"] or "Не указано"
     position_name = row["position_name"] or "Не указана"
-    module_name = row["module_name"] or "Не указан"
-    context = f"ФИО: {fio}, Должность: {position_name}, Модуль: {module_name}"
+    email = (row["email"] or "").strip() or "Не указан"
+    current_modules = (row["current_modules"] or "").strip() or "нет модулей"
+    current_groups = (row["current_groups"] or "").strip() or "нет групп"
+
+    context = (
+        f"ФИО: {fio}; "
+        f"Должность: {position_name}; "
+        f"Email: {email}; "
+        f"Текущие модули: {current_modules}; "
+        f"Текущие группы: {current_groups}"
+    )
     logger.info(
         "get_employee_context employee_id=%s position=%r", employee_id, position_name
     )
-    _log_db_response("get_employee_context", {
-        "fio": fio,
-        "position_name": position_name,
-        "module_name": module_name,
-    })
+    _log_db_response(
+        "get_employee_context",
+        {
+            "fio": fio,
+            "position_name": position_name,
+            "email": email,
+            "current_modules": current_modules,
+            "current_groups": current_groups,
+        },
+    )
     return context
 
 
@@ -739,6 +873,28 @@ async def get_all_modules() -> list[ModuleDto]:
         rows = await conn.fetch("SELECT * FROM admin.module_tab")
     result = [ModuleDto.model_validate(dict(r)) for r in rows]
     _log_db_response("get_all_modules", result)
+    return result
+
+
+async def get_modules_for_employee(employee_id: int) -> list[ModuleDto]:
+    """
+    Return only modules that are linked to the given employee (employee_module_tab).
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT m.*
+            FROM admin.module_tab m
+            JOIN admin.employee_module_tab em
+              ON em.module_id = m.module_id
+            WHERE em.employee_id = $1
+            ORDER BY m.module_id
+            """,
+            employee_id,
+        )
+    result = [ModuleDto.model_validate(dict(r)) for r in rows]
+    _log_db_response("get_modules_for_employee", result)
     return result
 
 
@@ -810,9 +966,62 @@ async def get_city_name(city_id: int) -> str | None:
         return None
 
 
+# ── FETCH: меню и права по модулю (для ручного выбора в заявке) ─────────────
+
+
+async def get_menus_by_module(module_id: int) -> list[dict[str, Any]]:
+    """
+    Список меню модуля для выбора в заявке (id, название, parent для дерева).
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT menu_id, menu_name, menu_pid
+            FROM admin.menu_tab
+            WHERE module_id = $1
+            ORDER BY menu_name
+            """,
+            module_id,
+        )
+    return [
+        {
+            "menu_id": r["menu_id"],
+            "menu_name": r["menu_name"],
+            "menu_pid": r["menu_pid"],
+        }
+        for r in rows
+    ]
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 # FETCH: все права из admin.grant_tab
 # ═══════════════════════════════════════════════════════════════════════════
+
+
+async def get_grants_by_module(module_id: int) -> list[dict[str, Any]]:
+    """
+    Список прав модуля для выбора в заявке (id, название, parent для дерева).
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT grant_id, grant_name, grant_pid
+            FROM admin.grant_tab
+            WHERE module_id = $1
+            ORDER BY grant_name
+            """,
+            module_id,
+        )
+    return [
+        {
+            "grant_id": r["grant_id"],
+            "grant_name": r["grant_name"],
+            "grant_pid": r["grant_pid"],
+        }
+        for r in rows
+    ]
 
 
 async def get_all_grants_by_module(module_id: int) -> list[GrantDto]:
@@ -963,7 +1172,10 @@ async def get_company_id(employee_id: int) -> int | None:
             )
             if row and row["company_id"] is not None:
                 company_id = int(row["company_id"])
-                _log_db_response("get_company_id", {"employee_id": employee_id, "company_id": company_id})
+                _log_db_response(
+                    "get_company_id",
+                    {"employee_id": employee_id, "company_id": company_id},
+                )
                 return company_id
         except asyncpg.UndefinedFunctionError:
             logger.debug("get_company_id not found in DB, employee_id=%s", employee_id)
@@ -990,6 +1202,222 @@ async def get_companies() -> list[dict[str, Any]]:
     except (asyncpg.UndefinedTableError, asyncpg.PostgresError) as e:
         logger.debug("get_companies skipped (table or column missing): %s", e)
         return []
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SQL approval requests: заявки на исполнение SQL для аппрува админом
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+async def create_sql_approval_request(
+    *,
+    request_type: str,
+    sql_queries: list[Any],
+    user_prompt: str | None = None,
+    business_reason: str | None = None,
+    created_by: int | None = None,
+) -> int:
+    """
+    Создаёт запись в ai_admin.sql_approval_requests_tab.
+    sql_queries: для grants/user_creation — список SQL-строк; для access_request — список {tool, args}.
+    Сохраняет то, что написал пользователь (user_prompt, business_reason), чтобы админ
+    мог прочитать и решить — давать ли доступ / выполнять ли SQL.
+
+    Возвращает request_id (PK новой записи).
+    """
+    pool = get_pool()
+    row = await pool.fetchrow(
+        """
+        INSERT INTO ai_admin.sql_approval_requests_tab
+        (request_type, user_prompt, business_reason, sql_queries, status, created_by)
+        VALUES ($1, $2, $3, $4::jsonb, 'pending', $5)
+        RETURNING request_id
+        """,
+        request_type,
+        (user_prompt or "").strip() or None,
+        (business_reason or "").strip() or None,
+        json.dumps(sql_queries, ensure_ascii=False),
+        created_by,
+    )
+    request_id = int(row["request_id"])
+    logger.info(
+        "create_sql_approval_request request_type=%s request_id=%s created_by=%s",
+        request_type,
+        request_id,
+        created_by,
+    )
+    return request_id
+
+
+async def list_sql_approval_requests(
+    *,
+    request_type: str | None = None,
+    status: str | None = None,
+    limit: int = 50,
+) -> list[dict[str, Any]]:
+    """
+    Вернуть последние заявки из ai_admin.sql_approval_requests_tab
+    (для админской страницы обработки запросов).
+    """
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        rows = await conn.fetch(
+            """
+            SELECT
+                r.request_id,
+                r.request_type,
+                r.user_prompt,
+                r.business_reason,
+                r.sql_queries,
+                r.status,
+                r.created_by,
+                r.created_at,
+                e.fio AS created_by_fio
+            FROM ai_admin.sql_approval_requests_tab r
+            LEFT JOIN admin.employee_tab e ON e.employee_id = r.created_by
+            WHERE ($1::text IS NULL OR r.request_type = $1::text)
+              AND ($2::text IS NULL OR r.status = $2::text)
+            ORDER BY r.created_at DESC
+            LIMIT $3
+            """,
+            request_type,
+            status,
+            limit,
+        )
+        result = [dict(row) for row in rows]
+
+        # Для access_request разворачиваем sql_queries в человекочитаемые названия меню/прав
+        menu_ids_global: set[int] = set()
+        grant_ids_global: set[int] = set()
+
+        for row in result:
+            if row.get("request_type") != "access_request":
+                continue
+            q = row.get("sql_queries")
+            try:
+                actions = json.loads(q) if isinstance(q, str) else (q or [])
+            except Exception:
+                actions = []
+            menu_ids: set[int] = set()
+            grant_ids: set[int] = set()
+            for action in actions:
+                if not isinstance(action, dict):
+                    continue
+                tool = action.get("tool")
+                args = action.get("args") or {}
+                if tool == "add_interface_button" and "menu_id" in args:
+                    mid = int(args["menu_id"])
+                    menu_ids.add(mid)
+                    menu_ids_global.add(mid)
+                elif tool == "add_grant" and "grant_id" in args:
+                    gid = int(args["grant_id"])
+                    grant_ids.add(gid)
+                    grant_ids_global.add(gid)
+            row["_menu_ids"] = menu_ids
+            row["_grant_ids"] = grant_ids
+
+        menu_name_map: dict[int, str] = {}
+        grant_name_map: dict[int, str] = {}
+
+        if menu_ids_global:
+            mrows = await conn.fetch(
+                """
+                SELECT t.menu_id, t.menu_name, m.module_name
+                FROM admin.menu_tab t
+                LEFT JOIN admin.module_tab m ON t.module_id = m.module_id
+                WHERE t.menu_id = ANY($1::int[])
+                """,
+                list(menu_ids_global),
+            )
+            for mrow in mrows:
+                module_name = mrow["module_name"]
+                base = mrow["menu_name"]
+                menu_name_map[mrow["menu_id"]] = (
+                    f"{base} ({module_name})" if module_name else base
+                )
+
+        if grant_ids_global:
+            grows = await conn.fetch(
+                """
+                SELECT g.grant_id, g.grant_name, m.module_name
+                FROM admin.grant_tab g
+                LEFT JOIN admin.module_tab m ON g.module_id = m.module_id
+                WHERE g.grant_id = ANY($1::int[])
+                """,
+                list(grant_ids_global),
+            )
+            for grow in grows:
+                module_name = grow["module_name"]
+                base = grow["grant_name"]
+                grant_name_map[grow["grant_id"]] = (
+                    f"{base} ({module_name})" if module_name else base
+                )
+
+        for row in result:
+            mids = row.pop("_menu_ids", set())
+            gids = row.pop("_grant_ids", set())
+            if mids:
+                row["menu_names"] = [
+                    menu_name_map.get(mid, f"menu_id={mid}") for mid in sorted(mids)
+                ]
+            if gids:
+                row["grant_names"] = [
+                    grant_name_map.get(gid, f"grant_id={gid}") for gid in sorted(gids)
+                ]
+
+    _log_db_response("list_sql_approval_requests", result)
+    return result
+
+
+async def get_sql_approval_request(request_id: int) -> dict[str, Any] | None:
+    """Получить одну заявку по request_id."""
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow(
+            """
+            SELECT
+                r.request_id,
+                r.request_type,
+                r.user_prompt,
+                r.business_reason,
+                r.sql_queries,
+                r.status,
+                r.created_by,
+                r.created_at,
+                e.fio AS created_by_fio
+            FROM ai_admin.sql_approval_requests_tab r
+            LEFT JOIN admin.employee_tab e ON e.employee_id = r.created_by
+            WHERE r.request_id = $1
+            """,
+            request_id,
+        )
+    return dict(row) if row else None
+
+
+async def update_sql_approval_request_status(
+    *,
+    request_id: int,
+    status: str,
+    approved_by: int | None = None,
+    comment: str | None = None,
+) -> None:
+    """Обновить статус заявки (approve / reject / executed / failed)."""
+    pool = get_pool()
+    async with pool.acquire() as conn:
+        await conn.execute(
+            """
+            UPDATE ai_admin.sql_approval_requests_tab
+            SET status = $2,
+                approved_by = COALESCE($3, approved_by),
+                approved_at = CASE WHEN $3 IS NOT NULL THEN now() ELSE approved_at END,
+                comment = COALESCE($4, comment)
+            WHERE request_id = $1
+            """,
+            request_id,
+            status,
+            approved_by,
+            comment,
+        )
 
 
 # ═══════════════════════════════════════════════════════════════════════════

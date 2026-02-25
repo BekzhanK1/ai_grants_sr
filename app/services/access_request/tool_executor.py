@@ -290,7 +290,17 @@ async def execute_tool_call_preview(call: Any, user_id: int) -> dict[str, Any]:
 
         result["sql"] = sql
         result["entity_id"] = entity_id
-        result["entity_name"] = entity_name
+        # Resolve human-readable name for preview list
+        if name == "add_interface_button":
+            result["entity_name"] = await db_service.get_menu_display_name(menu_id)
+        elif name == "add_grant":
+            result["entity_name"] = await db_service.get_grant_display_name(grant_id)
+        elif name == "assign_role":
+            result["entity_name"] = await db_service.get_group_display_name(group_id)
+        elif name == "link_module":
+            result["entity_name"] = await db_service.get_module_display_name(module_id)
+        else:
+            result["entity_name"] = entity_name
     except Exception as exc:  # noqa: BLE001
         result["status"] = "error"
         result["error"] = str(exc)

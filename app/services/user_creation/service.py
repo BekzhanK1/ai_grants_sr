@@ -29,6 +29,7 @@ from app.core.database import get_pool
 from app.core.exceptions import DatabaseError
 from app.services.db_service import (
     check_email_exists,
+    create_sql_approval_request,
     get_all_cities,
     get_all_modules,
     get_all_positions,
@@ -906,12 +907,48 @@ async def execute_user_creation(
     email_for_lookup: str | None = None,
     phone: str | None = None,
     initiator_id: int | None = None,
+    user_prompt: str | None = None,
+    business_reason: str | None = None,
 ) -> ExecuteUserResult:
     """
     Step 3: Execute sql_queries in one transaction.
     In TEST_MODE rolls back. Optionally returns employee_id by email and temporary_password by phone after success.
     Если передан initiator_id, устанавливает myapp.user_id для триггеров (проверка прав ADD_USER и др.).
+
+    При settings.ADMIN_APPROVE = True фактическое исполнение не происходит:
+    заявка сохраняется в ai_admin.sql_approval_requests_tab (user_prompt, business_reason),
+    возвращается request_id.
     """
+    if settings.ADMIN_APPROVE:
+        try:
+            request_id = await create_sql_approval_request(
+                request_type="user_creation",
+                sql_queries=sql_queries,
+                user_prompt=user_prompt,
+                business_reason=business_reason,
+                created_by=initiator_id,
+            )
+        except Exception as e:
+            logger.exception("create_sql_approval_request failed: %s", e)
+            return ExecuteUserResult(
+                status="error",
+                message=f"Не удалось сохранить заявку на аппрув: {e}",
+                rows_affected=0,
+                employee_id=None,
+                temporary_password=None,
+                request_id=None,
+            )
+        return ExecuteUserResult(
+            status="pending_approval",
+            message=(
+                "ADMIN_APPROVE включён: SQL не выполнен. "
+                "Заявка сохранена. Админ может прочитать запрос пользователя и утвердить или отклонить."
+            ),
+            rows_affected=0,
+            employee_id=None,
+            temporary_password=None,
+            request_id=request_id,
+        )
     pool = get_pool()
     total_rows = 0
     try:

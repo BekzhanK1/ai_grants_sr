@@ -59,21 +59,35 @@ class ProcessRequestResponse(BaseModel):
 class AccessRequestPrepareBody(BaseModel):
     """
     Тело запроса для превью AI-заявки на доступ (без применения SQL).
+
+    Два режима:
+    - По запросу: prompt + reason (ИИ подбирает меню/права по тексту).
+    - По выбору: module_id + menu_ids + grant_ids + reason (ИИ даёт вердикт по досье).
     """
 
     user_id: int = Field(..., description="ID сотрудника в Smart Remont")
     module_id: int | None = Field(
         default=None,
-        description="ID модуля, в контексте которого ищутся права (по умолчанию MySpace=5 на фронте)",
+        description="ID модуля (обязателен для режима «по выбору»).",
     )
-    prompt: str = Field(
-        ..., min_length=1, description="Естественно-языковой запрос о правах доступа"
+    prompt: str | None = Field(
+        default=None,
+        min_length=1,
+        description="Запрос текстом (режим «по запросу»). Не нужен при menu_ids/grant_ids.",
     )
     reason: str = Field(
         ...,
         min_length=10,
         max_length=500,
-        description="Причина запроса прав (минимум 10 символов). Объясните, зачем нужен доступ.",
+        description="Обоснование (минимум 10 символов).",
+    )
+    menu_ids: list[int] = Field(
+        default_factory=list,
+        description="Выбранные вручную menu_id (режим «по выбору»).",
+    )
+    grant_ids: list[int] = Field(
+        default_factory=list,
+        description="Выбранные вручную grant_id (режим «по выбору»).",
     )
 
 
@@ -100,16 +114,37 @@ class AccessRequestExecuteBody(BaseModel):
         min_length=1,
         description="Список действий для выполнения (обычно подмножество превью tool_calls)",
     )
+    prompt: str | None = Field(
+        default=None,
+        description="Текст запроса пользователя — сохраняется для аппрува (ADMIN_APPROVE).",
+    )
+    reason: str | None = Field(
+        default=None,
+        description="Обоснование запроса — сохраняется для аппрува.",
+    )
 
 
 class AccessRequestExecuteResult(BaseModel):
     """
-    Результат исполнения: список фактически выполненных действий.
+    Результат исполнения: список фактически выполненных действий
+    или status=pending_approval при ADMIN_APPROVE.
     """
 
     tool_calls: list[ToolCallResult] = Field(
         default_factory=list,
         description="Список выполненных действий с финальным статусом и SQL",
+    )
+    status: str | None = Field(
+        default=None,
+        description="pending_approval — заявка отправлена админу; иначе не задан",
+    )
+    request_id: int | None = Field(
+        default=None,
+        description="ID заявки в ai_admin (при status=pending_approval).",
+    )
+    message: str | None = Field(
+        default=None,
+        description="Сообщение для пользователя (при pending_approval).",
     )
 
 
@@ -215,6 +250,34 @@ class EmployeeSearchItem(BaseModel):
     email: str | None = Field(default=None, description="Email")
 
     model_config = {"from_attributes": True}
+
+
+class SqlApprovalRequestDto(BaseModel):
+    """Заявка из ai_admin.sql_approval_requests_tab для админского интерфейса."""
+
+    request_id: int = Field(..., description="ID заявки")
+    request_type: str = Field(..., description="Тип заявки (access_request / grants / user_creation и т.п.)")
+    user_prompt: str | None = Field(default=None, description="Что написал пользователь")
+    business_reason: str | None = Field(default=None, description="Обоснование запроса")
+    status: str = Field(..., description="Статус заявки (pending / approved / rejected / executed / failed)")
+    created_by: int | None = Field(default=None, description="ID сотрудника-инициатора")
+    created_by_fio: str | None = Field(default=None, description="ФИО инициатора")
+    created_at: datetime = Field(..., description="Дата и время создания заявки")
+    menu_names: list[str] | None = Field(
+        default=None,
+        description="Названия меню, которые будут выданы (для access_request)",
+    )
+    grant_names: list[str] | None = Field(
+        default=None,
+        description="Названия прав, которые будут выданы (для access_request)",
+    )
+
+
+class SqlApprovalDecisionBody(BaseModel):
+    """Тело запроса для approve/reject заявки."""
+
+    admin_id: int = Field(..., description="ID администратора, принявшего решение")
+    comment: str | None = Field(default=None, description="Комментарий администратора")
 
 
 # ── Grants preparation (дерево прав + LLM → new_grants, sql_queries) ──────────
@@ -327,14 +390,33 @@ class ExecuteGrantsRequestBody(BaseModel):
     """Тело запроса на исполнение SQL (финальный шаг)."""
 
     sql_queries: list[str] = Field(..., description="SQL-скрипты для выполнения")
+    user_prompt: str | None = Field(
+        default=None,
+        description="Текст запроса пользователя (дерево прав, «Кому: …») — сохраняется для аппрува, чтобы админ видел, что просили.",
+    )
+    business_reason: str | None = Field(
+        default=None,
+        description="Причина/обоснование запроса — сохраняется для аппрува.",
+    )
+    created_by: int | None = Field(
+        default=None,
+        description="employee_id инициатора заявки (для записи в таблицу заявок).",
+    )
 
 
 class ExecuteGrantsResult(BaseModel):
     """Результат исполнения SQL."""
 
-    status: str = Field(..., description="success | error | rolled_back")
+    status: str = Field(
+        ...,
+        description="success | error | rolled_back | pending_approval",
+    )
     message: str = Field(..., description="Описание результата")
     rows_affected: int = Field(default=0, description="Кол-во затронутых строк")
+    request_id: int | None = Field(
+        default=None,
+        description="ID заявки в ai_admin (при status=pending_approval).",
+    )
 
 
 # ── User creation (prepare → confirm → execute) ──────────────────────────────
@@ -487,12 +569,23 @@ class ExecuteUserRequestBody(BaseModel):
         ...,
         description="ID сотрудника (админа), от имени которого выполняется операция. Устанавливается в myapp.user_id для триггеров.",
     )
+    user_prompt: str | None = Field(
+        default=None,
+        description="Текст запроса пользователя (кого создать, права и т.д.) — сохраняется для аппрува.",
+    )
+    business_reason: str | None = Field(
+        default=None,
+        description="Причина/обоснование — сохраняется для аппрува.",
+    )
 
 
 class ExecuteUserResult(BaseModel):
     """Результат исполнения SQL создания пользователя."""
 
-    status: str = Field(..., description="success | error | rolled_back")
+    status: str = Field(
+        ...,
+        description="success | error | rolled_back | pending_approval",
+    )
     message: str = Field(..., description="Описание результата")
     rows_affected: int = Field(default=0, description="Кол-во затронутых строк")
     employee_id: int | None = Field(
@@ -501,4 +594,8 @@ class ExecuteUserResult(BaseModel):
     temporary_password: str | None = Field(
         default=None,
         description="Временный пароль для входа (телефон без первой цифры). Показать админу для передачи сотруднику.",
+    )
+    request_id: int | None = Field(
+        default=None,
+        description="ID заявки в ai_admin (при status=pending_approval).",
     )
