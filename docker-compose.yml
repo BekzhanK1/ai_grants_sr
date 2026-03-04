@@ -1,7 +1,0 @@
-services:
-  ai-admin:
-    build: .
-    ports:
-      - "8555:8555"
-    env_file: .env
-    restart: unless-stopped
